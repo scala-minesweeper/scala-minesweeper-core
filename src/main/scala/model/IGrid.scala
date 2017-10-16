@@ -1,5 +1,7 @@
 package model
 
+import Array._
+
 trait IGrid {
-  val field:Array[IField];
+  val playground:Array[IField];
 }

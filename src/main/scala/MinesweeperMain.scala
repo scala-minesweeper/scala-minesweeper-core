@@ -1,8 +1,11 @@
-import model.IGrid
+
+import model.impl.{Field, Grid}
+import Array._
 
 object MinesweeperMain {
 
-  val grid = new IGrid(10,10);
+  val playground = ofDim[Field](10,10);
+  val grid = new Grid(playground);
 
   def main(args: Array[String])
   {

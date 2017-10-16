@@ -1,7 +1,10 @@
 package model.impl
 
-import model.IGrid
+import model.{IGrid}
 
-class Grid () extends IGrid{
+
+
+class Grid (field:Array[Array[Field]]) extends IGrid{
+  val playground = field;
 
 }
