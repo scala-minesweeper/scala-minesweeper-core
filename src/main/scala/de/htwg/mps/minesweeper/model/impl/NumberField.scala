@@ -15,6 +15,6 @@ case class NumberField() extends IField {
 
   override def toString: String = "" + numberBombs
 
-  def incrementNumberBombsBeside() { numberBombs = numberBombs+1  }
+  def incrementNumberBombsBeside():Unit = numberBombs = numberBombs + 1
 
 }
