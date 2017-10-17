@@ -12,6 +12,8 @@ class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
 
   def init(): Unit = {
     val list = ListBuffer[(Int, Int)]()
+    val bombList = ListBuffer[(Int, Int)]()
+
     for ( a <- 1 to width){
       for ( b <- 1 to height){
         list.+=:(a-1,b-1)
@@ -21,11 +23,16 @@ class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
     for(c <- 1 to bombs){
       val randomValue = Random.nextInt(list.length)
       val position = list.remove(randomValue)
+      bombList.+=:(position._1, position._2)
       playground(position._1)(position._2) = BombField()
     }
 
     for (d <- list) {
       playground(d._1)(d._2) = NumberField()
+    }
+
+    for (e <- bombList) {
+      incrementBombNumberAround(e._1, e._2)
     }
   }
 
