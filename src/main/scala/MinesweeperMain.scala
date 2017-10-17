@@ -5,12 +5,12 @@ import Array._
 
 object MinesweeperMain {
 
-  val playground: Array[Array[Field]] = ofDim[Field](10,10)
-  val grid = new Grid(playground)
+  //val playground: Array[Array[Field]] = ofDim[Field](10,10)
+  val grid = new Grid(3,10,8)
 
   def main(args: Array[String])
   {
-    println("Hello World")
-    var (a,b) = Pair(40,42)
+    grid.init()
+    println(grid)
   }
 }

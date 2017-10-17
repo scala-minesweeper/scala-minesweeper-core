@@ -1,10 +1,50 @@
 package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.IGrid
+import Array._
+import scala.collection.mutable.ListBuffer
+import scala.util.Random
 
 class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
   // TODO bomb calculation
-  def this(value: Int) = this(value, value, (value-1)*2)
+  def this(value: Int) = this(value, value, (value - 1) * 2)
+  var playground: Array[Array[Field]] = ofDim[Field](width,height)
 
-  //var playground:Array[Array[Field]]
+  def init() = {
+    val list = ListBuffer[(Int, Int)]()
+    for ( a <- 1 to width){
+      for ( b <- 1 to height){
+        list.+=:(a-1,b-1)
+      }
+    }
+    println(list.toList)
+    println(playground(0)(0))
+
+    for( c <- 1 to bombs){
+      var randomValue = Random.nextInt(list.length)
+      var position = list.remove(randomValue)
+      playground(position._1)(position._2) = BombField()
+    }
+
+    for ( d <- list) {
+      playground(d._1)(d._2) = NumberField(0)
+    }
+
+  }
+
+  override def toString: String = {
+    var string = "Grid(\n"
+    for ( a <- 1 to width) {
+      for (b <- 1 to height) {
+        val field = playground(a-1)(b-1)
+        if(field.isBomb)
+          string += "+ "
+        else
+          string += "0 "
+      }
+      string += "\n"
+    }
+    string += ")"
+    string
+  }
 }
