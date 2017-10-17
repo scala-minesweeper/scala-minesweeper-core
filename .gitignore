@@ -3,3 +3,9 @@
 *.class
 *.log
 
+.idea/
+project/project/
+project/target/scala-2.12/
+project/target/streams/
+s101plugin.state
+target/
