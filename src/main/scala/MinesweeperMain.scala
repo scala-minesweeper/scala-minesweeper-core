@@ -1,5 +1,5 @@
 
-import de.htwg.mps.minesweeper.model.impl.{Field, Grid}
+import de.htwg.mps.minesweeper.model.impl.Grid
 
 import Array._
 

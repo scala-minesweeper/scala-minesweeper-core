@@ -8,7 +8,7 @@ import scala.util.Random
 class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
   // TODO bomb calculation
   def this(value: Int) = this(value, value, (value - 1) * 2)
-  var playground: Array[Array[Field]] = ofDim[Field](width,height)
+  var playground: Array[Array[NumberField]] = ofDim[NumberField](width,height)
 
   def init(): Unit = {
     val list = ListBuffer[(Int, Int)]()
@@ -25,9 +25,8 @@ class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
     }
 
     for (d <- list) {
-      playground(d._1)(d._2) = NumberField(0)
+      playground(d._1)(d._2) = NumberField()
     }
-
   }
 
   override def toString: String = {
@@ -41,5 +40,31 @@ class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
     }
     string += ")"
     string
+  }
+
+  def incrementBombNumberAround(x:Int, y:Int): Unit = {
+    incrementBombNumber(x - 1, y - 1)
+    incrementBombNumber(x - 1, y)
+    incrementBombNumber(x - 1, y + 1)
+    incrementBombNumber(x, y - 1)
+    incrementBombNumber(x, y + 1)
+    incrementBombNumber(x + 1, y - 1)
+    incrementBombNumber(x + 1, y)
+    incrementBombNumber(x + 1, y + 1)
+  }
+
+  def incrementBombNumber(x:Int, y:Int): Unit = {
+    var field = getPosition(x, y)
+    if(field != null) {
+      field.incrementNumberBombsBeside()
+    }
+  }
+
+  def getPosition(x:Int, y:Int): NumberField = {
+    if(x < 0 || x >= width || y < 0 || y >= height) {
+      null
+    } else {
+      playground(x)(y)
+    }
   }
 }
