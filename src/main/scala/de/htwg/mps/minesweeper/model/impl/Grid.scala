@@ -16,41 +16,40 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     val bombList = ListBuffer[(Int, Int)]()
 
 
-    for (c <- 1 to bombs) {
+    1.to(bombs).foreach(_ => {
       val randomValue = Random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
       playground(position._1)(position._2) = BombField()
-    }
+    })
 
-    for (d <- list) {
-      playground(d._1)(d._2) = NumberField()
-    }
+    list.foreach((position) => playground(position._1)(position._2) = NumberField())
 
-    for (e <- bombList) {
-      incrementBombNumberAround(e._1, e._2)
-    }
+    bombList.foreach((position) => incrementBombNumberAround(position._1, position._2))
+
   }
 
   private def mapCoordinatesIntoList: ListBuffer[(Int, Int)] = {
     val list = ListBuffer[(Int, Int)]()
-    for (a <- 1 to width) {
-      for (b <- 1 to height) {
+
+    1.to(width).foreach(a => {
+      1.to(height).foreach(b => {
         list.+=:(a - 1, b - 1)
-      }
-    }
+      })
+    })
+
     list
   }
 
   override def toString: String = {
     var string = "Grid(\n"
-    for (a <- 1 to width) {
-      for (b <- 1 to height) {
+    1.to(width).foreach(a => {
+      1.to(height).foreach(b => {
         val field = playground(a - 1)(b - 1)
         string += " " + field.toString
-      }
+      })
       string += "\n"
-    }
+    })
     string += ")"
     string
   }
