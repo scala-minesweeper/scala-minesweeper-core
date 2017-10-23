@@ -5,7 +5,7 @@ import Array._
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
-class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
+case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
   // TODO bomb calculation
   def this(value: Int) = this(value, value, (value - 1) * 2)
   var playground: Array[Array[NumberField]] = ofDim[NumberField](width,height)
@@ -61,7 +61,7 @@ class Grid(val width: Int, val height: Int, val bombs: Int) extends IGrid {
   }
 
   def incrementBombNumber(x:Int, y:Int): Unit = {
-    var field = getPosition(x, y)
+    val field = getPosition(x, y)
     if(field != null) {
       field.incrementNumberBombsBeside()
     }
