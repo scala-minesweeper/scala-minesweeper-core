@@ -8,19 +8,15 @@ import scala.util.Random
 case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
   // TODO bomb calculation
   def this(value: Int) = this(value, value, (value - 1) * 2)
-  var playground: Array[Array[NumberField]] = ofDim[NumberField](width,height)
+
+  var playground: Array[Array[NumberField]] = ofDim[NumberField](width, height)
 
   def init(): Unit = {
-    val list = ListBuffer[(Int, Int)]()
+    val list = mapCoordinatesIntoList
     val bombList = ListBuffer[(Int, Int)]()
 
-    for ( a <- 1 to width){
-      for ( b <- 1 to height){
-        list.+=:(a-1,b-1)
-      }
-    }
 
-    for(c <- 1 to bombs){
+    for (c <- 1 to bombs) {
       val randomValue = Random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
@@ -36,12 +32,22 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     }
   }
 
+  private def mapCoordinatesIntoList: ListBuffer[(Int, Int)] = {
+    val list = ListBuffer[(Int, Int)]()
+    for (a <- 1 to width) {
+      for (b <- 1 to height) {
+        list.+=:(a - 1, b - 1)
+      }
+    }
+    list
+  }
+
   override def toString: String = {
     var string = "Grid(\n"
-    for ( a <- 1 to width) {
+    for (a <- 1 to width) {
       for (b <- 1 to height) {
-        val field = playground(a-1)(b-1)
-        string += " "+field.toString
+        val field = playground(a - 1)(b - 1)
+        string += " " + field.toString
       }
       string += "\n"
     }
@@ -49,7 +55,7 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     string
   }
 
-  def incrementBombNumberAround(x:Int, y:Int): Unit = {
+  private def incrementBombNumberAround(x: Int, y: Int): Unit = {
     incrementBombNumber(x - 1, y - 1)
     incrementBombNumber(x - 1, y)
     incrementBombNumber(x - 1, y + 1)
@@ -60,15 +66,15 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     incrementBombNumber(x + 1, y + 1)
   }
 
-  def incrementBombNumber(x:Int, y:Int): Unit = {
+  private def incrementBombNumber(x: Int, y: Int): Unit = {
     val field = getPosition(x, y)
-    if(field != null) {
+    if (field != null) {
       field.incrementNumberBombsBeside()
     }
   }
 
-  def getPosition(x:Int, y:Int): NumberField = {
-    if(x < 0 || x >= width || y < 0 || y >= height) {
+  def getPosition(x: Int, y: Int): NumberField = {
+    if (x < 0 || x >= width || y < 0 || y >= height) {
       null
     } else {
       playground(x)(y)
