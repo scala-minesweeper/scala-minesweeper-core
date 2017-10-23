@@ -1,7 +1,8 @@
 package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.IGrid
-import Array._
+
+import scala.Array._
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
@@ -16,7 +17,7 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     val bombList = ListBuffer[(Int, Int)]()
 
 
-    1.to(Math.min(bombs,list.length)).foreach(_ => {
+    1.to(Math.min(bombs, list.length)).foreach(_ => {
       val randomValue = Random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
@@ -43,7 +44,6 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
   }
 
 
-
   private def incrementBombNumberAround(x: Int, y: Int): Unit = {
     incrementBombNumber(x - 1, y - 1)
     incrementBombNumber(x - 1, y)
@@ -57,7 +57,7 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
 
   private def incrementBombNumber(x: Int, y: Int): Unit = {
     getPosition(x, y).exists(f => {
-      f.incrementNumberBombsBeside();
+      f.incrementNumberBombsBeside()
       true
     })
   }
