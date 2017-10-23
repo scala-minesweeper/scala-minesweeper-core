@@ -16,11 +16,12 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     val bombList = ListBuffer[(Int, Int)]()
 
 
-    1.to(bombs).foreach(_ => {
+    1.to(Math.min(bombs,list.length)).foreach(_ => {
       val randomValue = Random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
       playground(position._1)(position._2) = BombField()
+
     })
 
     list.foreach((position) => playground(position._1)(position._2) = NumberField())
@@ -41,18 +42,7 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
     list
   }
 
-  override def toString: String = {
-    var string = "Grid(\n"
-    1.to(width).foreach(a => {
-      1.to(height).foreach(b => {
-        val field = playground(a - 1)(b - 1)
-        string += " " + field.toString
-      })
-      string += "\n"
-    })
-    string += ")"
-    string
-  }
+
 
   private def incrementBombNumberAround(x: Int, y: Int): Unit = {
     incrementBombNumber(x - 1, y - 1)
@@ -66,17 +56,29 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
   }
 
   private def incrementBombNumber(x: Int, y: Int): Unit = {
-    val field = getPosition(x, y)
-    if (field != null) {
-      field.incrementNumberBombsBeside()
+    getPosition(x, y).exists(f => {
+      f.incrementNumberBombsBeside();
+      true
+    })
+  }
+
+  def getPosition(x: Int, y: Int): Option[NumberField] = {
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+      None
+    } else {
+      Option(playground(x)(y))
     }
   }
 
-  def getPosition(x: Int, y: Int): NumberField = {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
-      null
-    } else {
-      playground(x)(y)
-    }
+  override def toString: String = {
+    var string = "Grid(\n"
+    1.to(width).foreach(a => {
+      1.to(height).foreach(b => {
+        string += " " + playground(a - 1)(b - 1).toString
+      })
+      string += "\n"
+    })
+    string += ")"
+    string
   }
 }
