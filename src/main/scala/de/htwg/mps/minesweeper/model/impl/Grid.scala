@@ -6,9 +6,10 @@ import scala.Array._
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
-case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
+case class Grid(width: Int, height: Int, bombs: Int, random: Random) extends IGrid {
   // TODO bomb calculation
-  def this(value: Int) = this(value, value, (value - 1) * 2)
+  def this(value: Int) = this(value, value, (value - 1) * 2, Random)
+  def this(width: Int, height: Int, bombs: Int) = this(width, height, bombs, Random)
 
   var playground: Array[Array[NumberField]] = ofDim[NumberField](width, height)
 
@@ -18,7 +19,7 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
 
 
     1.to(Math.min(bombs, list.length)).foreach(_ => {
-      val randomValue = Random.nextInt(list.length)
+      val randomValue = random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
       playground(position._1)(position._2) = BombField()
@@ -32,15 +33,11 @@ case class Grid(width: Int, height: Int, bombs: Int) extends IGrid {
   }
 
   private def mapCoordinatesIntoList: ListBuffer[(Int, Int)] = {
-    val list = ListBuffer[(Int, Int)]()
-
-    1.to(width).foreach(a => {
-      1.to(height).foreach(b => {
-        list.+=:(a - 1, b - 1)
-      })
-    })
-
-    list
+    1.to(width).flatMap(a =>
+          1.to(height).map(b =>
+            (a - 1, b - 1)
+          )
+        )(collection.breakOut)
   }
 
 
