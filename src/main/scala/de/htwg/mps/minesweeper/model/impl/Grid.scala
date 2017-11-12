@@ -9,21 +9,20 @@ import scala.util.Random
 case class Grid(width: Int, height: Int, bombs: Int, random: Random) extends IGrid {
   // TODO bomb calculation
   def this(value: Int) = this(value, value, (value - 1) * 2, Random)
+
   def this(width: Int, height: Int, bombs: Int) = this(width, height, bombs, Random)
 
-  var playground: Array[Array[NumberField]] = ofDim[NumberField](width, height)
+  val playground: Array[Array[NumberField]] = ofDim[NumberField](width, height)
 
   def init(): Unit = {
     val list = mapCoordinatesIntoList
     val bombList = ListBuffer[(Int, Int)]()
-
 
     1.to(Math.min(bombs, list.length)).foreach(_ => {
       val randomValue = random.nextInt(list.length)
       val position = list.remove(randomValue)
       bombList.+=:(position._1, position._2)
       playground(position._1)(position._2) = BombField()
-
     })
 
     list.foreach((position) => playground(position._1)(position._2) = NumberField())
@@ -34,10 +33,10 @@ case class Grid(width: Int, height: Int, bombs: Int, random: Random) extends IGr
 
   private def mapCoordinatesIntoList: ListBuffer[(Int, Int)] = {
     1.to(width).flatMap(a =>
-          1.to(height).map(b =>
-            (a - 1, b - 1)
-          )
-        )(collection.breakOut)
+      1.to(height).map(b =>
+        (a - 1, b - 1)
+      )
+    )(collection.breakOut)
   }
 
 
