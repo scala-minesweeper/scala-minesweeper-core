@@ -6,7 +6,7 @@ class GridTest extends WordSpec {
 
   "A Grid" should {
 
-    val grid = new Grid(10);
+    val grid = new Grid(10)
 
     "have width" in {
       assert(grid.width == 10)
@@ -20,6 +20,9 @@ class GridTest extends WordSpec {
       assert(grid.bombs == 18)
     }
 
+    "have a playground" in {
+      assert(grid.playground.length==10)
+    }
   }
 
 }
