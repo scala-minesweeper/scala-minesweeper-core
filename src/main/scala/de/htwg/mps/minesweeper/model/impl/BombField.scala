@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.model.impl
 
-class BombField(isShown: Boolean, isFlagged: Boolean, numberBombs: Int)
-  extends NumberField(isShown, isFlagged, numberBombs) {
+class BombField(isShown: Boolean, isFlagged: Boolean)
+  extends NumberField(isShown, isFlagged, 0) {
 
   override def isBomb: Boolean = true
 
@@ -9,5 +9,5 @@ class BombField(isShown: Boolean, isFlagged: Boolean, numberBombs: Int)
 }
 
 object BombField {
-  def apply(): BombField = new BombField(false, false, 0)
+  def apply(): BombField = new BombField(false, false)
 }

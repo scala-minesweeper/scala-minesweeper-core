@@ -19,9 +19,9 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
   }
 
   override def foreachRow[U](f: Vector[A] => U): Unit = {
-    0.until(rows).foreach(row => {
+    0.until(rows).foreach(row =>
       f(vector.slice(row * cols, (row + 1) * cols))
-    })
+    )
   }
 
   override def getCoordinates: ListBuffer[(Int, Int)] =

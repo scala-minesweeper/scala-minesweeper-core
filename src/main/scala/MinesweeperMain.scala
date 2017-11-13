@@ -1,11 +1,9 @@
 
-import de.htwg.mps.minesweeper.model.impl.{Grid, NumberField, TwoDimensionalArray}
-
-import scala.util.Random
+import de.htwg.mps.minesweeper.model.impl.Grid
 
 object MinesweeperMain {
 
-  val grid = Grid(new TwoDimensionalArray[NumberField](5, 10, new NumberField(false, false, 0)), Random)
+  val grid = new Grid(5, 10, 10)
 
   def main(args: Array[String]) {
     val resultGrid = grid.init()

@@ -16,10 +16,8 @@ case class NumberField(isShown: Boolean, isFlagged: Boolean, numberBombs: Int) e
 
   override def toString: String = "" + numberBombs
 
-  def incrementNumberBombsBeside(): NumberField = copy(numberBombs = numberBombs + 1)
-
 }
 
 object NumberField {
-  def apply(): NumberField = new NumberField(isShown = false, isFlagged = false, numberBombs = 0)
+  def apply(numberBombs: Int): NumberField = new NumberField(false, false, numberBombs)
 }
