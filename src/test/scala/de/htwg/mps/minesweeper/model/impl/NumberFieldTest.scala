@@ -11,8 +11,12 @@ class NumberFieldTest extends WordSpec {
       assert(!numberField.isBomb)
     }
 
-    "print a number" in {
-      assert(numberField.toString.matches("[0-8]"))
+    "print a number at start" in {
+      assert(numberField.toString.equals("0"))
+    }
+
+    "not shown at start" in {
+      assert(!numberField.isShown)
     }
   }
 
