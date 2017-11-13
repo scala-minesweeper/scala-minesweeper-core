@@ -18,6 +18,10 @@ class NumberFieldTest extends WordSpec {
     "not shown at start" in {
       assert(!numberField.isShown)
     }
+
+    "is not flagged" in {
+      assert(!numberField.isFlagged)
+    }
   }
 
 }

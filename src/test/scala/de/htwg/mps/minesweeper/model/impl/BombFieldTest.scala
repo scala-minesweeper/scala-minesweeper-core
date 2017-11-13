@@ -16,6 +16,16 @@ class BombFieldTest extends WordSpec {
       assert(bombField.toString == "+")
     }
 
+    "is not flagged" in {
+      assert(!bombField.isFlagged)
+    }
+
+    "is not shown" in {
+      assert(!bombField.isShown)
+    }
+
+
+
   }
 
 
