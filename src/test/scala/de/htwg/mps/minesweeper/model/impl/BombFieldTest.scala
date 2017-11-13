@@ -6,7 +6,7 @@ class BombFieldTest extends WordSpec {
 
   "A BombField" should {
 
-    val bombField = new BombField()
+    val bombField = BombField()
 
     "be a bomb" in {
       assert(bombField.isBomb)

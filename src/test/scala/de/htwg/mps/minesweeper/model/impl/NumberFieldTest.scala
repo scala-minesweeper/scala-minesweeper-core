@@ -5,7 +5,7 @@ import org.scalatest.WordSpec
 class NumberFieldTest extends WordSpec {
 
   "A NumberField" should {
-    val numberField = new NumberField()
+    val numberField = NumberField()
 
     "be not a bomb" in {
       assert(!numberField.isBomb)

@@ -1,77 +1,58 @@
 package de.htwg.mps.minesweeper.model.impl
 
-import de.htwg.mps.minesweeper.model.IGrid
+import de.htwg.mps.minesweeper.model.{IGrid, ITwoDimensionalArray}
 
-import scala.Array._
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
-case class Grid(width: Int, height: Int, bombs: Int, random: Random) extends IGrid {
-  // TODO bomb calculation
-  def this(value: Int) = this(value, value, (value - 1) * 2, Random)
+case class Grid(playground: TwoDimensionalArray[NumberField], random: Random) extends IGrid {
 
-  def this(width: Int, height: Int, bombs: Int) = this(width, height, bombs, Random)
+  def set(row: Int, col: Int, cell: NumberField): Grid = copy(playground = playground.updated(row, col, cell))
 
-  val playground: Array[Array[NumberField]] = ofDim[NumberField](width, height)
+  def init(): Grid = {
+    var grid = this
+    val list = playground.getCoordinates
+    val bombs = 3
 
-  def init(): Unit = {
-    val list = mapCoordinatesIntoList
-    val bombList = ListBuffer[(Int, Int)]()
-
+    // place bombs and remove these coordinates from list
     1.to(Math.min(bombs, list.length)).foreach(_ => {
       val randomValue = random.nextInt(list.length)
       val position = list.remove(randomValue)
-      bombList.+=:(position._1, position._2)
-      playground(position._1)(position._2) = BombField()
+      grid = grid.set(position._1, position._2, new BombField(false, false, 0))
+    })
+    // place number fields on other coordinates
+    list.foreach((position) => {
+      grid = grid.set(position._1, position._2, new NumberField(false, false, grid.sumBombNumberAround(position._1, position._2)))
     })
 
-    list.foreach((position) => playground(position._1)(position._2) = NumberField())
-
-    bombList.foreach((position) => incrementBombNumberAround(position._1, position._2))
-
+    grid
   }
 
-  private def mapCoordinatesIntoList: ListBuffer[(Int, Int)] = {
-    1.to(width).flatMap(a =>
-      1.to(height).map(b =>
-        (a - 1, b - 1)
-      )
-    )(collection.breakOut)
+  private def sumBombNumberAround(row: Int, col: Int): Int = {
+    var sum = 0
+    sum += sumBombs(row - 1, col - 1)
+    sum += sumBombs(row - 1, col)
+    sum += sumBombs(row - 1, col + 1)
+    sum += sumBombs(row, col - 1)
+    sum += sumBombs(row, col + 1)
+    sum += sumBombs(row + 1, col - 1)
+    sum += sumBombs(row + 1, col)
+    sum += sumBombs(row + 1, col + 1)
+    sum
   }
 
-
-  private def incrementBombNumberAround(x: Int, y: Int): Unit = {
-    incrementBombNumber(x - 1, y - 1)
-    incrementBombNumber(x - 1, y)
-    incrementBombNumber(x - 1, y + 1)
-    incrementBombNumber(x, y - 1)
-    incrementBombNumber(x, y + 1)
-    incrementBombNumber(x + 1, y - 1)
-    incrementBombNumber(x + 1, y)
-    incrementBombNumber(x + 1, y + 1)
-  }
-
-  private def incrementBombNumber(x: Int, y: Int): Unit = {
-    getPosition(x, y).exists(f => {
-      f.incrementNumberBombsBeside()
-      true
-    })
-  }
-
-  def getPosition(x: Int, y: Int): Option[NumberField] = {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
-      None
-    } else {
-      Option(playground(x)(y))
-    }
+  private def sumBombs(row: Int, col: Int): Int = {
+    playground.get(row, col).map(f => {
+      if (f.isBomb) {
+        1
+      } else 0
+    }).getOrElse(0)
   }
 
   override def toString: String = {
     var string = "Grid(\n"
-    1.to(width).foreach(a => {
-      1.to(height).foreach(b => {
-        string += " " + playground(a - 1)(b - 1).toString
-      })
+    playground.foreachRow(row => {
+      row.foreach(field => string += " " + field.toString)
       string += "\n"
     })
     string += ")"

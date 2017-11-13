@@ -1,11 +1,17 @@
 package de.htwg.mps.minesweeper.model
 
+import de.htwg.mps.minesweeper.model.impl.NumberField
+
 trait IField {
-  def showField(): Unit
+  def showField(): IField
 
-  def flagField(): Unit
+  def flagField(): IField
 
-  def unflagField(): Unit
+  def unflagField(): IField
 
   def isBomb: Boolean
+
+  def setNumber(number: Int): IField
+
+  def incrementNumberBombsBeside(): NumberField
 }

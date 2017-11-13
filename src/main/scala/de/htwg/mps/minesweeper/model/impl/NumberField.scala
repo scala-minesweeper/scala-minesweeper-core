@@ -2,27 +2,24 @@ package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.IField
 
-class NumberField() extends IField {
-  def apply(): NumberField = new NumberField()
+case class NumberField(isShown: Boolean, isFlagged: Boolean, numberBombs: Int) extends IField {
 
-  var isShown = false
-  var isFlagged = false
-  var numberBombs = 0
+  def showField(): NumberField = copy(isShown = true)
 
-  def showField(): Unit = isShown = true
+  def flagField(): NumberField = copy(isFlagged = true)
 
-  def flagField(): Unit = isFlagged = true
+  def unflagField(): NumberField = copy(isFlagged = false)
 
-  def unflagField(): Unit = isFlagged = false
+  def setNumber(number: Int): NumberField = copy(numberBombs = number)
 
   override def isBomb: Boolean = false
 
   override def toString: String = "" + numberBombs
 
-  def incrementNumberBombsBeside(): Unit = numberBombs = numberBombs + 1
+  def incrementNumberBombsBeside(): NumberField = copy(numberBombs = numberBombs + 1)
 
 }
 
 object NumberField {
-  def apply(): NumberField = new NumberField
+  def apply(): NumberField = new NumberField(isShown = false, isFlagged = false, numberBombs = 0)
 }
