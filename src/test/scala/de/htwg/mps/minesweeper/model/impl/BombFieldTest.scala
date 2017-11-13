@@ -18,4 +18,16 @@ class BombFieldTest extends WordSpec {
 
   }
 
+  "A NumberField" should {
+    val numberField = new NumberField()
+
+    "be not a bomb" in {
+      assert(!numberField.isBomb)
+    }
+
+    "print a number" in {
+      assert(numberField.toString.matches("[0-8]"))
+    }
+  }
+
 }
