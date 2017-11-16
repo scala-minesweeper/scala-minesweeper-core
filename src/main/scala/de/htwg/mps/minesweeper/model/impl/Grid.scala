@@ -1,13 +1,14 @@
 package de.htwg.mps.minesweeper.model.impl
 
-import de.htwg.mps.minesweeper.model.IGrid
+import de.htwg.mps.minesweeper.model.{IField, IGrid}
 
 import scala.util.Random
 
-case class Grid(playground: TwoDimensionalArray[NumberField], bombs: Int, random: Random) extends IGrid {
-  def this(rows: Int, cols: Int, bombs: Int) = this(new TwoDimensionalArray[NumberField](rows, cols, NumberField(0)), bombs, Random)
+case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Random) extends IGrid {
+  def this(rows: Int, cols: Int, bombs: Int) = this(new TwoDimensionalArray[IField](rows, cols, NumberField(0)), bombs, Random)
 
-  def set(row: Int, col: Int, cell: NumberField): Grid = copy(playground = playground.updated(row, col, cell))
+  def set(row: Int, col: Int, cell: IField): Grid = copy(playground = playground.updated(row, col, cell))
+  def get(row: Int, col: Int): Option[IField] = playground.get(row, col)
 
   def init(): Grid = {
     var grid = this
