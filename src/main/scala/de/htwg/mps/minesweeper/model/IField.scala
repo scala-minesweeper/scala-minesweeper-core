@@ -1,6 +1,8 @@
 package de.htwg.mps.minesweeper.model
 
 trait IField {
+  protected val hiddenFieldString = "◊"
+
   def showField(): IField
 
   def flagField(): IField

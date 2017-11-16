@@ -5,7 +5,7 @@ class BombField(isShown: Boolean, isFlagged: Boolean)
 
   override def isBomb: Boolean = true
 
-  override def toString: String = "+"
+  override def toString: String = if(isShown) "+" else hiddenFieldString
 }
 
 object BombField {

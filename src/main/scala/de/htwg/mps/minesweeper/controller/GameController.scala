@@ -6,6 +6,7 @@ class GameController(var grid: IGrid) extends IGameController {
 
   override def openField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => {
+      println("Open field (" + row + "|" + col + ")")
       grid = grid.set(row, col, cell.showField())
       true
     })
