@@ -30,16 +30,11 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
   }
 
   private def sumBombNumberAround(row: Int, col: Int): Int = {
-    var sum = 0
-    sum += sumBombs(row - 1, col - 1)
-    sum += sumBombs(row - 1, col)
-    sum += sumBombs(row - 1, col + 1)
-    sum += sumBombs(row, col - 1)
-    sum += sumBombs(row, col + 1)
-    sum += sumBombs(row + 1, col - 1)
-    sum += sumBombs(row + 1, col)
-    sum += sumBombs(row + 1, col + 1)
-    sum
+    (for {
+      r <- row - 1 to row + 1
+      c <- col - 1 to col + 1
+      if r != row || c != col
+    } yield sumBombs(r, c)).sum
   }
 
   private def sumBombs(row: Int, col: Int): Int = {
