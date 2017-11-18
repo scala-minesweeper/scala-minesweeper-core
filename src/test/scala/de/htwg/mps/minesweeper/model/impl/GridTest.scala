@@ -6,7 +6,7 @@ class GridTest extends WordSpec {
 
   "A 10x10 Grid" should {
 
-    val grid_10 = new Grid(10, 10, 18)
+    val grid_10 = Grid(10, 10, 18)
     grid_10.init()
 
     "have width" in {
@@ -24,7 +24,7 @@ class GridTest extends WordSpec {
   }
 
   "A 5x7 Grid with 10 bombs" should {
-    val grid_5_7_10 = new Grid(5, 7, 10)
+    val grid_5_7_10 = Grid(5, 7, 10)
     grid_5_7_10.init()
 
     "have width" in {

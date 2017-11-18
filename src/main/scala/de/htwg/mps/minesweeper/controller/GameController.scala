@@ -23,4 +23,6 @@ class GameController(var grid: IGrid) extends IGameController {
       true
     })
 
+  override def getGrid: IGrid = grid
+
 }

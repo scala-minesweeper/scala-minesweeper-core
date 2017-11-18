@@ -52,6 +52,6 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
 }
 
 object Grid {
-  def apply(rows: Int, cols: Int, bombs: Int) =
+  def apply(rows: Int, cols: Int, bombs: Int): Grid =
     Grid(new TwoDimensionalArray[IField](rows, cols, NumberField(0)), bombs, Random)
 }

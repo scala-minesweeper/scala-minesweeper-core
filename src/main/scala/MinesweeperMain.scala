@@ -1,17 +1,19 @@
 
-import de.htwg.mps.minesweeper.controller.GameController
+import de.htwg.mps.minesweeper.controller.{GameController, IGameController}
+import de.htwg.mps.minesweeper.model.IGrid
 import de.htwg.mps.minesweeper.model.impl.Grid
+import de.htwg.mps.minesweeper.view.tui.Tui
+
+import scala.io.StdIn.readLine
 
 object MinesweeperMain {
 
-  val controller = new GameController(Grid(5, 10, 10).init())
+  val grid: IGrid = Grid(5, 10, 10).init()
+  val controller: IGameController = new GameController(grid)
+  val tui: Tui = new Tui(controller)
 
   def main(args: Array[String]) {
-    println(controller.grid)
-    for {
-      r <- 0 to 5
-      c <- 0 to 10
-    } controller.openField(r, c)
-    println(controller.grid)
+    tui.printTui()
+    while (tui.processInput(readLine())) {}
   }
 }
