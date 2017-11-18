@@ -4,7 +4,7 @@ import de.htwg.mps.minesweeper.model.impl.Grid
 
 object MinesweeperMain {
 
-  val controller = new GameController(new Grid(5, 10, 10).init())
+  val controller = new GameController(Grid(5, 10, 10).init())
 
   def main(args: Array[String]) {
     println(controller.grid)
