@@ -8,9 +8,10 @@ object MinesweeperMain {
 
   def main(args: Array[String]) {
     println(controller.grid)
-    controller.openField(2, 2)
-    controller.openField(3, 5)
-    controller.openField(1, 6)
+    for {
+      r <- 0 to 5
+      c <- 0 to 10
+    } controller.openField(r, c)
     println(controller.grid)
   }
 }

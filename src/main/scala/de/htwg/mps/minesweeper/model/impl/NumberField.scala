@@ -4,13 +4,11 @@ import de.htwg.mps.minesweeper.model.IField
 
 case class NumberField(isShown: Boolean, isFlagged: Boolean, numberBombs: Int) extends IField {
 
-  def showField(): NumberField = copy(isShown = true)
+  override def showField(): IField = copy(isShown = true)
 
-  def flagField(): NumberField = copy(isFlagged = true)
+  override def flagField(): IField = copy(isFlagged = true)
 
-  def unflagField(): NumberField = copy(isFlagged = false)
-
-  def setNumber(number: Int): NumberField = copy(numberBombs = number)
+  override def unflagField(): IField = copy(isFlagged = false)
 
   override def isBomb: Boolean = false
 

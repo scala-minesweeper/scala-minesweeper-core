@@ -1,6 +1,7 @@
 package de.htwg.mps.minesweeper.model
 
 trait IField {
+
   protected val hiddenFieldString = "◊"
 
   def showField(): IField
@@ -11,5 +12,4 @@ trait IField {
 
   def isBomb: Boolean
 
-  def setNumber(number: Int): IField
 }
