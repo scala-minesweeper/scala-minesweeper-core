@@ -9,11 +9,15 @@ class Tui(val controller: IGameController) {
     println(controller.getGrid.toString)
     println("You can choose following actions")
     println(" <row> <col> - open a cell")
+    println(" p - print the field")
     println(" q - quit the game")
   }
 
   def processInput(input: String): Boolean = {
     input match {
+      case "p" =>
+        println(controller.getGrid.toString)
+        true
       case "q" =>
         println("Goodbye")
         false
