@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.model
 
 trait IField {
 
-  protected val hiddenFieldString = "◊"
+  protected val hiddenFieldString = "~"
 
   def showField(): IField
 

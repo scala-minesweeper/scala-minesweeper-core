@@ -41,12 +41,15 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
   }
 
   override def toString: String = {
-    var string = "Grid(\n"
+    var string = "  │ " + 0.until(playground.cols).mkString(" ") + "\n"
+    string += "-" * 2 + "╁" + "-" * (playground.cols*2) + "\n"
+    var rowIndex = 0
     playground.foreachRow(row => {
+      string += rowIndex + " │"
       row.foreach(field => string += " " + field.toString)
       string += "\n"
+      rowIndex += 1
     })
-    string += ")"
     string
   }
 }
