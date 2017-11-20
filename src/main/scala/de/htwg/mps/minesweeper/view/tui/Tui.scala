@@ -13,7 +13,7 @@ class Tui(val controller: IGameController) extends Reactor {
   printTui()
 
   def printTui(): Unit = {
-    println("Minesweeper")
+    println("Minesweeper\n")
     println(controller.getGrid.toString)
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
