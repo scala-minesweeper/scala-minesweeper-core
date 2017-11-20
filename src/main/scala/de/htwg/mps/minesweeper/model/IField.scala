@@ -6,6 +6,8 @@ trait IField {
 
   protected val questionMarkedFieldString = "?"
 
+  protected val flaggedFieldString = "#"
+
   def showField(): IField
 
   def flagField(): IField

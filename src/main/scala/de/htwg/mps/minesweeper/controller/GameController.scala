@@ -27,6 +27,7 @@ class GameController(var grid: IGrid) extends IGameController {
 
   override def flagField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => {
+      println("Flag field (" + row + "|" + col + ")")
       grid = grid.set(row, col, cell.flagField())
       true
     })
