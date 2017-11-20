@@ -1,8 +1,16 @@
 package de.htwg.mps.minesweeper.view.tui
 
-import de.htwg.mps.minesweeper.controller.IGameController
+import de.htwg.mps.minesweeper.controller.{FieldChanged, IGameController}
 
-class Tui(val controller: IGameController) {
+import scala.swing.Reactor
+
+class Tui(val controller: IGameController) extends Reactor {
+
+  listenTo(controller)
+  reactions += {
+    case e: FieldChanged => printTui()
+  }
+  printTui()
 
   def printTui(): Unit = {
     println("Minesweeper")
@@ -28,16 +36,12 @@ class Tui(val controller: IGameController) {
         input.toList.filter(c => c != ' ').map(c => c.toString) match {
           case "o" :: row :: column :: Nil =>
             controller.openField(row.toInt, column.toInt)
-            println(controller.getGrid.toString)
           case "?" :: row :: column :: Nil =>
             controller.questionField(row.toInt, column.toInt)
-            println(controller.getGrid.toString)
           case "!" :: row :: column :: Nil =>
-            controller.unquestionField(row.toInt, column.toInt)
-            println(controller.getGrid.toString)
+            controller.unQuestionField(row.toInt, column.toInt)
           case "f" :: row :: column :: Nil =>
             controller.flagField(row.toInt, column.toInt)
-            println(controller.getGrid.toString)
           case _ => println("Unknown action")
         }
         true

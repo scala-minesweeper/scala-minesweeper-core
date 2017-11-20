@@ -13,7 +13,6 @@ object MinesweeperMain {
   val tui: Tui = new Tui(controller)
 
   def main(args: Array[String]) {
-    tui.printTui()
     while (tui.processInput(readLine())) {}
   }
 }

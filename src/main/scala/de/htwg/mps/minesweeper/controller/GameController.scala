@@ -1,13 +1,19 @@
 package de.htwg.mps.minesweeper.controller
 
-import de.htwg.mps.minesweeper.model.IGrid
+import de.htwg.mps.minesweeper.model.{IField, IGrid}
+
+import scala.swing.event.Event
+
+case class FieldChanged(row: Int, col: Int, field: IField) extends Event
 
 class GameController(var grid: IGrid) extends IGameController {
 
   override def openField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => {
       println("Open field (" + row + "|" + col + ")")
-      grid = grid.set(row, col, cell.showField())
+      val newCell = cell.showField()
+      grid = grid.set(row, col, newCell)
+      publish(FieldChanged(row, col, newCell))
       true
     })
 
@@ -18,7 +24,7 @@ class GameController(var grid: IGrid) extends IGameController {
       true
     })
 
-  override def unquestionField(row: Int, col: Int): Unit =
+  override def unQuestionField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => {
       println("Unquestion mark field (" + row + "|" + col + ")")
       grid = grid.set(row, col, cell.unQuestionField())
