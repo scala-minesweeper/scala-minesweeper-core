@@ -2,6 +2,8 @@ package de.htwg.mps.minesweeper.model.impl
 
 import org.scalatest.WordSpec
 
+import scala.util.Random
+
 class GridTest extends WordSpec {
 
   "A 10x10 Grid" should {
@@ -40,4 +42,15 @@ class GridTest extends WordSpec {
     }
 
   }
+
+//  "An initialized 5x7 Grid with 10 bombs" should {
+//    val grid = new Grid(5, 7, 10).init()
+//
+//    "have a bomb in 4,7" in {
+//      println(grid)
+//      assert(grid.playground.get(0, 2).get.isBomb)
+//    }
+//
+//  }
+
 }

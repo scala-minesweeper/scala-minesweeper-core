@@ -11,6 +11,20 @@ class GameController(var grid: IGrid) extends IGameController {
       true
     })
 
+  override def questionField(row: Int, col: Int): Unit =
+    grid.get(row, col).exists(cell => {
+      println("Question mark field (" + row + "|" + col + ")")
+      grid = grid.set(row, col, cell.questionField())
+      true
+    })
+
+  override def unquestionField(row: Int, col: Int): Unit =
+    grid.get(row, col).exists(cell => {
+      println("Unquestion mark field (" + row + "|" + col + ")")
+      grid = grid.set(row, col, cell.unQuestionField())
+      true
+    })
+
   override def flagField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => {
       grid = grid.set(row, col, cell.flagField())
