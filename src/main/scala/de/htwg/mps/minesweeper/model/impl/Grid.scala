@@ -2,7 +2,6 @@ package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.{IField, IGrid}
 
-import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Random) extends IGrid {
@@ -12,20 +11,17 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
   def get(row: Int, col: Int): Option[IField] = playground.get(row, col)
 
   def init(): Grid = {
-    var grid = this
-    val list: ListBuffer[(Int, Int)] = playground.getCoordinates
-
-    // place bombs and remove these coordinates from list
-    grid = 1.to(Math.min(bombs, list.length)).foldLeft(grid)((grid, index) => {
-      val randomValue = random.nextInt(list.length)
-      val position = list.remove(randomValue)
-      placeBombField(grid, position)
-    })
-    // place number fields on other coordinates
-    list.foldLeft(grid)(placeNumberField)
+    // shuffle all available field coordinates
+    val list: List[(Int, Int)] = random.shuffle(playground.getCoordinates)
+    val bombList = list.slice(0, bombs)
+    val numberList = list.slice(bombs, list.size)
+    // place bomb and number fields on a slice of coordinates
+    numberList.foldLeft(
+      bombList.foldLeft(this)(placeBombField)
+    )(placeNumberField)
   }
 
-  override def getCoordinates: List[(Int, Int)] = playground.getCoordinates.toList
+  override def getCoordinates: List[(Int, Int)] = playground.getCoordinates
 
   private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =
     grid.set(position._1, position._2, NumberField(grid.sumBombNumberAround(position._1, position._2)))

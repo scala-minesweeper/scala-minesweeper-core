@@ -4,9 +4,9 @@ import org.scalatest.WordSpec
 
 class BombFieldTest extends WordSpec {
 
-  "A BombField" should {
+  "A shown BombField" should {
 
-    val bombField = BombField()
+    val bombField: BombField = BombField().showField()
 
     "be a bomb" in {
       assert(bombField.isBomb)
@@ -20,14 +20,12 @@ class BombFieldTest extends WordSpec {
       assert(!bombField.isFlagged)
     }
 
-    "is not shown" in {
-      assert(!bombField.isShown)
+    "is shown" in {
+      assert(bombField.isShown)
     }
 
 
-
   }
-
 
 
 }

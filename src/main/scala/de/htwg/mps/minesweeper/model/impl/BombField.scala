@@ -4,15 +4,15 @@ import de.htwg.mps.minesweeper.model.IField
 
 case class BombField(isShown: Boolean, isFlagged: Boolean, isQuestionMarked: Boolean) extends IField {
 
-  override def showField(): IField = copy(isShown = true)
+  override def showField(): BombField = copy(isShown = true)
 
-  override def flagField(): IField = copy(isFlagged = true)
+  override def flagField(): BombField = copy(isFlagged = true)
 
-  override def questionField(): IField = copy(isQuestionMarked = true)
+  override def questionField(): BombField = copy(isQuestionMarked = true)
 
-  override def unQuestionField(): IField = copy(isQuestionMarked = false)
+  override def unQuestionField(): BombField = copy(isQuestionMarked = false)
 
-  override def unflagField(): IField = copy(isFlagged = false)
+  override def unflagField(): BombField = copy(isFlagged = false)
 
   override def isBomb: Boolean = true
 

@@ -24,7 +24,7 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
     )
   }
 
-  override def getCoordinates: ListBuffer[(Int, Int)] =
+  override def getCoordinates: List[(Int, Int)] =
     0.until(rows).flatMap(row =>
       0.until(cols).map(col =>
         (row, col)

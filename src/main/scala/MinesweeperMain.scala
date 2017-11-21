@@ -8,7 +8,7 @@ import scala.io.StdIn.readLine
 
 object MinesweeperMain {
 
-  val grid: IGrid = Grid(5, 10, 10).init()
+  val grid: IGrid = Grid(8, 10, 10).init()
   val controller: IGameController = new GameController(grid)
   val tui: Tui = new Tui(controller)
 
