@@ -2,10 +2,7 @@ package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.ITwoDimensionalArray
 
-import scala.collection.mutable.ListBuffer
-
 case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) extends ITwoDimensionalArray[A] {
-  def this(rows: Int, cols: Int, elem: A) = this(rows, cols, Vector.fill(rows * cols)(elem))
 
   override def updated(row: Int, col: Int, element: A): TwoDimensionalArray[A] =
     copy(vector = vector.updated(cols * row + col, element))
@@ -31,6 +28,9 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
       )
     )(collection.breakOut)
 
+}
 
-
+object TwoDimensionalArray {
+  def apply[A](rows: Int, cols: Int, elem: A): ITwoDimensionalArray[A] =
+    TwoDimensionalArray[A](rows, cols, Vector.fill(rows * cols)(elem))
 }

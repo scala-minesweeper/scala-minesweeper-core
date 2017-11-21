@@ -1,10 +1,10 @@
 package de.htwg.mps.minesweeper.model.impl
 
-import de.htwg.mps.minesweeper.model.{IField, IGrid}
+import de.htwg.mps.minesweeper.model.{IField, IGrid, ITwoDimensionalArray}
 
 import scala.util.Random
 
-case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Random) extends IGrid {
+case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Random) extends IGrid {
 
   def set(row: Int, col: Int, cell: IField): Grid = copy(playground = playground.updated(row, col, cell))
 
@@ -55,5 +55,5 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
 
 object Grid {
   def apply(rows: Int, cols: Int, bombs: Int): Grid =
-    Grid(new TwoDimensionalArray[IField](rows, cols, NumberField(0)), bombs, Random)
+    Grid(TwoDimensionalArray[IField](rows, cols, NumberField(0)), bombs, Random)
 }
