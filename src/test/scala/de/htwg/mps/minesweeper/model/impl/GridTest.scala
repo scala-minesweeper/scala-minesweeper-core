@@ -1,5 +1,7 @@
 package de.htwg.mps.minesweeper.model.impl
 
+import de.htwg.mps.minesweeper.controller.GameController
+import de.htwg.mps.minesweeper.model.IField
 import org.scalatest.WordSpec
 
 import scala.util.Random
@@ -8,7 +10,7 @@ class GridTest extends WordSpec {
 
   "A 10x10 Grid" should {
 
-    val grid_10 = Grid(10, 10, 18)
+    val grid_10 = Grid(new TwoDimensionalArray[IField](10, 10, NumberField(0)), 18, Random)
     grid_10.init()
 
     "have width" in {
@@ -26,7 +28,7 @@ class GridTest extends WordSpec {
   }
 
   "A 5x7 Grid with 10 bombs" should {
-    val grid_5_7_10 = Grid(5, 7, 10)
+    val grid_5_7_10 = Grid(new TwoDimensionalArray[IField](5, 7, NumberField(0)), 10, Random)
     grid_5_7_10.init()
 
     "have width" in {
@@ -43,14 +45,38 @@ class GridTest extends WordSpec {
 
   }
 
-//  "An initialized 5x7 Grid with 10 bombs" should {
-//    val grid = new Grid(5, 7, 10).init()
-//
-//    "have a bomb in 4,7" in {
-//      println(grid)
-//      assert(grid.playground.get(0, 2).get.isBomb)
-//    }
-//
-//  }
+  "An initialized 3x3 Grid with 2 bombs and fixed random" should {
+    val grid = new Grid(
+      new TwoDimensionalArray[IField](3, 3, NumberField(0)), 2, new Random(5))
+      .init()
+
+    println(grid.toString)
+
+    "have bombs" in {
+      assert(grid.playground.get(0, 0).get.isBomb)
+      assert(grid.playground.get(1, 2).get.isBomb)
+    }
+
+    "have numbers" in {
+      assert(grid.playground.get(0, 1).get.asInstanceOf[NumberField].numberBombs == 2)
+      assert(grid.playground.get(0, 2).get.asInstanceOf[NumberField].numberBombs == 1)
+      assert(grid.playground.get(1, 0).get.asInstanceOf[NumberField].numberBombs == 1)
+      assert(grid.playground.get(1, 1).get.asInstanceOf[NumberField].numberBombs == 2)
+      assert(grid.playground.get(2, 0).get.asInstanceOf[NumberField].numberBombs == 0)
+      assert(grid.playground.get(2, 1).get.asInstanceOf[NumberField].numberBombs == 1)
+      assert(grid.playground.get(2, 2).get.asInstanceOf[NumberField].numberBombs == 1)
+    }
+
+    "print a grid" in {
+      val result =
+        "  | 0 1 2\n" +
+          "--|------\n" +
+          "0 | ~ ~ ~\n" +
+          "1 | ~ ~ ~\n" +
+          "2 | ~ ~ ~\n"
+      assert(grid.toString == result)
+    }
+
+ }
 
 }
