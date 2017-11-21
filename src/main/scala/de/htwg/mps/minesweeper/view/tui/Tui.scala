@@ -21,6 +21,7 @@ class Tui(val controller: IGameController) extends Reactor {
     println(" ! <row> <col> - unquestion mark cell")
     println(" f <row> <col> - flag cell")
     println(" p - print the field")
+    println(" a - open all fields (dev cheat)")
     println(" q - quit the game")
   }
 
@@ -31,6 +32,9 @@ class Tui(val controller: IGameController) extends Reactor {
         true
       case "q" =>
         println("Goodbye")
+        false
+      case "a" =>
+        controller.openAllFields()
         false
       case _ =>
         input.toList.filter(c => c != ' ').map(c => c.toString) match {

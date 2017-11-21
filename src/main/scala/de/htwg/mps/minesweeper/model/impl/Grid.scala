@@ -2,6 +2,7 @@ package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.{IField, IGrid}
 
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Random) extends IGrid {
@@ -12,21 +13,25 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
 
   def init(): Grid = {
     var grid = this
-    val list = playground.getCoordinates
+    val list: ListBuffer[(Int, Int)] = playground.getCoordinates
 
     // place bombs and remove these coordinates from list
-    1.to(Math.min(bombs, list.length)).foreach(_ => {
+    grid = 1.to(Math.min(bombs, list.length)).foldLeft(grid)((grid, index) => {
       val randomValue = random.nextInt(list.length)
       val position = list.remove(randomValue)
-      grid = grid.set(position._1, position._2, BombField())
+      placeBombField(grid, position)
     })
     // place number fields on other coordinates
-    list.foreach((position) => {
-      grid = grid.set(position._1, position._2, NumberField(grid.sumBombNumberAround(position._1, position._2)))
-    })
-
-    grid
+    list.foldLeft(grid)(placeNumberField)
   }
+
+  override def getCoordinates: List[(Int, Int)] = playground.getCoordinates.toList
+
+  private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =
+    grid.set(position._1, position._2, NumberField(grid.sumBombNumberAround(position._1, position._2)))
+
+  private def placeBombField(grid: Grid, position: (Int, Int)): Grid =
+    grid.set(position._1, position._2, BombField())
 
   private def sumBombNumberAround(row: Int, col: Int): Int = {
     (for {
@@ -42,7 +47,7 @@ case class Grid(playground: TwoDimensionalArray[IField], bombs: Int, random: Ran
 
   override def toString: String = {
     var string = "  | " + 0.until(playground.cols).mkString(" ") + "\n"
-    string += "-" * 2 + "|" + "-" * (playground.cols*2) + "\n"
+    string += "-" * 2 + "|" + "-" * (playground.cols * 2) + "\n"
     var rowIndex = 0
     playground.foreachRow(row => {
       string += rowIndex + " |"

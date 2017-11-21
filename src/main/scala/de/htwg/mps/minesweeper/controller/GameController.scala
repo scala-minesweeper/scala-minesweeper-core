@@ -8,6 +8,9 @@ case class FieldChanged(row: Int, col: Int, field: IField) extends Event
 
 class GameController(var grid: IGrid) extends IGameController {
 
+  override def openAllFields(): Unit =
+    grid.getCoordinates.foreach(coordinate => openField(coordinate._1, coordinate._2))
+
   override def openField(row: Int, col: Int): Unit =
     grid.get(row, col).exists(cell => updateField("Open field", row, col, cell.showField()))
 
