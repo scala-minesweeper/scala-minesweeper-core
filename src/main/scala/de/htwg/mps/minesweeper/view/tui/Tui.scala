@@ -37,7 +37,7 @@ class Tui(val controller: IGameController) extends Reactor {
         controller.openAllFields()
         false
       case _ =>
-        input.toList.filter(c => c != ' ').map(c => c.toString) match {
+        input.split("\\s+").toList match {
           case "o" :: row :: column :: Nil =>
             controller.openField(row.toInt, column.toInt)
           case "?" :: row :: column :: Nil =>
