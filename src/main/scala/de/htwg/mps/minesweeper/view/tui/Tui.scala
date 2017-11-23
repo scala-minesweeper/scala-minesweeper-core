@@ -11,11 +11,12 @@ class Tui(val controller: IGameController) extends Reactor {
     case _: FieldChanged => printTui()
     case _: GameWon => printTui("You win")
     case _: GameLost => printTui("You lost")
-    case _: GameStart => printTui()
+    case _: GameStart =>
+      println("\n==========================\nMinesweeper\n==========================")
+      printTui()
   }
 
   def printTui(): Unit = {
-    println("Minesweeper\n")
     println(controller.getGrid.toString)
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
@@ -29,38 +30,40 @@ class Tui(val controller: IGameController) extends Reactor {
   }
 
   def printTui(message: String): Unit = {
-    println("Minesweeper\n")
     println(message)
   }
 
   def processInput(input: String): Boolean = {
     input match {
-      case "p" =>
-        println(controller.getGrid.toString)
-        true
-      case "q" =>
-        println("Goodbye")
-        false
-      case "a" =>
-        controller.openAllFields()
-        true
-      case "r" =>
-        controller.restartGame()
-        true
+      case "p" => continue(() => println(controller.getGrid.toString))
+      case "q" => stop(() => println("Goodbye"))
+      case "a" => continue(() => controller.openAllFields())
+      case "r" => continue(() => controller.restartGame())
       case _ =>
-        input.split("\\s+").toList match {
-          case "o" :: row :: column :: Nil =>
-            controller.openField(row.toInt, column.toInt)
-          case "?" :: row :: column :: Nil =>
-            controller.questionField(row.toInt, column.toInt)
-          case "!" :: row :: column :: Nil =>
-            controller.unQuestionField(row.toInt, column.toInt)
-          case "f" :: row :: column :: Nil =>
-            controller.flagField(row.toInt, column.toInt)
-          case _ => println("Unknown action")
-        }
-        true
+        continue(() =>
+          input.split("\\s+").toList match {
+            case "o" :: row :: column :: Nil =>
+              controller.openField(row.toInt, column.toInt)
+            case "?" :: row :: column :: Nil =>
+              controller.questionField(row.toInt, column.toInt)
+            case "!" :: row :: column :: Nil =>
+              controller.unQuestionField(row.toInt, column.toInt)
+            case "f" :: row :: column :: Nil =>
+              controller.flagField(row.toInt, column.toInt)
+            case _ => println("Unknown action")
+          }
+        )
     }
+  }
+
+  private def continue[U](f: () => U): Boolean = {
+    f()
+    true
+  }
+
+  private def stop[U](f: () => U): Boolean = {
+    f()
+    false
   }
 
 }
