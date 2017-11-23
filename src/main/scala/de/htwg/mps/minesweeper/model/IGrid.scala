@@ -6,5 +6,6 @@ trait IGrid {
   def set(row: Int, col: Int, cell: IField): IGrid
   def get(row: Int, col: Int): Option[IField]
   def getCoordinates: List[(Int, Int)]
+  def checkIfGameIsWon: Boolean
 
 }

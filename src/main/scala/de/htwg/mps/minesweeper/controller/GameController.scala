@@ -5,6 +5,7 @@ import de.htwg.mps.minesweeper.model.{IField, IGrid}
 import scala.swing.event.Event
 
 case class FieldChanged(row: Int, col: Int, field: IField) extends Event
+case class GameOver(won: Boolean) extends Event
 
 class GameController(var grid: IGrid) extends IGameController {
 
@@ -39,6 +40,7 @@ class GameController(var grid: IGrid) extends IGameController {
   private def updateField(row: Int, col: Int, field: IField): Boolean = {
     grid = grid.set(row, col, field)
     publish(FieldChanged(row, col, field))
+    checkIfGameIsOver
     true
   }
 
@@ -55,6 +57,15 @@ class GameController(var grid: IGrid) extends IGameController {
   private def updateField(actionText: String, row: Int, col: Int, field: IField): Boolean = {
     println(actionText + " " + coordinateToString(row, col))
     updateField(row, col, field)
+  }
+
+
+  /**
+    * Check in the grid if all fields were found which are not bombs.
+    * If yes, all reactors are notified and the game will be finished successfully.
+    */
+  private def checkIfGameIsOver(): Unit = {
+    if(grid.checkIfGameIsWon ) publish(GameOver(true))
   }
 
   /**

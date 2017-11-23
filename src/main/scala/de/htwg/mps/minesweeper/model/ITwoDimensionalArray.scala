@@ -5,6 +5,8 @@ trait ITwoDimensionalArray[A] {
 
   def get(row: Int, col: Int): Option[A]
 
+  def detectedNonBombFields : Int
+
   def foreachRow[U](f: Vector[A] => U): Unit
   val cols: Int
   val rows: Int

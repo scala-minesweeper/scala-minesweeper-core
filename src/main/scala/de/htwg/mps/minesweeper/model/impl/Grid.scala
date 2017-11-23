@@ -21,6 +21,18 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     )(placeNumberField)
   }
 
+  /**
+    * compares number of opened numberFields with total number of numberfields
+    *
+    * @return true if number of opened numberfields equals total number of numberFields
+    */
+  def checkIfGameIsWon: Boolean = {
+    println("detectedNonBombFields: "+ playground.detectedNonBombFields)
+    println("bombs: " +bombs)
+    println("playground size: "+playground.cols*playground.rows)
+    playground.detectedNonBombFields == nonBombFields
+  }
+
   override def getCoordinates: List[(Int, Int)] = playground.getCoordinates
 
   private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =
@@ -39,6 +51,10 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
 
   private def sumBombs(row: Int, col: Int): Int = {
     playground.get(row, col).map(f => if (f.isBomb) 1 else 0).getOrElse(0)
+  }
+
+  private def nonBombFields: Int = {
+    playground.cols*playground.rows-bombs
   }
 
   override def toString: String = {
