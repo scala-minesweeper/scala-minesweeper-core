@@ -20,11 +20,18 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
     )
   }
 
+  def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean = {
+    this.get(col, row).getOrElse().isInstanceOf[BombField]
+  }
+
   def detectedNonBombFields: Int = {
     var numberDetNonBombFields: Int = 0
     0.until(rows).flatMap(row =>
       0.until(cols).map(col =>
-        if(this.get(col, row).getOrElse().isInstanceOf[NumberField] && this.get(col, row).getOrElse().asInstanceOf[NumberField].isShown) numberDetNonBombFields += 1
+        this.get(col, row).getOrElse() match {
+          case field: NumberField if field.isShown => numberDetNonBombFields += 1
+          case _ =>
+        }
       )
     )
     numberDetNonBombFields

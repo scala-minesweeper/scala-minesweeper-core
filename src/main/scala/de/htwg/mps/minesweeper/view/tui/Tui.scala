@@ -1,6 +1,6 @@
 package de.htwg.mps.minesweeper.view.tui
 
-import de.htwg.mps.minesweeper.controller.{FieldChanged, GameOver, IGameController}
+import de.htwg.mps.minesweeper.controller.{FieldChanged, GameWon, GameLost, IGameController}
 
 import scala.swing.Reactor
 
@@ -9,7 +9,8 @@ class Tui(val controller: IGameController) extends Reactor {
   listenTo(controller)
   reactions += {
     case e: FieldChanged => printTui()
-    case f: GameOver => printTui("You win")
+    case f: GameWon => printTui("You win")
+    case g: GameLost => printTui("You lost")
   }
   printTui()
 

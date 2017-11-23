@@ -30,6 +30,10 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     playground.detectedNonBombFields == nonBombFields
   }
 
+  def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean = {
+    playground.checkIfCoordinateIsBomb(col, row)
+  }
+
   override def getCoordinates: List[(Int, Int)] = playground.getCoordinates
 
   private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =

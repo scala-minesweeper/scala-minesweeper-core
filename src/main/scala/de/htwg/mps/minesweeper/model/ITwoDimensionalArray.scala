@@ -7,6 +7,8 @@ trait ITwoDimensionalArray[A] {
 
   def detectedNonBombFields : Int
 
+  def checkIfCoordinateIsBomb(col: Int, row: Int) : Boolean
+
   def foreachRow[U](f: Vector[A] => U): Unit
   val cols: Int
   val rows: Int

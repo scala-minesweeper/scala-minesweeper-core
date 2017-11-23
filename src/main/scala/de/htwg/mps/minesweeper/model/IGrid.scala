@@ -7,5 +7,6 @@ trait IGrid {
   def get(row: Int, col: Int): Option[IField]
   def getCoordinates: List[(Int, Int)]
   def checkIfGameIsWon: Boolean
+  def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean
 
 }
