@@ -12,7 +12,7 @@ class NumberFieldTest extends WordSpec {
     }
 
     "print a placeholder" in {
-      assert(numberField.toString.equals("~"))
+      assert(numberField.toString.equals("~ "))
     }
 
     "not shown at start" in {
@@ -36,7 +36,7 @@ class NumberFieldTest extends WordSpec {
     }
 
     "print a number" in {
-      assert(numberField.toString.equals("1"))
+      assert(numberField.toString.equals("1 "))
     }
 
     "is shown" in {
@@ -60,7 +60,7 @@ class NumberFieldTest extends WordSpec {
     }
 
     "print a flag" in {
-      assert(numberField.toString.equals("#"))
+      assert(numberField.toString.equals("# "))
     }
 
     "is not shown at start" in {

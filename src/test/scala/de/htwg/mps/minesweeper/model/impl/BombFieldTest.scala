@@ -13,7 +13,7 @@ class BombFieldTest extends WordSpec {
     }
 
     "print a +" in {
-      assert(bombField.toString == "+")
+      assert(bombField.toString == "+ ")
     }
 
     "is not flagged" in {
