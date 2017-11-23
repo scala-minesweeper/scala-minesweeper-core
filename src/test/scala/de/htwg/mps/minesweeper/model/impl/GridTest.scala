@@ -1,11 +1,11 @@
 package de.htwg.mps.minesweeper.model.impl
 
 import de.htwg.mps.minesweeper.model.IField
-import org.scalatest.WordSpec
+import org.scalatest.{Matchers, WordSpec}
 
 import scala.util.Random
 
-class GridTest extends WordSpec {
+class GridTest extends WordSpec with Matchers {
 
   "A 10x10 Grid" should {
 
@@ -13,15 +13,15 @@ class GridTest extends WordSpec {
     grid_10.init()
 
     "have width" in {
-      assert(grid_10.playground.cols == 10)
+      grid_10.playground.cols shouldBe 10
     }
 
     "have height" in {
-      assert(grid_10.playground.rows == 10)
+      grid_10.playground.rows shouldBe 10
     }
 
     "have number of bombs" in {
-      assert(grid_10.bombs == 18)
+      grid_10.bombs shouldBe 18
     }
 
   }
@@ -31,15 +31,15 @@ class GridTest extends WordSpec {
     grid_5_7_10.init()
 
     "have width" in {
-      assert(grid_5_7_10.playground.rows == 5)
+      grid_5_7_10.playground.rows shouldBe 5
     }
 
     "have height" in {
-      assert(grid_5_7_10.playground.cols == 7)
+      grid_5_7_10.playground.cols shouldBe 7
     }
 
     "have number of bombs" in {
-      assert(grid_5_7_10.bombs == 10)
+      grid_5_7_10.bombs shouldBe 10
     }
 
   }
@@ -48,33 +48,31 @@ class GridTest extends WordSpec {
     val grid = new Grid(TwoDimensionalArray[IField](3, 3, NumberField(0)), 2, new Random(5))
       .init()
 
-    println(grid.toString)
-
     "have bombs" in {
-      assert(grid.playground.get(0, 0).get.isBomb)
-      assert(grid.playground.get(1, 2).get.isBomb)
+      grid.playground.get(0, 0).get.isBomb shouldBe true
+      grid.playground.get(1, 2).get.isBomb shouldBe true
     }
 
     "have numbers" in {
-      assert(grid.playground.get(0, 1).get.asInstanceOf[NumberField].numberBombs == 2)
-      assert(grid.playground.get(0, 2).get.asInstanceOf[NumberField].numberBombs == 1)
-      assert(grid.playground.get(1, 0).get.asInstanceOf[NumberField].numberBombs == 1)
-      assert(grid.playground.get(1, 1).get.asInstanceOf[NumberField].numberBombs == 2)
-      assert(grid.playground.get(2, 0).get.asInstanceOf[NumberField].numberBombs == 0)
-      assert(grid.playground.get(2, 1).get.asInstanceOf[NumberField].numberBombs == 1)
-      assert(grid.playground.get(2, 2).get.asInstanceOf[NumberField].numberBombs == 1)
+      grid.playground.get(0, 1).get.asInstanceOf[NumberField].numberBombs shouldBe 2
+      grid.playground.get(0, 2).get.asInstanceOf[NumberField].numberBombs shouldBe 1
+      grid.playground.get(1, 0).get.asInstanceOf[NumberField].numberBombs shouldBe 1
+      grid.playground.get(1, 1).get.asInstanceOf[NumberField].numberBombs shouldBe 2
+      grid.playground.get(2, 0).get.asInstanceOf[NumberField].numberBombs shouldBe 0
+      grid.playground.get(2, 1).get.asInstanceOf[NumberField].numberBombs shouldBe 1
+      grid.playground.get(2, 2).get.asInstanceOf[NumberField].numberBombs shouldBe 1
     }
 
     "print a grid" in {
       val result =
         "   | 0  1  2\n" +
-        "---|---------\n" +
-        "0  | ~  ~  ~ \n" +
-        "1  | ~  ~  ~ \n" +
-        "2  | ~  ~  ~ \n"
-      assert(grid.toString == result)
+          "---|---------\n" +
+          "0  | ~  ~  ~ \n" +
+          "1  | ~  ~  ~ \n" +
+          "2  | ~  ~  ~ \n"
+      grid.toString shouldBe result
     }
 
- }
+  }
 
 }

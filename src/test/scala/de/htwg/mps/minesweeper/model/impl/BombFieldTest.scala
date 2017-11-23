@@ -1,27 +1,27 @@
 package de.htwg.mps.minesweeper.model.impl
 
-import org.scalatest.WordSpec
+import org.scalatest.{Matchers, WordSpec}
 
-class BombFieldTest extends WordSpec {
+class BombFieldTest extends WordSpec with Matchers {
 
   "A shown BombField" should {
 
     val bombField: BombField = BombField().showField()
 
     "be a bomb" in {
-      assert(bombField.isBomb)
+      bombField.isBomb shouldBe true
     }
 
     "print a +" in {
-      assert(bombField.toString == "+ ")
+      bombField.toString shouldBe "+ "
     }
 
     "is not flagged" in {
-      assert(!bombField.isFlagged)
+      bombField.isFlagged shouldBe false
     }
 
     "is shown" in {
-      assert(bombField.isShown)
+      bombField.isShown shouldBe false
     }
 
 

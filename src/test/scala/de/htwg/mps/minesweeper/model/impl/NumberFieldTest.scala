@@ -1,30 +1,30 @@
 package de.htwg.mps.minesweeper.model.impl
 
-import org.scalatest.WordSpec
+import org.scalatest.{Matchers, WordSpec}
 
-class NumberFieldTest extends WordSpec {
+class NumberFieldTest extends WordSpec with Matchers {
 
   "A hidden NumberField" should {
     val numberField = NumberField(0)
 
     "not be a bomb" in {
-      assert(!numberField.isBomb)
+      numberField.isBomb shouldBe false
     }
 
     "print a placeholder" in {
-      assert(numberField.toString.equals("~ "))
+      numberField.toString shouldBe "~ "
     }
 
     "not shown at start" in {
-      assert(!numberField.isShown)
+      numberField.isShown shouldBe false
     }
 
     "is not flagged" in {
-      assert(!numberField.isFlagged)
+      numberField.isFlagged shouldBe false
     }
 
     "is not marked with ?" in {
-      assert(!numberField.isQuestionMarked)
+      numberField.isQuestionMarked shouldBe false
     }
   }
 
@@ -32,23 +32,23 @@ class NumberFieldTest extends WordSpec {
     val numberField: NumberField = NumberField(1).showField()
 
     "not be a bomb" in {
-      assert(!numberField.isBomb)
+      numberField.isBomb shouldBe false
     }
 
     "print a number" in {
-      assert(numberField.toString.equals("1 "))
+      numberField.toString shouldBe "1 "
     }
 
     "is shown" in {
-      assert(numberField.isShown)
+      numberField.isShown shouldBe true
     }
 
     "is not flagged" in {
-      assert(!numberField.isFlagged)
+      numberField.isFlagged shouldBe false
     }
 
     "is not marked with ?" in {
-      assert(!numberField.isQuestionMarked)
+      numberField.isQuestionMarked shouldBe false
     }
   }
 
@@ -56,23 +56,23 @@ class NumberFieldTest extends WordSpec {
     val numberField: NumberField = NumberField(1).flagField()
 
     "not be a bomb" in {
-      assert(!numberField.isBomb)
+      numberField.isBomb shouldBe false
     }
 
     "print a flag" in {
-      assert(numberField.toString.equals("# "))
+      numberField.toString shouldBe "# "
     }
 
     "is not shown at start" in {
-      assert(!numberField.isShown)
+      numberField.isShown shouldBe false
     }
 
     "is flagged" in {
-      assert(numberField.isFlagged)
+      numberField.isFlagged shouldBe true
     }
 
     "is not marked with ?" in {
-      assert(!numberField.isQuestionMarked)
+      numberField.isQuestionMarked shouldBe false
     }
   }
 
