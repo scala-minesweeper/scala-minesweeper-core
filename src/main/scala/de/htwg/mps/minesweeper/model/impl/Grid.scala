@@ -12,7 +12,7 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
 
   def init(): Grid = {
     // shuffle all available field coordinates
-    val list: List[(Int, Int)] = random.shuffle(playground.getCoordinates)
+    val list: List[(Int, Int)] = random.shuffle(playground.asCoordinates)
     val bombList = list.slice(0, bombs)
     val numberList = list.slice(bombs, list.size)
     // place bomb and number fields on a slice of coordinates
@@ -29,13 +29,11 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
   def checkIfGameIsWon: Boolean = detectedNonBombFields == nonBombFields
 
   private def detectedNonBombFields: Int = {
-    0.until(playground.rows).flatMap(row =>
-      0.until(playground.cols).map(col =>
-        playground.get(col, row).getOrElse(BombField) match {
-          case field: NumberField if field.isShown => 1
-          case _ => 0
-        }
-      )
+    playground.asNestedList.flatMap(row =>
+      row.map {
+        case field: NumberField if field.isShown => 1
+        case _ => 0
+      }
     ).sum
   }
 
@@ -43,7 +41,7 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     playground.get(row, col).exists(field => field.isBomb)
   }
 
-  override def getCoordinates: List[(Int, Int)] = playground.getCoordinates
+  override def getCoordinates: List[(Int, Int)] = playground.asCoordinates
 
   private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =
     grid.set(position._1, position._2, NumberField(grid.sumBombNumberAround(position._1, position._2)))
@@ -73,7 +71,7 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     string += "\n"
     string += "-" * 3 + "|" + "-" * (playground.cols * 3) + "\n"
     var rowIndex = 0
-    playground.foreachRow(row => {
+    playground.asNestedList.foreach(row => {
       if(rowIndex < 10) string += rowIndex + "  | " + row.mkString(" ") + "\n" else string += rowIndex + " | " + row.mkString(" ") + "\n"
       rowIndex += 1
     })
