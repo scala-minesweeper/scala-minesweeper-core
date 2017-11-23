@@ -41,7 +41,7 @@ class GameController(var grid: IGrid) extends IGameController {
   private def updateField(row: Int, col: Int, field: IField): Boolean = {
     grid = grid.set(row, col, field)
     publish(FieldChanged(row, col, field))
-    checkIfGameIsOver(col, row)
+    checkIfGameIsOver(row, col)
     true
   }
 
@@ -66,9 +66,9 @@ class GameController(var grid: IGrid) extends IGameController {
     * Either because all the fields that are not bombs have been uncovered
     * or because a field with a bomb has been uncovered.
     */
-  private def checkIfGameIsOver(col: Int, row: Int): Unit = {
+  private def checkIfGameIsOver(row: Int, col: Int): Unit = {
     if(grid.checkIfGameIsWon ) publish(GameWon())
-    if(grid.checkIfCoordinateIsBomb(col, row)) publish(GameLost())
+    if(grid.checkIfCoordinateIsBomb(row, col)) publish(GameLost())
   }
 
 

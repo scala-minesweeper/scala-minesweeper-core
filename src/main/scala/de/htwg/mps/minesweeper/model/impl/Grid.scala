@@ -26,12 +26,21 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     *
     * @return true if number of opened numberfields equals total number of numberFields
     */
-  def checkIfGameIsWon: Boolean = {
-    playground.detectedNonBombFields == nonBombFields
+  def checkIfGameIsWon: Boolean = detectedNonBombFields == nonBombFields
+
+  private def detectedNonBombFields: Int = {
+    0.until(playground.rows).flatMap(row =>
+      0.until(playground.cols).map(col =>
+        playground.get(col, row).getOrElse(BombField) match {
+          case field: NumberField if field.isShown => 1
+          case _ => 0
+        }
+      )
+    ).sum
   }
 
-  def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean = {
-    playground.get(col, row).exists(field => field.isBomb)
+  def checkIfCoordinateIsBomb(row: Int, col: Int): Boolean = {
+    playground.get(row, col).exists(field => field.isBomb)
   }
 
   override def getCoordinates: List[(Int, Int)] = playground.getCoordinates

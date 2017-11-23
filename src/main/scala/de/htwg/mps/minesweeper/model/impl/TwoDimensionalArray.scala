@@ -20,19 +20,6 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
     )
   }
 
-  def detectedNonBombFields: Int = {
-    var numberDetNonBombFields: Int = 0
-    0.until(rows).flatMap(row =>
-      0.until(cols).map(col =>
-        this.get(col, row).getOrElse() match {
-          case field: NumberField if field.isShown => numberDetNonBombFields += 1
-          case _ =>
-        }
-      )
-    )
-    numberDetNonBombFields
-  }
-
   override def getCoordinates: List[(Int, Int)] =
     0.until(rows).flatMap(row =>
       0.until(cols).map(col =>
