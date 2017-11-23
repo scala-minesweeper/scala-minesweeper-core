@@ -15,5 +15,10 @@ trait ITwoDimensionalArray[A] {
     */
   def asCoordinates: List[(Int, Int)]
 
+  /**
+    * Get this two dimensional element as two nested immutable lists for iterating.
+    *
+    * @return nested lists with element
+    */
   def asNestedList: List[List[A]]
 }

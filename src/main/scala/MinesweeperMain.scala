@@ -8,11 +8,11 @@ import scala.io.StdIn.readLine
 
 object MinesweeperMain {
 
-  val grid: IGrid = Grid(3, 3, 3).init()
-  val controller: IGameController = new GameController(grid)
+  val controller: IGameController = new GameController()
   val tui: Tui = new Tui(controller)
 
   def main(args: Array[String]) {
+    controller.restartGame()
     while (tui.processInput(readLine())) {}
   }
 }

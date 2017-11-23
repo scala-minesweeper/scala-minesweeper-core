@@ -1,5 +1,6 @@
 package de.htwg.mps.minesweeper.controller
 
+import de.htwg.mps.minesweeper.model.impl.Grid
 import de.htwg.mps.minesweeper.model.{IField, IGrid}
 
 import scala.swing.event.Event
@@ -7,8 +8,16 @@ import scala.swing.event.Event
 case class FieldChanged(row: Int, col: Int, field: IField) extends Event
 case class GameWon() extends Event
 case class GameLost() extends Event
+case class GameStart(grid: IGrid) extends Event
 
-class GameController(var grid: IGrid) extends IGameController {
+class GameController() extends IGameController {
+
+  var grid: IGrid = Grid(0, 0, 0)
+
+  override def restartGame(): Unit = {
+    grid = Grid(3, 3, 3).init()
+    publish(GameStart(grid))
+  }
 
   override def openAllFields(): Unit =
     grid.getCoordinates.foreach(coordinate => openField(coordinate._1, coordinate._2))
