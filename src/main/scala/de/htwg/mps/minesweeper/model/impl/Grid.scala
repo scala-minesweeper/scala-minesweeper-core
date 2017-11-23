@@ -27,9 +27,6 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     * @return true if number of opened numberfields equals total number of numberFields
     */
   def checkIfGameIsWon: Boolean = {
-    println("detectedNonBombFields: "+ playground.detectedNonBombFields)
-    println("bombs: " +bombs)
-    println("playground size: "+playground.cols*playground.rows)
     playground.detectedNonBombFields == nonBombFields
   }
 
