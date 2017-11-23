@@ -43,7 +43,8 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
 
   override def toString: String = {
     var string = "   | " +0.until(math.min(11, playground.cols)).mkString("  ")
-    if(playground.cols > 10) string += " "+11.until(playground.cols).mkString(" ") + "\n"
+    if(playground.cols > 10) string += " "+11.until(playground.cols).mkString(" ")
+    string += "\n"
     string += "-" * 3 + "|" + "-" * (playground.cols * 3) + "\n"
     var rowIndex = 0
     playground.foreachRow(row => {
