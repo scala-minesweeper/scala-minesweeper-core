@@ -31,7 +31,7 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
   }
 
   def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean = {
-    playground.checkIfCoordinateIsBomb(col, row)
+    playground.get(col, row).exists(field => field.isBomb)
   }
 
   override def getCoordinates: List[(Int, Int)] = playground.getCoordinates

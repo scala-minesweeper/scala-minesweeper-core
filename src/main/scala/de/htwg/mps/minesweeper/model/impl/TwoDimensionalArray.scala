@@ -20,10 +20,6 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
     )
   }
 
-  def checkIfCoordinateIsBomb(col: Int, row: Int): Boolean = {
-    this.get(col, row).getOrElse().isInstanceOf[BombField]
-  }
-
   def detectedNonBombFields: Int = {
     var numberDetNonBombFields: Int = 0
     0.until(rows).flatMap(row =>
