@@ -16,7 +16,7 @@ case class NumberField(isShown: Boolean, isFlagged: Boolean, isQuestionMarked: B
 
   override def isBomb: Boolean = false
 
-  override def toString: String = if(isShown) "" + numberBombs else if(isQuestionMarked) questionMarkedFieldString else if(isFlagged) flaggedFieldString else hiddenFieldString
+  override def toString: String = if(isShown) "" + numberBombs+" " else if(isQuestionMarked) questionMarkedFieldString else if(isFlagged) flaggedFieldString else hiddenFieldString
 
 
 }
