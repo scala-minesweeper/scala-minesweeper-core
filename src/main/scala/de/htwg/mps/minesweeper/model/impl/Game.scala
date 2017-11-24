@@ -25,6 +25,8 @@ case class Game(start: DateTime,
     )
   }
 
+  override def updateGrid(grid: IGrid): IGame = copy(grid = grid)
+
   override def isRunning: Boolean = running
 
   override def isFinished: Boolean = running && !start.equals(end)
@@ -36,6 +38,14 @@ case class Game(start: DateTime,
 }
 
 object Game {
+  def apply(): Game = Game(
+    DateTime.now,
+    DateTime.now,
+    running = false,
+    Grid(1, 1, 0),
+    Player(),
+    EmptyGameResult()
+  )
   def apply(grid: IGrid): Game = Game(
     DateTime.now,
     DateTime.now,

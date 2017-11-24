@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.controller
 
 import de.htwg.mps.minesweeper.model.impl.{Game, Grid}
-import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, MinesweeperGameResult}
+import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
 import de.htwg.mps.minesweeper.model.{IField, IGame, IGrid}
 
 import scala.swing.event.Event
@@ -10,46 +10,44 @@ case class FieldChanged(row: Int, col: Int, field: IField) extends Event
 
 case class GameWon() extends Event
 
-case class GameLost() extends Event
+case class GameLost(gameResult: GameResult) extends Event
 
 case class GameStart(grid: IGrid) extends Event
 
 class GameController() extends IGameController {
 
-  var grid: IGrid = Grid(1, 1, 0)
-  var game: IGame = Game(grid)
+  var game: IGame = Game()
 
   override def restartGame(): Unit = {
-    grid = Grid(3, 3, 3).init()
-    game = Game(grid).startGame()
-    publish(GameStart(grid))
+    game = Game(Grid(4, 4, 3).init()).startGame()
+    publish(GameStart(game.grid()))
   }
 
   override def openAllFields(): Unit = running(() =>
-    grid.getCoordinates.foreach(coordinate => openField(coordinate._1, coordinate._2))
+    game.grid().getCoordinates.foreach(coordinate => openField(coordinate._1, coordinate._2))
   )
 
   override def openField(row: Int, col: Int): Unit = running(() =>
-    grid.get(row, col).exists(cell => updateField("Open field", row, col, cell.showField()))
+    game.grid().get(row, col).exists(cell => updateField("Open field", row, col, cell.showField()))
   )
 
   override def questionField(row: Int, col: Int): Unit = running(() =>
-    grid.get(row, col).exists(cell => updateField("Mark field (?)", row, col, cell.questionField()))
+    game.grid().get(row, col).exists(cell => updateField("Mark field (?)", row, col, cell.questionField()))
   )
 
   override def unQuestionField(row: Int, col: Int): Unit = running(() =>
-    grid.get(row, col).exists(cell => updateField("Unmark field (?)", row, col, cell.unQuestionField()))
+    game.grid().get(row, col).exists(cell => updateField("Unmark field (?)", row, col, cell.unQuestionField()))
   )
 
   override def flagField(row: Int, col: Int): Unit = running(() =>
-    grid.get(row, col).exists(cell => updateField(row, col, cell.flagField()))
+    game.grid().get(row, col).exists(cell => updateField(row, col, cell.flagField()))
   )
 
   override def unflagField(row: Int, col: Int): Unit = running(() =>
-    grid.get(row, col).exists(cell => updateField(row, col, cell.unflagField()))
+    game.grid().get(row, col).exists(cell => updateField(row, col, cell.unflagField()))
   )
 
-  override def getGrid: IGrid = grid
+  override def getGrid: IGrid = game.grid()
 
   /**
     * Only execute the given function, if the current game is running.
@@ -68,7 +66,7 @@ class GameController() extends IGameController {
     * @return true, if successfully updated
     */
   private def updateField(row: Int, col: Int, field: IField): Boolean = {
-    grid = grid.set(row, col, field)
+    game = game.updateGrid(game.grid().set(row, col, field))
     publish(FieldChanged(row, col, field))
     checkIfGameIsOver()
     true
@@ -90,8 +88,8 @@ class GameController() extends IGameController {
   }
 
   private def checkIfGameIsOver(): Unit = {
-    if (grid.checkIfGameIsWon) finishGameWin()
-    if (grid.checkIfGameIsLost) finishGameLost()
+    if (game.grid().checkIfGameIsWon) finishGameWin()
+    if (game.grid().checkIfGameIsLost) finishGameLost()
   }
 
   private def finishGameWin(): Unit = {
@@ -103,7 +101,7 @@ class GameController() extends IGameController {
   private def finishGameLost(): Unit = {
     game = game.finishGame()
     println(game.getScore.getOrElse(EmptyGameResult()))
-    publish(GameLost())
+    publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
   }
 
   /**

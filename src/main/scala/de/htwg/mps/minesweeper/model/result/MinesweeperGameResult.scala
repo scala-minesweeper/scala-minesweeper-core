@@ -8,8 +8,8 @@ case class MinesweeperGameResult(win: Boolean,
   override def getScore: Int = foundBombsScore + gridDifficultyScore + timeScore
 
   def foundBombsScore: Int = (if (win) 100 else 10) * foundBombs
-  def gridDifficultyScore: Int = if (win) 10 * allBombs / gridFields else 0
-  def timeScore: Int = (if (win) 500 * (math.max(1, gridFields * 3 - timeSeconds) / 100) else 0).toInt
+  def gridDifficultyScore: Int = (if (win) (500.0 * allBombs) / gridFields else 0).toInt
+  def timeScore: Int = (if (win) 500.0 * (math.max(1.0, gridFields * 3 - timeSeconds) / 100) else 0).toInt
 
   override def toString: String = "Score(" +
     "\n found bombs     : " + foundBombsScore +
