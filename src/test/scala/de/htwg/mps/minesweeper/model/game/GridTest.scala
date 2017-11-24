@@ -1,6 +1,6 @@
-package de.htwg.mps.minesweeper.model.impl
+package de.htwg.mps.minesweeper.model.game
 
-import de.htwg.mps.minesweeper.model.IField
+import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.util.Random
@@ -9,7 +9,7 @@ class GridTest extends WordSpec with Matchers {
 
   "A 10x10 Grid" should {
 
-    val grid_10 = Grid(TwoDimensionalArray[IField](10, 10, NumberField(0)), 18, Random)
+    val grid_10 = Grid(TwoDimensionalArray[Field](10, 10, NumberField(0)), 18, Random)
     grid_10.init()
 
     "have width" in {
@@ -27,7 +27,7 @@ class GridTest extends WordSpec with Matchers {
   }
 
   "A 5x7 Grid with 10 bombs" should {
-    val grid_5_7_10 = Grid(TwoDimensionalArray[IField](5, 7, NumberField(0)), 10, Random)
+    val grid_5_7_10 = Grid(TwoDimensionalArray[Field](5, 7, NumberField(0)), 10, Random)
     grid_5_7_10.init()
 
     "have width" in {
@@ -45,7 +45,7 @@ class GridTest extends WordSpec with Matchers {
   }
 
   "An initialized 3x3 Grid with 2 bombs and fixed random" should {
-    val grid = new Grid(TwoDimensionalArray[IField](3, 3, NumberField(0)), 2, new Random(5))
+    val grid = new Grid(TwoDimensionalArray[Field](3, 3, NumberField(0)), 2, new Random(5))
       .init()
 
     "have bombs" in {

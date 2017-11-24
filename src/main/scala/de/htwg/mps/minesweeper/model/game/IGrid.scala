@@ -1,11 +1,13 @@
-package de.htwg.mps.minesweeper.model
+package de.htwg.mps.minesweeper.model.game
+
+import de.htwg.mps.minesweeper.model.field.Field
 
 trait IGrid {
 
   val bombs: Int
   def init(): IGrid
-  def set(row: Int, col: Int, cell: IField): IGrid
-  def get(row: Int, col: Int): Option[IField]
+  def set(row: Int, col: Int, cell: Field): IGrid
+  def get(row: Int, col: Int): Option[Field]
   def getCoordinates: List[(Int, Int)]
   def getSize: (Int, Int)
   def getFieldCount: Int

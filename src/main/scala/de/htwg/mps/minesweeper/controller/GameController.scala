@@ -1,12 +1,12 @@
 package de.htwg.mps.minesweeper.controller
 
-import de.htwg.mps.minesweeper.model.impl.{Game, Grid}
+import de.htwg.mps.minesweeper.model.field.Field
+import de.htwg.mps.minesweeper.model.game.{Game, Grid, IGame, IGrid}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
-import de.htwg.mps.minesweeper.model.{IField, IGame, IGrid}
 
 import scala.swing.event.Event
 
-case class FieldChanged(row: Int, col: Int, field: IField) extends Event
+case class FieldChanged(row: Int, col: Int, field: Field) extends Event
 
 case class GameWon() extends Event
 
@@ -63,7 +63,7 @@ class GameController() extends IGameController {
     * @param field new field
     * @return true, if successfully updated
     */
-  private def updateField(row: Int, col: Int, field: IField): Boolean = {
+  private def updateField(row: Int, col: Int, field: Field): Boolean = {
     game = game.updateGrid(game.grid().set(row, col, field))
     publish(FieldChanged(row, col, field))
     checkIfGameIsOver()
@@ -80,7 +80,7 @@ class GameController() extends IGameController {
     * @param field      new field
     * @return true, if successfully updated
     */
-  private def updateField(actionText: String, row: Int, col: Int, field: IField): Boolean = {
+  private def updateField(actionText: String, row: Int, col: Int, field: Field): Boolean = {
     println(actionText + " " + coordinateToString(row, col))
     updateField(row, col, field)
   }

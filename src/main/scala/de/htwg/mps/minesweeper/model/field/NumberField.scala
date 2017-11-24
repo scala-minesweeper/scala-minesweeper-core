@@ -1,8 +1,6 @@
-package de.htwg.mps.minesweeper.model.impl
+package de.htwg.mps.minesweeper.model.field
 
-import de.htwg.mps.minesweeper.model.IField
-
-case class NumberField(isShown: Boolean, isFlagged: Boolean, isQuestionMarked: Boolean, numberBombs: Int) extends IField {
+case class NumberField(isShown: Boolean, isFlagged: Boolean, isQuestionMarked: Boolean, numberBombs: Int) extends Field {
 
   override def showField(): NumberField = copy(isShown = true)
 

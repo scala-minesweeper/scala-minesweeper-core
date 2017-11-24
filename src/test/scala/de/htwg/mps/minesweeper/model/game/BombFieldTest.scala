@@ -1,5 +1,6 @@
-package de.htwg.mps.minesweeper.model.impl
+package de.htwg.mps.minesweeper.model.game
 
+import de.htwg.mps.minesweeper.model.field.BombField
 import org.scalatest.{Matchers, WordSpec}
 
 class BombFieldTest extends WordSpec with Matchers {

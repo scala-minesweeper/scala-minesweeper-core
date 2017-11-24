@@ -1,6 +1,6 @@
-package de.htwg.mps.minesweeper.model
+package de.htwg.mps.minesweeper.model.field
 
-trait IField {
+trait Field {
 
   protected val hiddenFieldString = "~ "
 
@@ -8,15 +8,15 @@ trait IField {
 
   protected val flaggedFieldString = "# "
 
-  def showField(): IField
+  def showField(): Field
 
-  def flagField(): IField
+  def flagField(): Field
 
-  def questionField(): IField
+  def questionField(): Field
 
-  def unQuestionField(): IField
+  def unQuestionField(): Field
 
-  def unflagField(): IField
+  def unflagField(): Field
 
   def isBomb: Boolean
 

@@ -1,6 +1,4 @@
-package de.htwg.mps.minesweeper.model.impl
-
-import de.htwg.mps.minesweeper.model.ITwoDimensionalArray
+package de.htwg.mps.minesweeper.model.game
 
 case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) extends ITwoDimensionalArray[A] {
 

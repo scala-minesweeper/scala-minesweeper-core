@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.model
+package de.htwg.mps.minesweeper.model.game
 
 import de.htwg.mps.minesweeper.model.result.GameResult
 

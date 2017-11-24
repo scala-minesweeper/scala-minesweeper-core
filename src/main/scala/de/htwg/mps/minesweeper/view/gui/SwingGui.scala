@@ -5,7 +5,7 @@ import java.awt.{Color, Font}
 import javax.swing.border.LineBorder
 
 import de.htwg.mps.minesweeper.controller._
-import de.htwg.mps.minesweeper.model.IGrid
+import de.htwg.mps.minesweeper.model.game.IGrid
 
 import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
