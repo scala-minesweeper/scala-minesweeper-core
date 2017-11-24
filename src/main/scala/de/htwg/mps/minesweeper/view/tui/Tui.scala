@@ -4,7 +4,7 @@ import de.htwg.mps.minesweeper.controller._
 
 import scala.swing.Reactor
 
-class Tui(val controller: IGameController) extends Reactor {
+class Tui(val controller: GameController) extends Reactor {
 
   listenTo(controller)
   reactions += {

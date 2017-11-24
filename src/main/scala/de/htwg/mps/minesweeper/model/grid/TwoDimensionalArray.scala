@@ -1,6 +1,6 @@
 package de.htwg.mps.minesweeper.model.grid
 
-case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) extends ITwoDimensionalArray[A] {
+case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) extends TwoDimensional[A] {
 
   override def updated(row: Int, col: Int, element: A): TwoDimensionalArray[A] = copy(vector = vector.updated(cols * row + col, element))
 
@@ -32,6 +32,6 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
 }
 
 object TwoDimensionalArray {
-  def apply[A](rows: Int, cols: Int, elem: A): ITwoDimensionalArray[A] =
+  def apply[A](rows: Int, cols: Int, elem: A): TwoDimensional[A] =
     TwoDimensionalArray[A](rows, cols, Vector.fill(rows * cols)(elem))
 }
