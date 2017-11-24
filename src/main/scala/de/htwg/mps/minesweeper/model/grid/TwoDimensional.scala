@@ -1,10 +1,10 @@
 package de.htwg.mps.minesweeper.model.grid
 
-trait ITwoDimensionalArray[A] {
+trait TwoDimensional[A] {
   val cols: Int
   val rows: Int
 
-  def updated(row: Int, col: Int, element: A): ITwoDimensionalArray[A]
+  def updated(row: Int, col: Int, element: A): TwoDimensional[A]
 
   def get(row: Int, col: Int): Option[A]
 

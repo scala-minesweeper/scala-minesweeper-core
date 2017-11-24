@@ -5,12 +5,12 @@ import java.awt.{Color, Font}
 import javax.swing.border.LineBorder
 
 import de.htwg.mps.minesweeper.controller._
-import de.htwg.mps.minesweeper.model.grid.IGrid
+import de.htwg.mps.minesweeper.model.grid.Grid
 
 import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
 
-class SwingGui(controller: IGameController) extends Frame {
+class SwingGui(controller: GameController) extends Frame {
 
   listenTo(controller)
 
@@ -60,7 +60,7 @@ class SwingGui(controller: IGameController) extends Frame {
     controller.game.grid().getSize._2) {
     border = new LineBorder(Color.BLACK, 2)
     background = Color.WHITE
-    val grid: IGrid = controller.game.grid()
+    val grid: Grid = controller.game.grid()
     for {
       row <- 0 until grid.getSize._1
       column <- 0 until grid.getSize._2
