@@ -87,8 +87,8 @@ class GameControllerImpl() extends GameController {
   }
 
   private def checkIfGameIsOver(): Unit = {
-    if (game.grid().checkIfGameIsWon) finishGameWin()
-    if (game.grid().checkIfGameIsLost) finishGameLost()
+    if (game.checkWin) finishGameWin()
+    if (game.checkLost) finishGameLost()
   }
 
   private def finishGameWin(): Unit = {

@@ -11,4 +11,6 @@ trait Game {
   def isRunning: Boolean
   def isFinished: Boolean
   def getScore: Option[GameResult]
+  def checkWin: Boolean
+  def checkLost: Boolean
 }

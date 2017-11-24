@@ -11,8 +11,6 @@ trait Grid {
   def getCoordinates: List[(Int, Int)]
   def getSize: (Int, Int)
   def getFieldCount: Int
-  def correctlyFlaggedBombs: Int
-  def checkIfGameIsWon: Boolean
-  def checkIfGameIsLost: Boolean
+  def fields: List[Field]
 
 }

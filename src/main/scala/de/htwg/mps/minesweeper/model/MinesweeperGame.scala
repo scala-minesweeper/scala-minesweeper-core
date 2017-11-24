@@ -15,8 +15,8 @@ case class MinesweeperGame(start: DateTime,
     val now = DateTime.now
     copy(end = now, running = false,
       gameResult = MinesweeperGameResult(
-        grid.checkIfGameIsWon,
-        grid.correctlyFlaggedBombs,
+        checkWin,
+        correctlyFlaggedBombs,
         grid.bombs,
         start.to(now).toDuration.getStandardSeconds,
         grid.getCoordinates.size
@@ -34,6 +34,19 @@ case class MinesweeperGame(start: DateTime,
     case _: EmptyGameResult => None
     case e => Some(e)
   }
+
+  override def checkWin: Boolean = detectedNonBombFields == nonBombFields && correctlyFlaggedBombs == grid.bombs
+
+  override def checkLost: Boolean = openedBombFields > 0
+
+  def nonBombFields: Int = grid.getFieldCount - grid.bombs
+
+  def correctlyFlaggedBombs: Int = grid.fields.count(f => f.isFlagged && f.isBomb)
+
+  def detectedNonBombFields: Int = grid.fields.count(field => !field.isBomb && field.isShown)
+
+  def openedBombFields: Int = grid.fields.count(field => field.isBomb && field.isShown)
+
 }
 
 object MinesweeperGame {

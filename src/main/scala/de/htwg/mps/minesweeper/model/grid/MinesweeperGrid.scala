@@ -21,15 +21,6 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
     )(placeNumberField)
   }
 
-  override def checkIfGameIsWon: Boolean =
-    detectedNonBombFields == nonBombFields && correctlyFlaggedBombs == bombs
-
-  override def checkIfGameIsLost: Boolean = openedBombFields > 0
-
-  def detectedNonBombFields: Int = playground.asList.count(field => !field.isBomb && field.isShown)
-
-  def openedBombFields: Int = playground.asList.count(field => field.isBomb && field.isShown)
-
   override def getCoordinates: List[(Int, Int)] = playground.asCoordinates
 
   override def getSize: (Int, Int) = (playground.rows, playground.cols)
@@ -48,16 +39,12 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
     } yield sumBombs(r, c)).sum
   }
 
-  private def sumBombs(row: Int, col: Int): Int = {
+  private def sumBombs(row: Int, col: Int): Int =
     playground.get(row, col).map(f => if (f.isBomb) 1 else 0).getOrElse(0)
-  }
-
-  def nonBombFields: Int = playground.cols * playground.rows - bombs
 
   override def getFieldCount: Int = playground.rows * playground.cols
 
-  override def correctlyFlaggedBombs: Int =
-    playground.asList.count(f => f.isFlagged && f.isBomb)
+  override def fields: List[Field] = playground.asList
 
   override def toString: String = {
     var string = "   | " + 0.until(math.min(11, playground.cols)).mkString("  ")
