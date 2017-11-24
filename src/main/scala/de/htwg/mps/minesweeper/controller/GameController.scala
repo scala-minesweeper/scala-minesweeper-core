@@ -19,7 +19,7 @@ class GameController() extends IGameController {
   var game: IGame = Game()
 
   override def restartGame(): Unit = {
-    game = Game(Grid(4, 4, 3).init()).startGame()
+    game = Game(Grid(4, 5, 3).init()).startGame()
     publish(GameStart(game.grid()))
   }
 
@@ -46,8 +46,6 @@ class GameController() extends IGameController {
   override def unflagField(row: Int, col: Int): Unit = running(() =>
     game.grid().get(row, col).exists(cell => updateField(row, col, cell.unflagField()))
   )
-
-  override def getGrid: IGrid = game.grid()
 
   /**
     * Only execute the given function, if the current game is running.

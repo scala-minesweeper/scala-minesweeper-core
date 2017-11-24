@@ -5,6 +5,7 @@ import java.awt.{Color, Font}
 import javax.swing.border.LineBorder
 
 import de.htwg.mps.minesweeper.controller._
+import de.htwg.mps.minesweeper.model.IGrid
 
 import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
@@ -54,20 +55,23 @@ class SwingGui(controller: IGameController) extends Frame {
     add(status, BorderPanel.Position.South)
   }
 
-  private def gridPanel: GridPanel = new GridPanel(controller.getGrid.getSize._1, controller.getGrid.getSize._1) {
+  private def gridPanel: GridPanel = new GridPanel(
+    controller.game.grid().getSize._1,
+    controller.game.grid().getSize._2) {
     border = new LineBorder(Color.BLACK, 2)
     background = Color.WHITE
+    val grid: IGrid = controller.game.grid()
     for {
-      row <- 0 until controller.getGrid.getSize._1
-      column <- 0 until controller.getGrid.getSize._1
+      row <- 0 until grid.getSize._1
+      column <- 0 until grid.getSize._2
     } {
       contents += new FlowPanel() {
         contents += new Label() {
-          text = controller.getGrid.get(row, column).getOrElse().toString
+          text = grid.get(row, column).getOrElse().toString
           font = new Font("Verdana", 1, 36)
           listenTo(mouse.clicks)
           reactions += {
-            case evt @ MouseClicked(_, _, _, _, _) =>
+            case evt@MouseClicked(_, _, _, _, _) =>
               evt.peer.getButton match {
                 case MouseEvent.BUTTON1 => controller.openField(row, column)
                 case MouseEvent.BUTTON3 => controller.flagField(row, column)

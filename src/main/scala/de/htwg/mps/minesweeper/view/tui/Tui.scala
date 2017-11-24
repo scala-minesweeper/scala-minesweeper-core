@@ -17,7 +17,7 @@ class Tui(val controller: IGameController) extends Reactor {
   }
 
   def printTui(): Unit = {
-    println(controller.getGrid.toString)
+    println(printGrid)
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
     println(" ? <row> <col> - question mark cell")
@@ -35,7 +35,7 @@ class Tui(val controller: IGameController) extends Reactor {
 
   def processInput(input: String): Boolean = {
     input match {
-      case "p" => continue(() => println(controller.getGrid.toString))
+      case "p" => continue(() => println(printGrid))
       case "q" => stop(() => println("Goodbye"))
       case "a" => continue(() => controller.openAllFields())
       case "r" => continue(() => controller.restartGame())
@@ -55,6 +55,8 @@ class Tui(val controller: IGameController) extends Reactor {
         )
     }
   }
+
+  private def printGrid: String = controller.game.grid().toString
 
   private def continue[U](f: () => U): Boolean = {
     f()
