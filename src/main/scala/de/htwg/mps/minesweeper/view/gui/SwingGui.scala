@@ -1,11 +1,12 @@
 package de.htwg.mps.minesweeper.view.gui
 
+import java.awt.event.MouseEvent
 import java.awt.{Color, Font}
 import javax.swing.border.LineBorder
 
 import de.htwg.mps.minesweeper.controller._
 
-import scala.swing.event.Key
+import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
 
 class SwingGui(controller: IGameController) extends Frame {
@@ -57,13 +58,22 @@ class SwingGui(controller: IGameController) extends Frame {
     border = new LineBorder(Color.BLACK, 2)
     background = Color.WHITE
     for {
-      outerRow <- 0 until controller.getGrid.getSize._1
-      outerColumn <- 0 until controller.getGrid.getSize._1
+      row <- 0 until controller.getGrid.getSize._1
+      column <- 0 until controller.getGrid.getSize._1
     } {
       contents += new FlowPanel() {
         contents += new Label() {
-          text = controller.getGrid.get(outerRow, outerColumn).getOrElse().toString
+          text = controller.getGrid.get(row, column).getOrElse().toString
           font = new Font("Verdana", 1, 36)
+          listenTo(mouse.clicks)
+          reactions += {
+            case evt @ MouseClicked(_, _, _, _, _) =>
+              evt.peer.getButton match {
+                case MouseEvent.BUTTON1 => controller.openField(row, column)
+                case MouseEvent.BUTTON3 => controller.flagField(row, column)
+                case _ =>
+              }
+          }
         }
       }
     }
