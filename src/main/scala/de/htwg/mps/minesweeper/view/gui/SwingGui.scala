@@ -3,7 +3,7 @@ package de.htwg.mps.minesweeper.view.gui
 import java.awt.{Color, Font}
 import javax.swing.border.LineBorder
 
-import de.htwg.mps.minesweeper.controller.{FieldChanged, GameStart, IGameController}
+import de.htwg.mps.minesweeper.controller._
 
 import scala.swing.event.Key
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
@@ -14,16 +14,24 @@ class SwingGui(controller: IGameController) extends Frame {
 
   title = "Minesweeper"
 
+  var status = new TextField("Initializing", 20)
+
   contents = new BorderPanel {
     add(gridPanel, BorderPanel.Position.North)
-    add(new TextField("Test status", 20), BorderPanel.Position.South)
+    add(status, BorderPanel.Position.South)
   }
 
   visible = true
 
   reactions += {
     case _: FieldChanged => redraw()
-    case _: GameStart => resize()
+    case _: GameStart =>
+      status.text = "Game is running"
+      resize()
+    case _: GameWon =>
+      status.text = "You win"
+    case _: GameLost =>
+      status.text = "You lost"
   }
 
   menuBar = new MenuBar {
@@ -42,7 +50,7 @@ class SwingGui(controller: IGameController) extends Frame {
 
   private def resize(): Unit = contents = new BorderPanel {
     add(gridPanel, BorderPanel.Position.North)
-    add(new TextField("Test status", 20), BorderPanel.Position.South)
+    add(status, BorderPanel.Position.South)
   }
 
   private def gridPanel: GridPanel = new GridPanel(controller.getGrid.getSize._1, controller.getGrid.getSize._1) {
