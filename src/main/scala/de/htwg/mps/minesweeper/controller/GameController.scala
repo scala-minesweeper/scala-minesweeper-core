@@ -12,7 +12,7 @@ case class GameStart(grid: IGrid) extends Event
 
 class GameController() extends IGameController {
 
-  var grid: IGrid = Grid(0, 0, 0)
+  var grid: IGrid = Grid(1, 1, 0)
 
   override def restartGame(): Unit = {
     grid = Grid(3, 3, 3).init()

@@ -43,6 +43,8 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
 
   override def getCoordinates: List[(Int, Int)] = playground.asCoordinates
 
+  override def getSize: (Int, Int) = (playground.rows, playground.cols)
+
   private def placeNumberField(grid: Grid, position: (Int, Int)): Grid =
     grid.set(position._1, position._2, NumberField(grid.sumBombNumberAround(position._1, position._2)))
 
@@ -62,17 +64,17 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
   }
 
   private def nonBombFields: Int = {
-    playground.cols*playground.rows-bombs
+    playground.cols * playground.rows - bombs
   }
 
   override def toString: String = {
-    var string = "   | " +0.until(math.min(11, playground.cols)).mkString("  ")
-    if(playground.cols > 10) string += " "+11.until(playground.cols).mkString(" ")
+    var string = "   | " + 0.until(math.min(11, playground.cols)).mkString("  ")
+    if (playground.cols > 10) string += " " + 11.until(playground.cols).mkString(" ")
     string += "\n"
     string += "-" * 3 + "|" + "-" * (playground.cols * 3) + "\n"
     var rowIndex = 0
     playground.asNestedList.foreach(row => {
-      if(rowIndex < 10) string += rowIndex + "  | " + row.mkString(" ") + "\n" else string += rowIndex + " | " + row.mkString(" ") + "\n"
+      if (rowIndex < 10) string += rowIndex + "  | " + row.mkString(" ") + "\n" else string += rowIndex + " | " + row.mkString(" ") + "\n"
       rowIndex += 1
     })
     string
