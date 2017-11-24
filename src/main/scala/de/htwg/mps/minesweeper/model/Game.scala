@@ -1,6 +1,8 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model
 
 import com.github.nscala_time.time.Imports._
+import de.htwg.mps.minesweeper.model.grid._
+import de.htwg.mps.minesweeper.model.player.{IPlayer, Player}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult, MinesweeperGameResult}
 
 case class Game(start: DateTime,

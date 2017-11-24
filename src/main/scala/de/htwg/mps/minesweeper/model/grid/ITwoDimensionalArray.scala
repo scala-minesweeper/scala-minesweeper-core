@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model.grid
 
 trait ITwoDimensionalArray[A] {
   val cols: Int

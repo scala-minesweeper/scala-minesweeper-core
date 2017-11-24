@@ -1,7 +1,8 @@
 package de.htwg.mps.minesweeper.controller
 
+import de.htwg.mps.minesweeper.model.{Game, IGame}
 import de.htwg.mps.minesweeper.model.field.Field
-import de.htwg.mps.minesweeper.model.game.{Game, Grid, IGame, IGrid}
+import de.htwg.mps.minesweeper.model.grid.{Grid, IGrid}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
 
 import scala.swing.event.Event

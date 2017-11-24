@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model.grid
 
 import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
 import org.scalatest.{Matchers, WordSpec}

@@ -1,6 +1,5 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model.field
 
-import de.htwg.mps.minesweeper.model.field.NumberField
 import org.scalatest.{Matchers, WordSpec}
 
 class NumberFieldTest extends WordSpec with Matchers {

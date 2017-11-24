@@ -1,5 +1,6 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model
 
+import de.htwg.mps.minesweeper.model.grid.IGrid
 import de.htwg.mps.minesweeper.model.result.GameResult
 
 trait IGame {

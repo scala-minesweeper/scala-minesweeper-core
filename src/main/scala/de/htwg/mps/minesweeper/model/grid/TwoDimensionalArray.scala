@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model.grid
 
 case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) extends ITwoDimensionalArray[A] {
 

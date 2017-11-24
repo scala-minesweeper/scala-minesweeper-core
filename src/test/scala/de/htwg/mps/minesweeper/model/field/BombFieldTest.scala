@@ -1,6 +1,5 @@
-package de.htwg.mps.minesweeper.model.game
+package de.htwg.mps.minesweeper.model.field
 
-import de.htwg.mps.minesweeper.model.field.BombField
 import org.scalatest.{Matchers, WordSpec}
 
 class BombFieldTest extends WordSpec with Matchers {
@@ -22,7 +21,7 @@ class BombFieldTest extends WordSpec with Matchers {
     }
 
     "is shown" in {
-      bombField.isShown shouldBe false
+      bombField.isShown shouldBe true
     }
 
 

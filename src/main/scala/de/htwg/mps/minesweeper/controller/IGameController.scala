@@ -1,6 +1,7 @@
 package de.htwg.mps.minesweeper.controller
 
-import de.htwg.mps.minesweeper.model.game.IGame
+
+import de.htwg.mps.minesweeper.model.IGame
 
 import scala.swing.Publisher
 
