@@ -20,9 +20,9 @@ class Tui(val controller: GameController) extends Reactor {
     println(printGrid)
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
+    println(" # <row> <col> - flag cell")
     println(" ? <row> <col> - question mark cell")
-    println(" ! <row> <col> - unquestion mark cell")
-    println(" f <row> <col> - flag cell")
+    println(" ! <row> <col> - toggle cell mark")
     println(" p - print the field")
     println(" a - open all fields (dev cheat)")
     println(" r - restart the game with new fields")
@@ -47,8 +47,8 @@ class Tui(val controller: GameController) extends Reactor {
             case "?" :: row :: column :: Nil =>
               controller.questionField(row.toInt, column.toInt)
             case "!" :: row :: column :: Nil =>
-              controller.unQuestionField(row.toInt, column.toInt)
-            case "f" :: row :: column :: Nil =>
+              controller.toggleMarkField(row.toInt, column.toInt)
+            case "#" :: row :: column :: Nil =>
               controller.flagField(row.toInt, column.toInt)
             case _ => println("Unknown action")
           }

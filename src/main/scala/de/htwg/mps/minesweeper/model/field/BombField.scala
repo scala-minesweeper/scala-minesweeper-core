@@ -1,23 +1,26 @@
 package de.htwg.mps.minesweeper.model.field
 
-case class BombField(isShown: Boolean, isFlagged: Boolean, isQuestionMarked: Boolean) extends Field {
+case class BombField(fieldState: FieldState) extends Field {
 
-  override def showField(): BombField = copy(isShown = true)
+  override def showField(): BombField = copy(fieldState = FieldOpenState())
 
-  override def flagField(): BombField = copy(isFlagged = true)
+  override def flagField(): BombField = copy(fieldState = FieldFlaggedState())
 
-  override def questionField(): BombField = copy(isQuestionMarked = true)
+  override def questionField(): BombField = copy(fieldState = FieldQuestionMarkedState())
 
-  override def unQuestionField(): BombField = copy(isQuestionMarked = false)
-
-  override def unflagField(): BombField = copy(isFlagged = false)
+  override def toggleNextFieldState(): BombField = copy(fieldState = fieldState.nextState)
 
   override def isBomb: Boolean = true
 
-  override def toString: String = if(isShown) "+ " else if(isQuestionMarked) questionMarkedFieldString else if (isFlagged) flaggedFieldString else hiddenFieldString
+  override def toString: String = {
+    if (isShown) "+ " else
+    if (isQuestionMarked) questionMarkedFieldString else
+    if (isFlagged) flaggedFieldString else
+      hiddenFieldString
+  }
 
 }
 
 object BombField {
-  def apply(): BombField = new BombField(false, false, false)
+  def apply(): BombField = new BombField(FieldHiddenState())
 }

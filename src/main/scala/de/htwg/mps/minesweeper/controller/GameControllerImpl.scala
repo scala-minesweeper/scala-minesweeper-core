@@ -1,8 +1,8 @@
 package de.htwg.mps.minesweeper.controller
 
-import de.htwg.mps.minesweeper.model.{MinesweeperGame, Game}
-import de.htwg.mps.minesweeper.model.field.Field
-import de.htwg.mps.minesweeper.model.grid.{MinesweeperGrid, Grid}
+import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
+import de.htwg.mps.minesweeper.model.field.{Field, FieldHiddenState}
+import de.htwg.mps.minesweeper.model.grid.{Grid, MinesweeperGrid}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
 
 import scala.swing.event.Event
@@ -29,23 +29,26 @@ class GameControllerImpl() extends GameController {
   )
 
   override def openField(row: Int, col: Int): Unit = running(() =>
-    game.grid().get(row, col).exists(cell => updateField("Open field", row, col, cell.showField()))
+    game.grid().get(row, col).exists(cell => {
+      if (!cell.isFlagged && !cell.isQuestionMarked)
+        // do not open field if it is flagged or marked
+        updateField("Open field", row, col, cell.showField())
+      else
+        println("First unmark field before you can open it!")
+        true
+    })
   )
 
   override def questionField(row: Int, col: Int): Unit = running(() =>
     game.grid().get(row, col).exists(cell => updateField("Mark field (?)", row, col, cell.questionField()))
   )
 
-  override def unQuestionField(row: Int, col: Int): Unit = running(() =>
-    game.grid().get(row, col).exists(cell => updateField("Unmark field (?)", row, col, cell.unQuestionField()))
-  )
-
   override def flagField(row: Int, col: Int): Unit = running(() =>
     game.grid().get(row, col).exists(cell => updateField(row, col, cell.flagField()))
   )
 
-  override def unflagField(row: Int, col: Int): Unit = running(() =>
-    game.grid().get(row, col).exists(cell => updateField(row, col, cell.unflagField()))
+  override def toggleMarkField(row: Int, col: Int): Unit = running(() =>
+    game.grid().get(row, col).exists(cell => updateField(row, col, cell.toggleNextFieldState()))
   )
 
   /**

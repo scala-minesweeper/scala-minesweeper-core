@@ -11,9 +11,8 @@ trait GameController extends Publisher {
   def openField(row: Int, col: Int): Unit
   def openAllFields(): Unit
   def questionField(row: Int, col: Int): Unit
-  def unQuestionField(row: Int, col: Int): Unit
   def flagField(row: Int, col: Int): Unit
-  def unflagField(row: Int, col: Int): Unit
+  def toggleMarkField(row: Int, col: Int): Unit
   def game: Game
 
 }

@@ -74,7 +74,7 @@ class SwingGui(controller: GameController) extends Frame {
             case evt@MouseClicked(_, _, _, _, _) =>
               evt.peer.getButton match {
                 case MouseEvent.BUTTON1 => controller.openField(row, column)
-                case MouseEvent.BUTTON3 => controller.flagField(row, column)
+                case MouseEvent.BUTTON3 => controller.toggleMarkField(row, column)
                 case _ =>
               }
           }

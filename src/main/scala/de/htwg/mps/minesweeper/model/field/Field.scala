@@ -8,20 +8,22 @@ trait Field {
 
   protected val flaggedFieldString = "# "
 
+  def fieldState: FieldState
+
   def showField(): Field
 
   def flagField(): Field
 
   def questionField(): Field
 
-  def unQuestionField(): Field
-
-  def unflagField(): Field
+  def toggleNextFieldState(): Field
 
   def isBomb: Boolean
 
-  def isFlagged: Boolean
+  def isFlagged: Boolean = fieldState == FieldFlaggedState()
 
-  def isShown: Boolean
+  def isQuestionMarked: Boolean = fieldState == FieldQuestionMarkedState()
+
+  def isShown: Boolean = fieldState == FieldOpenState()
 
 }
