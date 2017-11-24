@@ -21,21 +21,14 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     )(placeNumberField)
   }
 
-  /**
-    * compares number of opened numberFields with total number of numberfields
-    *
-    * @return true if number of opened numberfields equals total number of numberFields
-    */
-  def checkIfGameIsWon: Boolean = detectedNonBombFields == nonBombFields
+  override def checkIfGameIsWon: Boolean =
+    detectedNonBombFields == nonBombFields && correctlyFlaggedBombs == bombs
 
-  private def detectedNonBombFields: Int = {
-    playground.asNestedList.flatMap(row =>
-      row.map {
-        case field: NumberField if field.isShown => 1
-        case _ => 0
-      }
-    ).sum
-  }
+  override def checkIfGameIsLost: Boolean = openedBombFields > 0
+
+  def detectedNonBombFields: Int = playground.asList.count(field => !field.isBomb && field.isShown)
+
+  def openedBombFields: Int = playground.asList.count(field => field.isBomb && field.isShown)
 
   def checkIfCoordinateIsBomb(row: Int, col: Int): Boolean = {
     playground.get(row, col).exists(field => field.isBomb)
@@ -63,9 +56,12 @@ case class Grid(playground: ITwoDimensionalArray[IField], bombs: Int, random: Ra
     playground.get(row, col).map(f => if (f.isBomb) 1 else 0).getOrElse(0)
   }
 
-  private def nonBombFields: Int = {
-    playground.cols * playground.rows - bombs
-  }
+  def nonBombFields: Int = playground.cols * playground.rows - bombs
+
+  override def getFieldCount: Int = playground.rows * playground.cols
+
+  override def correctlyFlaggedBombs: Int =
+    playground.asList.count(f => f.isFlagged && f.isBomb)
 
   override def toString: String = {
     var string = "   | " + 0.until(math.min(11, playground.cols)).mkString("  ")

@@ -29,6 +29,8 @@ case class TwoDimensionalArray[A](rows: Int, cols: Int, vector: Vector[A]) exten
     ).toList
   }
 
+  override def asList: List[A] = vector.toList
+
 }
 
 object TwoDimensionalArray {

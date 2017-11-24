@@ -20,4 +20,8 @@ trait IField {
 
   def isBomb: Boolean
 
+  def isFlagged: Boolean
+
+  def isShown: Boolean
+
 }

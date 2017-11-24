@@ -1,7 +1,12 @@
 package de.htwg.mps.minesweeper.model
 
-trait IGame {
-  def grid: IGrid
+import de.htwg.mps.minesweeper.model.result.GameResult
 
-  def score: Int
+trait IGame {
+  def startGame(): IGame
+  def finishGame(): IGame
+  def grid(): IGrid
+  def isRunning: Boolean
+  def isFinished: Boolean
+  def getScore: Option[GameResult]
 }

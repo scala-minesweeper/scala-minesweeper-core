@@ -1,5 +1,5 @@
 package de.htwg.mps.minesweeper.model.impl
 
-class Player(username: String, games: List[Game]) {
+import de.htwg.mps.minesweeper.model.IPlayer
 
-}
+case class Player() extends IPlayer

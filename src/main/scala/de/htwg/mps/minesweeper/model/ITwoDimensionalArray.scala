@@ -21,4 +21,6 @@ trait ITwoDimensionalArray[A] {
     * @return nested lists with element
     */
   def asNestedList: List[List[A]]
+
+  def asList: List[A]
 }
