@@ -21,7 +21,7 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
     )(placeNumberField)
   }
 
-  override def getCoordinates: List[(Int, Int)] = playground.asCoordinates
+  override def coordinates: List[(Int, Int)] = playground.asCoordinates
 
   override def getSize: (Int, Int) = (playground.rows, playground.cols)
 
