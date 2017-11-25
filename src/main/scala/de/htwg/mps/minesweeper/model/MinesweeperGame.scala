@@ -19,7 +19,7 @@ case class MinesweeperGame(start: DateTime,
         correctlyFlaggedBombs,
         grid.bombs,
         start.to(now).toDuration.getStandardSeconds,
-        grid.getCoordinates.size
+        grid.coordinates.size
       )
     )
   }
