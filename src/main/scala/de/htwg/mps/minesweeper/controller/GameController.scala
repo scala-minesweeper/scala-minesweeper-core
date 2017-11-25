@@ -7,7 +7,7 @@ import scala.swing.Publisher
 
 trait GameController extends Publisher {
 
-  def restartGame(): Unit
+  def restartGame(rows: Int, cols: Int, bombs: Int): Unit
   def openField(row: Int, col: Int): Unit
   def openAllFields(): Unit
   def questionField(row: Int, col: Int): Unit

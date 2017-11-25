@@ -19,8 +19,8 @@ class GameControllerImpl() extends GameController {
 
   var game: Game = MinesweeperGame()
 
-  override def restartGame(): Unit = {
-    game = MinesweeperGame(MinesweeperGrid(4, 5, 3).init()).startGame()
+  override def restartGame(rows: Int, cols: Int, bombs: Int): Unit = {
+    game = MinesweeperGame(MinesweeperGrid(rows, cols, bombs).init()).startGame()
     publish(GameStart(game.grid()))
   }
 
@@ -101,9 +101,10 @@ class GameControllerImpl() extends GameController {
   }
 
   private def finishGameLost(): Unit = {
-    game = game.finishGame()
+
     println(game.getScore.getOrElse(EmptyGameResult()))
     publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
+    game = game.finishGame()
   }
 
   /**

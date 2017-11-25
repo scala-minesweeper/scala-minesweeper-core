@@ -12,7 +12,7 @@ object MinesweeperMain {
   val gui = new SwingGui(controller)
 
   def main(args: Array[String]) {
-    controller.restartGame()
+    controller.restartGame(4,5,3)
     while (tui.processInput(readLine())) {}
   }
 }
