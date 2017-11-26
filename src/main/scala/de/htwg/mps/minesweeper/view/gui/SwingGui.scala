@@ -88,13 +88,13 @@ class SwingGui(controller: GameController) extends Frame {
     }
 
     val textFieldRows:TextField = new TextField {
-      text = "3"
+      text = controller.game.grid().getSize._1.toString
     }
     val textFieldCols:TextField = new TextField {
-      text = "4"
+      text = controller.game.grid().getSize._2.toString
     }
     val textFieldBombs:TextField = new TextField {
-      text = "3"
+      text = controller.game.grid().bombs.toString
     }
 
     private def textFieldPanel: BorderPanel = new BorderPanel(){
