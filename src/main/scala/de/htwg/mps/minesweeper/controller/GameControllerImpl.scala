@@ -25,7 +25,7 @@ class GameControllerImpl() extends GameController {
   }
 
   override def openAllFields(): Unit = running(() =>
-    game.grid().coordinates.foreach(coordinate => openField(coordinate._1, coordinate._2))
+    game.grid().coordinates.foreach(coordinate => openFieldLostGame(coordinate._1, coordinate._2))
   )
 
   override def openField(row: Int, col: Int): Unit = running(row, col, cell => {
@@ -40,6 +40,10 @@ class GameControllerImpl() extends GameController {
 
   override def questionField(row: Int, col: Int): Unit = running(row, col, cell =>
     updateField("Mark field (?)", row, col, cell.questionField())
+  )
+
+  def openFieldLostGame(row: Int, col: Int): Unit = running(row, col, cell =>
+    updateFieldGameOver(row, col, cell.showField())
   )
 
   override def flagField(row: Int, col: Int): Unit = running(row, col, cell =>
@@ -89,6 +93,13 @@ class GameControllerImpl() extends GameController {
     true
   }
 
+  private def updateFieldGameOver(row: Int, col: Int, field: Field): Boolean = {
+    println(row+":"+col+" opended")
+    game = game.updateGrid(game.grid().set(row, col, field))
+    publish(FieldChanged(row, col, field))
+    true
+  }
+
   /**
     * Update a field and notify all reactors about the changed field in grid.
     * Additionally print an action, which was done.
@@ -119,6 +130,7 @@ class GameControllerImpl() extends GameController {
 
     println(game.getScore.getOrElse(EmptyGameResult()))
     publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
+    openAllFields
     game = game.finishGame()
   }
 
