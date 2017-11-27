@@ -8,6 +8,8 @@ trait Field {
 
   protected val flaggedFieldString = "# "
 
+  protected val openedFieldString: String
+
   def fieldState: FieldState
 
   def showField(): Field
@@ -25,5 +27,12 @@ trait Field {
   def isQuestionMarked: Boolean = fieldState == FieldQuestionMarkedState()
 
   def isShown: Boolean = fieldState == FieldOpenState()
+
+  override def toString: String = fieldState match {
+    case _: FieldOpenState => openedFieldString
+    case _: FieldQuestionMarkedState => questionMarkedFieldString
+    case _: FieldFlaggedState => flaggedFieldString
+    case _ => hiddenFieldString
+  }
 
 }
