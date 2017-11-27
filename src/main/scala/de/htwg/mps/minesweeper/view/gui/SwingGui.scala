@@ -35,10 +35,10 @@ class SwingGui(controller: GameController) extends Frame {
       status.text = "Game is running"
       redraw()
     case _: GridChanged => redraw()
-    case _: GameWon =>
-      status.text = "You win"
-    case _: GameLost =>
-      status.text = "You lost"
+    case g: GameWon =>
+      status.text = "You win - Score: " + g.gameResult.getScore
+    case g: GameLost =>
+      status.text = "You lost - Score: " + g.gameResult.getScore
   }
 
   menuBar = new MenuBar {
