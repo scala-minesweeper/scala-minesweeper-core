@@ -9,7 +9,9 @@ import scala.swing.event.Event
 
 case class FieldChanged(row: Int, col: Int, field: Field) extends Event
 
-case class GameWon() extends Event
+case class GridChanged(grid: Grid) extends Event
+
+case class GameWon(gameResult: GameResult) extends Event
 
 case class GameLost(gameResult: GameResult) extends Event
 
@@ -24,9 +26,15 @@ class GameControllerImpl() extends GameController {
     publish(GameStart(game.grid()))
   }
 
-  override def openAllFields(): Unit = running(() =>
-    game.grid().coordinates.foreach(coordinate => openFieldLostGame(coordinate._1, coordinate._2))
-  )
+  override def openAllFields(): Unit = {
+    game.grid().coordinates.foreach(coordinate =>
+      game.grid().get(coordinate._1, coordinate._2).exists(field => {
+        game = game.updateGrid(game.grid().set(coordinate._1, coordinate._2, field.showField()))
+        true
+      })
+    )
+    publish(GridChanged(game.grid()))
+  }
 
   override def openField(row: Int, col: Int): Unit = running(row, col, cell => {
     // do not open field if it is flagged or marked
@@ -40,10 +48,6 @@ class GameControllerImpl() extends GameController {
 
   override def questionField(row: Int, col: Int): Unit = running(row, col, cell =>
     updateField("Mark field (?)", row, col, cell.questionField())
-  )
-
-  def openFieldLostGame(row: Int, col: Int): Unit = running(row, col, cell =>
-    updateFieldGameOver(row, col, cell.showField())
   )
 
   override def flagField(row: Int, col: Int): Unit = running(row, col, cell =>
@@ -93,13 +97,6 @@ class GameControllerImpl() extends GameController {
     true
   }
 
-  private def updateFieldGameOver(row: Int, col: Int, field: Field): Boolean = {
-    println(row+":"+col+" opended")
-    game = game.updateGrid(game.grid().set(row, col, field))
-    publish(FieldChanged(row, col, field))
-    true
-  }
-
   /**
     * Update a field and notify all reactors about the changed field in grid.
     * Additionally print an action, which was done.
@@ -115,23 +112,27 @@ class GameControllerImpl() extends GameController {
     updateField(row, col, field)
   }
 
-  private def checkIfGameIsOver(): Unit = {
-    if (game.checkWin) finishGameWin()
-    if (game.checkLost) finishGameLost()
+  private def checkIfGameIsOver(): Boolean = {
+    if (game.checkWin) {
+      finishGameWin()
+      return true
+    }
+    if (game.checkLost) {
+      finishGameLost()
+      return true
+    }
+    false
   }
 
   private def finishGameWin(): Unit = {
     game = game.finishGame()
-    println(game.getScore.getOrElse(EmptyGameResult()))
-    publish(GameWon())
+    publish(GameWon(game.getScore.getOrElse(EmptyGameResult())))
   }
 
   private def finishGameLost(): Unit = {
-
-    println(game.getScore.getOrElse(EmptyGameResult()))
-    publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
-    openAllFields
     game = game.finishGame()
+    publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
+    openAllFields()
   }
 
   /**

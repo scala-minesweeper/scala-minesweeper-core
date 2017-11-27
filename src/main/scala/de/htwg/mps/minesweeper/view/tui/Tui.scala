@@ -9,8 +9,13 @@ class Tui(val controller: GameController) extends Reactor {
   listenTo(controller)
   reactions += {
     case _: FieldChanged => printTui()
-    case _: GameWon => printTui("You win")
-    case _: GameLost => printTui("You lost")
+    case _: GridChanged => printTui()
+    case g: GameWon =>
+      printTui("You win")
+      println(g.gameResult)
+    case g: GameLost =>
+      printTui("You lost")
+      println(g.gameResult)
     case _: GameStart =>
       println("\n==========================\nMinesweeper\n==========================")
       printTui()

@@ -31,13 +31,12 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
   private def placeBombField(grid: MinesweeperGrid, position: (Int, Int)): MinesweeperGrid =
     grid.set(position._1, position._2, BombField())
 
-  private def sumBombNumberAround(row: Int, col: Int): Int = {
+  private def sumBombNumberAround(row: Int, col: Int): Int =
     (for {
       r <- row - 1 to row + 1
       c <- col - 1 to col + 1
       if r != row || c != col
     } yield sumBombs(r, c)).sum
-  }
 
   private def sumBombs(row: Int, col: Int): Int =
     playground.get(row, col).map(f => if (f.isBomb) 1 else 0).getOrElse(0)

@@ -33,7 +33,8 @@ class SwingGui(controller: GameController) extends Frame {
     case _: FieldChanged => redraw()
     case _: GameStart =>
       status.text = "Game is running"
-      resize()
+      redraw()
+    case _: GridChanged => redraw()
     case _: GameWon =>
       status.text = "You win"
     case _: GameLost =>
@@ -105,7 +106,7 @@ class SwingGui(controller: GameController) extends Frame {
 
     add(labelsPanel,BorderPanel.Position.West)
     add(textFieldPanel, BorderPanel.Position.Center)
-    add(restartButton,BorderPanel.Position.East);
+    add(restartButton,BorderPanel.Position.East)
 
   }
 
