@@ -27,11 +27,10 @@ class GameControllerImpl() extends GameController {
   }
 
   override def openAllFields(): Unit = {
-    game.grid().coordinates.foreach(coordinate =>
-      game.grid().get(coordinate._1, coordinate._2).exists(field => {
-        game = game.updateGrid(game.grid().set(coordinate._1, coordinate._2, field.showField()))
-        true
-      })
+    game = game.updateGrid(
+      game.grid().coordinates.foldLeft(game.grid())((grid, coordinate) =>
+        grid.updateField(coordinate._1, coordinate._2, field => field.showField())
+      )
     )
     publish(GridChanged(game.grid()))
   }

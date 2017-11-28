@@ -6,11 +6,14 @@ import scala.util.Random
 
 case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random: Random) extends Grid {
 
-  def set(row: Int, col: Int, cell: Field): MinesweeperGrid = copy(playground = playground.updated(row, col, cell))
+  override def set(row: Int, col: Int, cell: Field): MinesweeperGrid = copy(playground = playground.updated(row, col, cell))
 
-  def get(row: Int, col: Int): Option[Field] = playground.get(row, col)
+  override def updateField(row: Int, col: Int, f: Field => Field): Grid =
+    get(row, col).fold(this)(field => set(row, col, f(field)))
 
-  def init(): MinesweeperGrid = {
+  override def get(row: Int, col: Int): Option[Field] = playground.get(row, col)
+
+  override def init(): MinesweeperGrid = {
     // shuffle all available field coordinates
     val list: List[(Int, Int)] = random.shuffle(playground.asCoordinates)
     val bombList = list.slice(0, bombs)
