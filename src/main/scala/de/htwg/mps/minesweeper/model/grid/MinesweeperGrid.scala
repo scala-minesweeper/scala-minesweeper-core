@@ -1,8 +1,8 @@
 package de.htwg.mps.minesweeper.model.grid
 
 import de.htwg.mps.minesweeper.model.field.{BombField, Field, NumberField}
+import de.htwg.mps.minesweeper.utils.{NumberUtils, StringUtils}
 
-import scala.math.{abs, ceil, log}
 import scala.util.Random
 
 case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random: Random) extends Grid {
@@ -52,31 +52,21 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
   override def toString: String = {
     val cols = playground.cols
     val rows = playground.rows
-    val rowDigits = numberOfDigits(rows - 1)
-    val colDigits = numberOfDigits(cols - 1)
-    var string = 0.until(colDigits).foldRight(" ")((line, string) => {
-      string + "\n" + (" " * (rowDigits + 1)) + "| " + 0.until(cols).map(col => getChartAt(col, line)).mkString(" ")
-    })
+    val rowDigits = NumberUtils.numberOfDigits(rows - 1)
+    val colDigits = NumberUtils.numberOfDigits(cols - 1)
+    var string = 0.until(colDigits).foldRight(" ")((line, string) =>
+      string + "\n" + (" " * (rowDigits + 1)) + "| " + 0.until(cols)
+        .map(col => StringUtils.getCharStringAtOrElse(col, line, " "))
+        .mkString(" ")
+    )
     string += "\n" + "-" * (rowDigits + 1) + "|" + "-" * (cols * 2) + "\n"
     var rowIndex = -1
     string += playground.asNestedList.foldLeft(string)((string, row) => {
       rowIndex += 1
-      string + (" " * (rowDigits - stringLength(rowIndex))) + rowIndex + " | " + row.mkString(" ") + "\n"
+      string + (" " * (rowDigits - StringUtils.stringLength(rowIndex))) + rowIndex + " | " + row.mkString(" ") + "\n"
     })
     string
   }
-
-  private def getChartAt(input: Int, position: Int): String = {
-    if (stringLength(input) <= position) {
-      " "
-    } else {
-      input.toString.substring(position, position + 1)
-    }
-  }
-
-  private def stringLength(x: Int): Int = x.toString.length
-
-  private def numberOfDigits(x: Int): Int = ceil(log(abs(x) + 1) / log(10)).toInt
 
 }
 
