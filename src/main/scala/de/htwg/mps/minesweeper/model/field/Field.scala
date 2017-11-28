@@ -2,11 +2,11 @@ package de.htwg.mps.minesweeper.model.field
 
 trait Field {
 
-  protected val hiddenFieldString = "~ "
+  protected val hiddenFieldString = "~"
 
-  protected val questionMarkedFieldString = "? "
+  protected val questionMarkedFieldString = "?"
 
-  protected val flaggedFieldString = "# "
+  protected val flaggedFieldString = "#"
 
   protected val openedFieldString: String
 

@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.model.field
 
 case class BombField(fieldState: FieldState) extends Field {
 
-  override protected val openedFieldString: String = "+ "
+  override protected val openedFieldString: String = "+"
 
   override def showField(): BombField = copy(fieldState = FieldOpenState())
 

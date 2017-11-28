@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.model.field
 
 case class NumberField(fieldState: FieldState, numberBombs: Int) extends Field {
 
-  override protected val openedFieldString: String = "" + numberBombs + " "
+  override protected val openedFieldString: String = "" + numberBombs
 
   override def showField(): NumberField = copy(fieldState = FieldOpenState())
 
