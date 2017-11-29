@@ -5,7 +5,7 @@ import org.scalatest.{Matchers, WordSpec}
 class BombFieldTest extends WordSpec with Matchers {
 
   "A hidden BombField" should {
-    val bombField: BombField = BombField(FieldHiddenState())
+    val bombField: BombField = BombField(FieldHiddenState)
 
     "be a bomb" in {
       bombField.isBomb shouldBe true
@@ -23,12 +23,12 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isQuestionMarked shouldBe false
     }
     "has state hidden" in {
-      bombField.fieldState shouldBe FieldHiddenState()
+      bombField.fieldState shouldBe FieldHiddenState
     }
   }
 
   "A opened BombField" should {
-    val bombField: BombField = BombField(FieldOpenState())
+    val bombField: BombField = BombField(FieldOpenState)
 
     "be a bomb" in {
       bombField.isBomb shouldBe true
@@ -46,12 +46,12 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isQuestionMarked shouldBe false
     }
     "has state open" in {
-      bombField.fieldState shouldBe FieldOpenState()
+      bombField.fieldState shouldBe FieldOpenState
     }
   }
 
   "A flagged BombField" should {
-    val bombField: BombField = BombField(FieldFlaggedState())
+    val bombField: BombField = BombField(FieldFlaggedState)
 
     "be a bomb" in {
       bombField.isBomb shouldBe true
@@ -69,12 +69,12 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isQuestionMarked shouldBe false
     }
     "has state flagged" in {
-      bombField.fieldState shouldBe FieldFlaggedState()
+      bombField.fieldState shouldBe FieldFlaggedState
     }
   }
 
   "A ? marked BombField" should {
-    val bombField: BombField = BombField(FieldQuestionMarkedState())
+    val bombField: BombField = BombField(FieldQuestionMarkedState)
 
     "be a bomb" in {
       bombField.isBomb shouldBe true
@@ -92,12 +92,12 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isQuestionMarked shouldBe true
     }
     "has state flagged" in {
-      bombField.fieldState shouldBe FieldQuestionMarkedState()
+      bombField.fieldState shouldBe FieldQuestionMarkedState
     }
   }
 
   "A hidden BombField" should {
-    val bombField: BombField = BombField(FieldHiddenState())
+    val bombField: BombField = BombField(FieldHiddenState)
 
     "be opened after call open" in {
       bombField.showField().isShown shouldBe true
@@ -124,7 +124,7 @@ class BombFieldTest extends WordSpec with Matchers {
   "The BombField object" should {
 
     "return a hidden BombField" in {
-      BombField() shouldEqual BombField(FieldHiddenState())
+      BombField() shouldEqual BombField(FieldHiddenState)
     }
 
   }

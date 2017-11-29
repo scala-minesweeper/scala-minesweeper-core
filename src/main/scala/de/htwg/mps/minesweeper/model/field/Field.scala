@@ -22,16 +22,16 @@ trait Field {
 
   def isBomb: Boolean
 
-  def isFlagged: Boolean = fieldState == FieldFlaggedState()
+  def isFlagged: Boolean = fieldState == FieldFlaggedState
 
-  def isQuestionMarked: Boolean = fieldState == FieldQuestionMarkedState()
+  def isQuestionMarked: Boolean = fieldState == FieldQuestionMarkedState
 
-  def isShown: Boolean = fieldState == FieldOpenState()
+  def isShown: Boolean = fieldState == FieldOpenState
 
   override def toString: String = fieldState match {
-    case _: FieldOpenState => openedFieldString
-    case _: FieldQuestionMarkedState => questionMarkedFieldString
-    case _: FieldFlaggedState => flaggedFieldString
+    case FieldOpenState => openedFieldString
+    case FieldQuestionMarkedState => questionMarkedFieldString
+    case FieldFlaggedState => flaggedFieldString
     case _ => hiddenFieldString
   }
 

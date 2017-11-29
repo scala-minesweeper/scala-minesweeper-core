@@ -4,11 +4,11 @@ case class BombField(fieldState: FieldState) extends Field {
 
   override protected val openedFieldString: String = "+"
 
-  override def showField(): BombField = copy(fieldState = FieldOpenState())
+  override def showField(): BombField = copy(fieldState = FieldOpenState)
 
-  override def flagField(): BombField = copy(fieldState = FieldFlaggedState())
+  override def flagField(): BombField = copy(fieldState = FieldFlaggedState)
 
-  override def questionField(): BombField = copy(fieldState = FieldQuestionMarkedState())
+  override def questionField(): BombField = copy(fieldState = FieldQuestionMarkedState)
 
   override def toggleNextFieldState(): BombField = copy(fieldState = fieldState.nextState)
 
@@ -16,5 +16,5 @@ case class BombField(fieldState: FieldState) extends Field {
 }
 
 object BombField {
-  def apply(): BombField = new BombField(FieldHiddenState())
+  def apply(): BombField = new BombField(FieldHiddenState)
 }
