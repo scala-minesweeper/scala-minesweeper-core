@@ -31,7 +31,7 @@ case class MinesweeperGame(start: DateTime,
   override def isFinished: Boolean = running && !start.equals(end)
 
   override def getScore: Option[GameResult] = gameResult match {
-    case _: EmptyGameResult => None
+    case EmptyGameResult() => None
     case e => Some(e)
   }
 

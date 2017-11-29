@@ -54,18 +54,16 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
     val rows = playground.rows
     val rowDigits = NumberUtils.numberOfDigits(rows - 1)
     val colDigits = NumberUtils.numberOfDigits(cols - 1)
-    var string = 0.until(colDigits).foldRight(" ")((line, string) =>
+    val string = 0.until(colDigits).foldRight(" ")((line, string) =>
       string + "\n" + (" " * (rowDigits + 1)) + "| " + 0.until(cols)
         .map(col => StringUtils.getCharStringAtOrElse(col, line, " "))
         .mkString(" ")
-    )
-    string += "\n" + "-" * (rowDigits + 1) + "|" + "-" * (cols * 2) + "\n"
-    var rowIndex = -1
-    string += playground.asNestedList.foldLeft(string)((string, row) => {
-      rowIndex += 1
-      string + (" " * (rowDigits - StringUtils.stringLength(rowIndex))) + rowIndex + " | " + row.mkString(" ") + "\n"
+    ) + "\n" + "-" * (rowDigits + 1) + "|" + "-" * (cols * 2) + "\n"
+    playground.asNestedList.zipWithIndex.foldLeft(string)((string, row) => {
+      val index = row._2
+      val rowList = row._1
+      string + (" " * (rowDigits - StringUtils.stringLength(index))) + index + " | " + rowList.mkString(" ") + "\n"
     })
-    string
   }
 
 }
