@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.model.grid
 
 import de.htwg.mps.minesweeper.model.field.{BombField, Field, NumberField}
-import de.htwg.mps.minesweeper.utils.{NumberUtils, StringUtils}
+import de.htwg.mps.minesweeper.utils.{GridUtils, NumberUtils, StringUtils}
 
 import scala.util.Random
 
@@ -35,15 +35,12 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
   private def placeBombField(grid: MinesweeperGrid, position: (Int, Int)): MinesweeperGrid =
     grid.set(position._1, position._2, BombField())
 
-  private def sumBombNumberAround(row: Int, col: Int): Int =
-    (for {
-      r <- row - 1 to row + 1
-      c <- col - 1 to col + 1
-      if r != row || c != col
-    } yield sumBombs(r, c)).sum
+  private def sumBombNumberAround(position: (Int, Int)): Int =
+    GridUtils.coordinatesAround(position).count(isBomb)
 
-  private def sumBombs(row: Int, col: Int): Int =
-    playground.get(row, col).map(f => if (f.isBomb) 1 else 0).getOrElse(0)
+  private def isBomb(position: (Int, Int)): Boolean =
+    playground.get(position._1, position._2).fold(false)(f => f.isBomb)
+
 
   override def getFieldCount: Int = playground.rows * playground.cols
 
