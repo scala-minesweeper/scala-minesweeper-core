@@ -1,5 +1,6 @@
 package de.htwg.mps.minesweeper.utils
 
+import de.htwg.mps.minesweeper.model.field.NumberUtils
 import org.scalatest.{Matchers, WordSpec}
 
 class NumberUtilsTest extends WordSpec with Matchers {
