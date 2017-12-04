@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.utils
+package de.htwg.mps.minesweeper.model.grid
 
 import scala.collection.breakOut
 

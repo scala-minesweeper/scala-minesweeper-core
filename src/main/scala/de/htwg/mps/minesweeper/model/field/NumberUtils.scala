@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.utils
+package de.htwg.mps.minesweeper.model.field
 
 import scala.math.{abs, ceil, log}
 
