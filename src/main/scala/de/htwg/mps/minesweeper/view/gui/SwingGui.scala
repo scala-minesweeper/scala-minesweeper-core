@@ -45,7 +45,7 @@ class SwingGui(controller: GameController) extends Frame {
     contents += new Menu("File") {
       mnemonic = Key.F
       contents += new MenuItem(Action("New") {
-        controller.restartGame(4,5,3)
+        new NewGameGui(controller).visible = true
       })
       contents += new MenuItem(Action("Quit") {
         System.exit(0)
@@ -56,65 +56,9 @@ class SwingGui(controller: GameController) extends Frame {
   private def redraw(): Unit = resize()
 
   private def resize(): Unit = contents = new BorderPanel {
-    add(settingsPanel, BorderPanel.Position.North)
     add(gridPanel, BorderPanel.Position.Center)
     add(status, BorderPanel.Position.South)
   }
-
-  private def settingsPanel: BorderPanel = new BorderPanel(){
-
-
-
-    private def labelsPanel: BorderPanel = new BorderPanel(){
-      val labelRows:Label = new Label {
-        text = "Reihen"
-      }
-      val labelCols:Label = new Label {
-        text = "Spalten"
-      }
-      val labelBombs:Label = new Label {
-        text = "Minen"
-      }
-
-      add(labelRows,BorderPanel.Position.North)
-      add(labelCols,BorderPanel.Position.Center)
-      add(labelBombs,BorderPanel.Position.South)
-    }
-
-    private def restartButton: Button = new Button{
-      text = "restart"
-      action = Action("restart"){
-        controller.restartGame(textFieldRows.text.toInt,textFieldCols.text.toInt,textFieldBombs.text.toInt)
-      }
-    }
-
-    val textFieldRows:TextField = new TextField {
-      text = controller.game.grid().getSize._1.toString
-    }
-    val textFieldCols:TextField = new TextField {
-      text = controller.game.grid().getSize._2.toString
-    }
-    val textFieldBombs:TextField = new TextField {
-      text = controller.game.grid().bombs.toString
-    }
-
-    private def textFieldPanel: BorderPanel = new BorderPanel(){
-      add(textFieldCols,BorderPanel.Position.North)
-      add(textFieldRows,BorderPanel.Position.Center)
-      add(textFieldBombs,BorderPanel.Position.South)
-    }
-
-    add(labelsPanel,BorderPanel.Position.West)
-    add(textFieldPanel, BorderPanel.Position.Center)
-    add(restartButton,BorderPanel.Position.East)
-
-  }
-
-
-
-
-
-
 
   private def gridPanel: GridPanel = new GridPanel(
     controller.game.grid().getSize._1,
