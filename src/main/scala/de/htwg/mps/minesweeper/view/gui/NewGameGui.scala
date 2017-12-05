@@ -4,13 +4,11 @@ import javax.swing.border.EmptyBorder
 
 import de.htwg.mps.minesweeper.controller.GameController
 
-import scala.swing.{Action, BorderPanel, BoxPanel, Button, Font, Frame, Label, Orientation, TextField}
+import scala.swing.{Action, BorderPanel, BoxPanel, Button, Frame, Label, Orientation}
 
 class NewGameGui(controller: GameController) extends Frame {
 
   title = "Start new game"
-
-  val headingFont = new Font("Arial", 0, 20)
 
   contents = new BorderPanel() {
     add(heading, BorderPanel.Position.North)
@@ -22,20 +20,20 @@ class NewGameGui(controller: GameController) extends Frame {
     private def restartButton: Button = new Button {
       text = "restart"
       action = Action("restart") {
-        controller.restartGame(textFieldRows.text.toInt, textFieldCols.text.toInt, textFieldBombs.text.toInt)
+        controller.restartGame(textFieldRows.value, textFieldCols.value, textFieldBombs.value)
         dispose()
       }
     }
 
-    private lazy val textFieldRows: TextField = new TextField {
+    private lazy val textFieldRows = new DigitTextField {
       text = controller.game.grid().getSize._1.toString
       columns = 10
     }
-    private lazy val textFieldCols: TextField = new TextField {
+    private lazy val textFieldCols = new DigitTextField {
       text = controller.game.grid().getSize._2.toString
       columns = 10
     }
-    private lazy val textFieldBombs: TextField = new TextField {
+    private lazy val textFieldBombs = new DigitTextField {
       text = controller.game.grid().bombs.toString
       columns = 10
     }
@@ -43,7 +41,7 @@ class NewGameGui(controller: GameController) extends Frame {
     private def heading = new BorderPanel() {
       add(new Label {
         text = "Start a new minesweeper game"
-        font = headingFont
+        font = Constants.headingFont
       }, BorderPanel.Position.West)
 
       border = new EmptyBorder(0, 0, 10, 0)
