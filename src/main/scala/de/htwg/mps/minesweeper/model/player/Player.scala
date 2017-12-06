@@ -4,6 +4,7 @@ import de.htwg.mps.minesweeper.model.result.GameResult
 
 trait Player {
 
-  val history: List[GameResult]
+  def history: List[GameResult]
+  def addGameResult(gameResult: GameResult): Player
 
 }

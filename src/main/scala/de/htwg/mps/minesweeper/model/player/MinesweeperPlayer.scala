@@ -7,3 +7,7 @@ case class MinesweeperPlayer(history: List[GameResult]) extends Player {
   def addGameResult(gameResult: GameResult): Player = copy(history = history.::(gameResult))
 
 }
+
+object MinesweeperPlayer {
+  def apply(): MinesweeperPlayer = MinesweeperPlayer(List[GameResult]())
+}

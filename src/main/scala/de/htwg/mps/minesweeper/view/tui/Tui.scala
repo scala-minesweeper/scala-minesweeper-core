@@ -19,6 +19,7 @@ class Tui(val controller: GameController) extends Reactor {
     case _: GameStart =>
       println("\n==========================\nMinesweeper\n==========================")
       printTui()
+    case p: PlayerUpdate => PlayerTuiPrinter(p.player).print()
   }
 
   def printTui(): Unit = {

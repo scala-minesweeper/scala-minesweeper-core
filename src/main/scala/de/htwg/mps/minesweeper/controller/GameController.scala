@@ -2,6 +2,7 @@ package de.htwg.mps.minesweeper.controller
 
 
 import de.htwg.mps.minesweeper.model.Game
+import de.htwg.mps.minesweeper.model.player.Player
 
 import scala.swing.Publisher
 
@@ -14,5 +15,6 @@ trait GameController extends Publisher {
   def flagField(row: Int, col: Int): Unit
   def toggleMarkField(row: Int, col: Int): Unit
   def game: Game
+  def player: Player
 
 }

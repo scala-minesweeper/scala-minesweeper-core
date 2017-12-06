@@ -2,6 +2,7 @@ package de.htwg.mps.minesweeper.controller
 
 import de.htwg.mps.minesweeper.model.field.Field
 import de.htwg.mps.minesweeper.model.grid.{Grid, MinesweeperGrid}
+import de.htwg.mps.minesweeper.model.player.{MinesweeperPlayer, Player}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
 import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
 
@@ -17,9 +18,12 @@ case class GameLost(gameResult: GameResult) extends Event
 
 case class GameStart(grid: Grid) extends Event
 
+case class PlayerUpdate(player: Player) extends Event
+
 class GameControllerImpl() extends GameController {
 
   var game: Game = MinesweeperGame()
+  var player: Player = MinesweeperPlayer()
 
   override def restartGame(rows: Int, cols: Int, bombs: Int): Unit = {
     game = MinesweeperGame(MinesweeperGrid(rows, cols, bombs).init()).startGame()
@@ -92,7 +96,13 @@ class GameControllerImpl() extends GameController {
   private def updateField(row: Int, col: Int, field: Field): Boolean = {
     game = game.updateGrid(game.grid().set(row, col, field))
     publish(FieldChanged(row, col, field))
-    checkIfGameIsOver()
+    if(checkIfGameIsOver()) {
+      game.getScore.exists(score => {
+        player = player.addGameResult(score)
+        publish(PlayerUpdate(player))
+        true
+      })
+    }
     true
   }
 
