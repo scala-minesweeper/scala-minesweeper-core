@@ -1,3 +1,9 @@
 package de.htwg.mps.minesweeper.model.player
 
-case class MinesweeperPlayer() extends Player
+import de.htwg.mps.minesweeper.model.result.GameResult
+
+case class MinesweeperPlayer(history: List[GameResult]) extends Player {
+
+  def addGameResult(gameResult: GameResult): Player = copy(history = history.::(gameResult))
+
+}
