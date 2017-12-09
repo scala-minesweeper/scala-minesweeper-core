@@ -1,6 +1,6 @@
 package de.htwg.mps.minesweeper.controller
 
-import de.htwg.mps.minesweeper.model.field.Field
+import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
 import de.htwg.mps.minesweeper.model.grid.{Grid, MinesweeperGrid}
 import de.htwg.mps.minesweeper.model.player.{MinesweeperPlayer, Player}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
@@ -42,12 +42,43 @@ class GameControllerImpl() extends GameController {
   override def openField(row: Int, col: Int): Unit = running(row, col, cell => {
     // do not open field if it is flagged or marked
     if (!cell.isFlagged && !cell.isQuestionMarked)
-      updateField("Open field", row, col, cell.showField())
+      cell match {
+        case f: NumberField if f.numberBombs == 0 =>
+          println("Update cells around")
+          val g = openFieldsAround(row, col, game.grid())
+          println(g)
+          game = game.updateGrid(g)
+          publish(GridChanged(game.grid()))
+        case _ => updateField("Open field", row, col, cell.showField())
+      }
     else {
       println("First remove flag or ? on field before you can open it!")
       true
     }
   })
+
+  private def openFieldsAround(row: Int, col: Int, codeGrid: Grid): Grid = {
+
+    def openFieldsAroundHelper(coordinate: (Int, Int), internalGrid: Grid): Grid = {
+      internalGrid.get(coordinate).fold(internalGrid)({
+        case f if f.isShown || f.isQuestionMarked || f.isFlagged => internalGrid
+        case f: NumberField if f.numberBombs == 0 =>
+          val g = openFieldsAroundHelper((coordinate._1 + 1, coordinate._2), internalGrid)
+            .set(coordinate, f.showField())
+          println(g)
+          return g
+        /*
+        GridUtils.coordinatesAround(coordinate).foldLeft(grid)(
+          (grid, coordinate) => openFieldsAroundHelper(coordinate, grid)
+        )*/
+        case f =>
+          println("Open " + coordinate)
+          internalGrid.set(coordinate, f.showField())
+      })
+    }
+
+    openFieldsAroundHelper((row, col), codeGrid)
+  }
 
   override def questionField(row: Int, col: Int): Unit = running(row, col, cell =>
     updateField("Mark field (?)", row, col, cell.questionField())
@@ -96,7 +127,7 @@ class GameControllerImpl() extends GameController {
   private def updateField(row: Int, col: Int, field: Field): Boolean = {
     game = game.updateGrid(game.grid().set(row, col, field))
     publish(FieldChanged(row, col, field))
-    if(checkIfGameIsOver()) {
+    if (checkIfGameIsOver()) {
       game.getScore.exists(score => {
         player = player.addGameResult(score)
         publish(PlayerUpdate(player))
