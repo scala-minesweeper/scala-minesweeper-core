@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.controller
 
 import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
-import de.htwg.mps.minesweeper.model.grid.{Grid, MinesweeperGrid}
+import de.htwg.mps.minesweeper.model.grid.{Grid, GridUtils, MinesweeperGrid}
 import de.htwg.mps.minesweeper.model.player.{MinesweeperPlayer, Player}
 import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
 import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
@@ -45,9 +45,7 @@ class GameControllerImpl() extends GameController {
       cell match {
         case f: NumberField if f.numberBombs == 0 =>
           println("Update cells around")
-          val g = openFieldsAround(row, col, game.grid())
-          println(g)
-          game = game.updateGrid(g)
+          game = game.updateGrid(openFieldsAround(row, col, game.grid()))
           publish(GridChanged(game.grid()))
         case _ => updateField("Open field", row, col, cell.showField())
       }
@@ -59,25 +57,21 @@ class GameControllerImpl() extends GameController {
 
   private def openFieldsAround(row: Int, col: Int, codeGrid: Grid): Grid = {
 
-    def openFieldsAroundHelper(coordinate: (Int, Int), internalGrid: Grid): Grid = {
+    def openFieldsAroundHelper(internalGrid: Grid, coordinate: (Int, Int)): Grid = {
       internalGrid.get(coordinate).fold(internalGrid)({
         case f if f.isShown || f.isQuestionMarked || f.isFlagged => internalGrid
         case f: NumberField if f.numberBombs == 0 =>
-          val g = openFieldsAroundHelper((coordinate._1 + 1, coordinate._2), internalGrid)
-            .set(coordinate, f.showField())
-          println(g)
-          return g
-        /*
-        GridUtils.coordinatesAround(coordinate).foldLeft(grid)(
-          (grid, coordinate) => openFieldsAroundHelper(coordinate, grid)
-        )*/
-        case f =>
-          println("Open " + coordinate)
-          internalGrid.set(coordinate, f.showField())
+          GridUtils.coordinatesAround(coordinate)
+            .foldLeft(
+              internalGrid.set(coordinate, f.showField())
+            )(
+              openFieldsAroundHelper
+            )
+        case f => internalGrid.set(coordinate, f.showField())
       })
     }
 
-    openFieldsAroundHelper((row, col), codeGrid)
+    openFieldsAroundHelper(codeGrid, (row, col))
   }
 
   override def questionField(row: Int, col: Int): Unit = running(row, col, cell =>
