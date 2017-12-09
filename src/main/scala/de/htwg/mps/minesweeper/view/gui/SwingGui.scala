@@ -2,13 +2,13 @@ package de.htwg.mps.minesweeper.view.gui
 
 import java.awt.event.MouseEvent
 import java.awt.{Color, Font}
-import javax.swing.border.LineBorder
+import javax.swing.UIManager
 
 import de.htwg.mps.minesweeper.controller._
 import de.htwg.mps.minesweeper.model.grid.Grid
 
 import scala.swing.event.{Key, MouseClicked}
-import scala.swing.{Action, BorderPanel, Button, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, TextField}
+import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, Swing, TextField}
 
 
 
@@ -16,6 +16,7 @@ class SwingGui(controller: GameController) extends Frame {
 
   listenTo(controller)
 
+  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
 
   title = "Minesweeper"
 
@@ -63,7 +64,7 @@ class SwingGui(controller: GameController) extends Frame {
   private def gridPanel: GridPanel = new GridPanel(
     controller.game.grid().getSize._1,
     controller.game.grid().getSize._2) {
-    border = new LineBorder(Color.BLACK, 2)
+    border = Swing.LineBorder(Color.BLACK, 2)
     background = Color.WHITE
     val grid: Grid = controller.game.grid()
     for {
