@@ -7,7 +7,7 @@ import javax.swing.UIManager
 import de.htwg.mps.minesweeper.controller._
 import de.htwg.mps.minesweeper.model.grid.Grid
 
-import scala.swing.event.{Key, MouseClicked}
+import scala.swing.event.{Key, MouseClicked, MouseEntered, MouseExited}
 import scala.swing.{Action, BorderPanel, FlowPanel, Frame, GridPanel, Label, Menu, MenuBar, MenuItem, Swing, TextField}
 
 
@@ -76,6 +76,7 @@ class SwingGui(controller: GameController) extends Frame {
           text = grid.get(row, column).getOrElse().toString
           font = new Font("Verdana", 1, 36)
           listenTo(mouse.clicks)
+          listenTo(mouse.moves)
           reactions += {
             case evt@MouseClicked(_, _, _, _, _) =>
               evt.peer.getButton match {
@@ -83,6 +84,8 @@ class SwingGui(controller: GameController) extends Frame {
                 case MouseEvent.BUTTON3 => controller.toggleMarkField(row, column)
                 case _ =>
               }
+            case MouseEntered(_, _, _) =>
+            case MouseExited(_, _, _) =>
           }
         }
       }

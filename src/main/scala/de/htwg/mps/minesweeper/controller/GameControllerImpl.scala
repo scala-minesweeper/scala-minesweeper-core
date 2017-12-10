@@ -40,18 +40,14 @@ class GameControllerImpl() extends GameController {
   }
 
   override def openField(row: Int, col: Int): Unit = running(row, col, cell => {
-    // do not open field if it is flagged or marked
-    if (!cell.isFlagged && !cell.isQuestionMarked)
-      cell match {
-        case f: NumberField if f.numberBombs == 0 =>
-          println("Update cells around")
-          game = game.updateGrid(openFieldsAround(row, col, game.grid()))
-          publish(GridChanged(game.grid()))
-        case _ => updateField("Open field", row, col, cell.showField())
-      }
-    else {
-      println("First remove flag or ? on field before you can open it!")
-      true
+    cell match {
+      case f if f.isFlagged || f.isQuestionMarked =>
+        println("First remove flag or ? on field before you can open it!")
+        true
+      case f: NumberField if f.numberBombs == 0 =>
+        game = game.updateGrid(openFieldsAround(row, col, game.grid()))
+        publish(GridChanged(game.grid()))
+      case _ => updateField("Open field", row, col, cell.showField())
     }
   })
 
