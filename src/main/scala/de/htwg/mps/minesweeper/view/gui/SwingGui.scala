@@ -12,8 +12,6 @@ import scala.swing.{Action, BorderPanel, Frame, GridPanel, Menu, MenuBar, MenuIt
 
 class SwingGui(controller: GameController) extends Frame {
 
-  private val backgroundColor = new Color(255, 255, 255)
-
   listenTo(controller)
 
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
@@ -26,7 +24,7 @@ class SwingGui(controller: GameController) extends Frame {
   visible = true
 
   private def redraw(): Unit = contents = new BorderPanel {
-    add(gridPanel, BorderPanel.Position.Center)
+    add(new GamePanel(controller.game.grid(), controller), BorderPanel.Position.Center)
     add(status, BorderPanel.Position.South)
   }
 
@@ -53,14 +51,4 @@ class SwingGui(controller: GameController) extends Frame {
     }
   }
 
-  private def gridPanel: GridPanel = new GridPanel(
-    controller.game.grid().getSize._1,
-    controller.game.grid().getSize._2) {
-    background = backgroundColor
-    val grid: Grid = controller.game.grid()
-    for {
-      row <- 0 until grid.getSize._1
-      column <- 0 until grid.getSize._2
-    } contents += new CellPanel(row, column, controller)
-  }
 }
