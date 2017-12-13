@@ -6,7 +6,7 @@ import de.htwg.mps.minesweeper.model.player.Player
 
 import scala.swing.Publisher
 
-trait GameController extends Publisher {
+trait GameController extends scala.AnyRef with Publisher {
 
   def restartGame(rows: Int, cols: Int, bombs: Int): Unit
   def openField(row: Int, col: Int): Unit

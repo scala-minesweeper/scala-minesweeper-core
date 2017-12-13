@@ -20,7 +20,7 @@ case class GameStart(grid: Grid) extends Event
 
 case class PlayerUpdate(player: Player) extends Event
 
-class GameControllerImpl() extends GameController {
+class GameControllerImpl() extends scala.AnyRef with GameController {
 
   var game: Game = MinesweeperGame()
   var player: Player = MinesweeperPlayer()
