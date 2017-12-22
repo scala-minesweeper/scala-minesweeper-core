@@ -6,7 +6,7 @@ import de.htwg.mps.minesweeper.controller._
 import de.htwg.mps.minesweeper.model.grid.Grid
 
 import scala.swing.event.Key
-import scala.swing.{Action, BorderPanel, Frame, Menu, MenuBar, MenuItem, TextField}
+import scala.swing.{Action, BorderPanel, Frame, Label, Menu, MenuBar, MenuItem}
 
 
 class GameGui(guiController: GuiController) extends Frame {
@@ -27,7 +27,7 @@ class GameGui(guiController: GuiController) extends Frame {
 
   title = "Minesweeper"
 
-  var status = new TextField("Initializing", 20)
+  var status = new Label("Initializing")
 
   visible = true
 
