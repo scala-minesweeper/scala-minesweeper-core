@@ -44,7 +44,7 @@ class Tui(val controller: GameController) extends Reactor {
       case "p" => continue(() => println(printGrid))
       case "q" => stop(() => println("Goodbye"))
       case "a" => continue(() => controller.openAllFields())
-      case "r" => continue(() => controller.restartGame(4,5,3))
+      case "r" => continue(() => controller.restartGame(4, 5, 3))
       case _ =>
         continue(() =>
           input.split("\\s+").toList match {

@@ -1,33 +1,26 @@
 package de.htwg.mps.minesweeper.controller
 
+import akka.actor.{Actor, ActorRef}
 import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
 import de.htwg.mps.minesweeper.model.grid.{Grid, GridUtils, MinesweeperGrid}
 import de.htwg.mps.minesweeper.model.player.{MinesweeperPlayer, Player}
-import de.htwg.mps.minesweeper.model.result.{EmptyGameResult, GameResult}
+import de.htwg.mps.minesweeper.model.result.EmptyGameResult
 import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
 
-import scala.swing.event.Event
-
-case class FieldChanged(row: Int, col: Int, field: Field) extends Event
-
-case class GridChanged(grid: Grid) extends Event
-
-case class GameWon(gameResult: GameResult) extends Event
-
-case class GameLost(gameResult: GameResult) extends Event
-
-case class GameStart(grid: Grid) extends Event
-
-case class PlayerUpdate(player: Player) extends Event
-
-class GameControllerImpl() extends scala.AnyRef with GameController {
+class GameControllerImpl(publisher: ActorRef) extends GameController with Actor {
 
   var game: Game = MinesweeperGame()
   var player: Player = MinesweeperPlayer()
 
+  override def receive: PartialFunction[Any, Unit] = {
+    case StartGame(rows, cols, bombs) => restartGame(rows, cols, bombs)
+    case OpenField(row, col) => openField(row, col)
+    case ToggleField(row, col) => toggleMarkField(row, col)
+  }
+
   override def restartGame(rows: Int, cols: Int, bombs: Int): Unit = {
     game = MinesweeperGame(MinesweeperGrid(rows, cols, bombs).init()).startGame()
-    publish(GameStart(game.grid()))
+    publisher ! GameStart(game.grid())
   }
 
   override def openAllFields(): Unit = {
@@ -36,7 +29,7 @@ class GameControllerImpl() extends scala.AnyRef with GameController {
         grid.updateField(coordinate._1, coordinate._2, field => field.showField())
       )
     )
-    publish(GridChanged(game.grid()))
+    publisher ! GridChanged(game.grid())
   }
 
   override def openField(row: Int, col: Int): Unit = running(row, col, cell => {
@@ -46,7 +39,7 @@ class GameControllerImpl() extends scala.AnyRef with GameController {
         true
       case f: NumberField if f.numberBombs == 0 =>
         game = game.updateGrid(openFieldsAround(row, col, game.grid()))
-        publish(GridChanged(game.grid()))
+        publisher ! GridChanged(game.grid())
       case _ => updateField("Open field", row, col, cell.showField())
     }
   })
@@ -116,11 +109,11 @@ class GameControllerImpl() extends scala.AnyRef with GameController {
     */
   private def updateField(row: Int, col: Int, field: Field): Boolean = {
     game = game.updateGrid(game.grid().set(row, col, field))
-    publish(FieldChanged(row, col, field))
+    publisher ! FieldChanged(row, col, field)
     if (checkIfGameIsOver()) {
       game.getScore.exists(score => {
         player = player.addGameResult(score)
-        publish(PlayerUpdate(player))
+        publisher ! PlayerUpdate(player)
         true
       })
     }
@@ -156,12 +149,12 @@ class GameControllerImpl() extends scala.AnyRef with GameController {
 
   private def finishGameWin(): Unit = {
     game = game.finishGame()
-    publish(GameWon(game.getScore.getOrElse(EmptyGameResult())))
+    publisher ! GameWon(game.getScore.getOrElse(EmptyGameResult()))
   }
 
   private def finishGameLost(): Unit = {
     game = game.finishGame()
-    publish(GameLost(game.getScore.getOrElse(EmptyGameResult())))
+    publisher ! GameLost(game.getScore.getOrElse(EmptyGameResult()))
     openAllFields()
   }
 

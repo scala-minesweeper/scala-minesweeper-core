@@ -1,18 +1,34 @@
 
-import de.htwg.mps.minesweeper.controller.{GameControllerImpl, GameController}
-import de.htwg.mps.minesweeper.view.gui.SwingGui
-import de.htwg.mps.minesweeper.view.tui.Tui
+import akka.actor.{ActorRef, ActorSystem, Props}
+import com.typesafe.config.ConfigFactory
+import de.htwg.mps.minesweeper.controller.{GameControllerImpl, GameControllerPublisher}
+import de.htwg.mps.minesweeper.view.tui.TuiActor
 
-import scala.io.StdIn.readLine
+import scala.io.StdIn
+import scala.util.Try
 
 object MinesweeperMain {
 
-  val controller: GameController = new GameControllerImpl()
-  val tui: Tui = new Tui(controller)
-  val gui = new SwingGui(controller)
+  private val config = ConfigFactory.load()
+  private val actorSystemName = config.getString("akka.minesweeper.systemName")
+  private val controllerActorName = config.getString("akka.minesweeper.controllerActor")
+  private val publisherActorName = config.getString("akka.minesweeper.publisherActor")
+
+  val system = ActorSystem(actorSystemName)
+
+  val publisher: ActorRef =
+    system.actorOf(Props[GameControllerPublisher], publisherActorName)
+
+  val controller: ActorRef =
+    system.actorOf(Props(new GameControllerImpl(publisher)), controllerActorName)
+
+  val tui: ActorRef = system.actorOf(Props(new TuiActor(controller, publisher)))
+
+  //val gui = new SwingGui(controller)
 
   def main(args: Array[String]) {
-    controller.restartGame(4,5,3)
-    while (tui.processInput(readLine())) {}
+    while (true) {
+      Try(StdIn.readInt()) map (tui.tell(_, null))
+    }
   }
 }
