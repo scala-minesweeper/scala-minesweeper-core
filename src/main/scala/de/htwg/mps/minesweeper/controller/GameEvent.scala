@@ -5,7 +5,9 @@ import de.htwg.mps.minesweeper.model.grid.Grid
 import de.htwg.mps.minesweeper.model.player.Player
 import de.htwg.mps.minesweeper.model.result.GameResult
 
-trait GameEvent
+import scala.swing.event.Event
+
+trait GameEvent extends Event
 
 // TODO remove grid from this event
 case class FieldChanged(row: Int, col: Int, field: Field, grid: Grid) extends GameEvent

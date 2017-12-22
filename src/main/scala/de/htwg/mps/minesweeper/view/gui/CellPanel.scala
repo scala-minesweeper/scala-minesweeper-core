@@ -2,23 +2,21 @@ package de.htwg.mps.minesweeper.view.gui
 
 import java.awt.event.MouseEvent
 
-import de.htwg.mps.minesweeper.controller.{FieldChanged, GameController, GridChanged}
-import de.htwg.mps.minesweeper.model.field.Field
+import de.htwg.mps.minesweeper.controller.{FieldChanged, GridChanged}
+import de.htwg.mps.minesweeper.model.grid.Grid
 
 import scala.swing.event.MouseClicked
 import scala.swing.{FlowPanel, _}
 
-class CellPanel(row: Int, col: Int, controller: GameController) extends FlowPanel {
-
-  def getCell: Option[Field] = controller.game.grid().get(row, col)
+class CellPanel(row: Int, col: Int, grid: Grid, guiController: GuiController) extends FlowPanel {
 
   contents += new BoxPanel(Orientation.Vertical) {
     contents += new Label() {
-      text = getCell.getOrElse().toString
+      text = grid.get(row, col).getOrElse().toString
       font = Constants.cellFont
       listenTo(mouse.clicks)
       listenTo(mouse.moves)
-      listenTo(controller)
+      listenTo(guiController)
       reactions += {
         case e: FieldChanged =>
           if (e.col == col && e.row == row) {
@@ -30,8 +28,8 @@ class CellPanel(row: Int, col: Int, controller: GameController) extends FlowPane
           repaint
         case evt@MouseClicked(_, _, _, _, _) =>
           evt.peer.getButton match {
-            case MouseEvent.BUTTON1 => controller.openField(row, col)
-            case MouseEvent.BUTTON3 => controller.toggleMarkField(row, col)
+            case MouseEvent.BUTTON1 => guiController.openField(row, col)
+            case MouseEvent.BUTTON3 => guiController.toggleMarkField(row, col)
           }
       }
     }

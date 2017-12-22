@@ -6,7 +6,7 @@ import de.htwg.mps.minesweeper.model.grid.Grid
 
 case class ProcessTuiInput(input: String)
 
-class Tui(controller: ActorRef, publisher: ActorRef) extends Actor {
+class TuiActor(controller: ActorRef, publisher: ActorRef) extends Actor {
 
   publisher ! RegisterObserver
 
