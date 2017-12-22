@@ -7,7 +7,8 @@ import de.htwg.mps.minesweeper.model.result.GameResult
 
 trait GameEvent
 
-case class FieldChanged(row: Int, col: Int, field: Field) extends GameEvent
+// TODO remove grid from this event
+case class FieldChanged(row: Int, col: Int, field: Field, grid: Grid) extends GameEvent
 
 case class GridChanged(grid: Grid) extends GameEvent
 

@@ -1,77 +1,52 @@
 package de.htwg.mps.minesweeper.view.tui
 
+import akka.actor.{Actor, ActorRef}
 import de.htwg.mps.minesweeper.controller._
+import de.htwg.mps.minesweeper.model.grid.Grid
 
-import scala.swing.Reactor
+case class ProcessTuiInput(input: String)
 
-class Tui(val controller: GameController) extends Reactor {
+class Tui(controller: ActorRef, publisher: ActorRef) extends Actor {
 
-  listenTo(controller)
-  reactions += {
-    case _: FieldChanged => printTui()
-    case _: GridChanged => printTui()
-    case g: GameWon =>
-      printTui("You win")
-      println(g.gameResult)
-    case g: GameLost =>
-      printTui("You lost")
-      println(g.gameResult)
-    case _: GameStart =>
+  publisher ! RegisterObserver
+
+  override def receive: Receive = {
+    case ProcessTuiInput(input) => processInput(input)
+    case FieldChanged(_, _, _, grid) => println(grid)
+    case GridChanged(grid) => println(grid)
+    case GameWon(gameResult) => println(gameResult)
+    case GameLost(gameResult) => println(gameResult)
+    case GameStart(grid) =>
       println("\n==========================\nMinesweeper\n==========================")
-      printTui()
-    case p: PlayerUpdate => printTui(PlayerTuiPrinter(p.player).print())
+      printTui(grid)
+    case PlayerUpdate(player) => printTui(PlayerTuiPrinter(player).print())
   }
 
-  def printTui(): Unit = {
-    println(printGrid)
+  private def printTui(grid: Grid): Unit = {
+    println(grid)
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
-    println(" # <row> <col> - flag cell")
-    println(" ? <row> <col> - question mark cell")
-    println(" ! <row> <col> - toggle cell mark")
-    println(" p - print the field")
-    println(" a - open all fields (dev cheat)")
+    println(" ! <row> <col> - toggle cell mark (#: flagged, ?: question marked)")
     println(" r - restart the game with new fields")
-    println(" q - quit the game")
   }
 
-  def printTui(message: String): Unit = {
+  private def printTui(message: String): Unit = {
     println(message)
   }
 
-  def processInput(input: String): Boolean = {
+  private def processInput(input: String): Unit = {
     input match {
-      case "p" => continue(() => println(printGrid))
-      case "q" => stop(() => println("Goodbye"))
-      case "a" => continue(() => controller.openAllFields())
-      case "r" => continue(() => controller.restartGame(4, 5, 3))
+      case "r" => controller ! StartGame(4, 5, 3)
       case _ =>
-        continue(() =>
-          input.split("\\s+").toList match {
-            case "o" :: row :: column :: Nil =>
-              controller.openField(row.toInt, column.toInt)
-            case "?" :: row :: column :: Nil =>
-              controller.questionField(row.toInt, column.toInt)
-            case "!" :: row :: column :: Nil =>
-              controller.toggleMarkField(row.toInt, column.toInt)
-            case "#" :: row :: column :: Nil =>
-              controller.flagField(row.toInt, column.toInt)
-            case _ => println("Unknown action")
-          }
-        )
+        input.split("\\s+").toList match {
+          case "o" :: row :: column :: Nil =>
+            controller ! OpenField(row.toInt, column.toInt)
+          case "!" :: row :: column :: Nil =>
+            controller ! ToggleField(row.toInt, column.toInt)
+          case _ => println("Unknown action")
+        }
     }
-  }
 
-  private def printGrid: String = controller.game.grid().toString
-
-  private def continue[U](f: () => U): Boolean = {
-    f()
-    true
-  }
-
-  private def stop[U](f: () => U): Boolean = {
-    f()
-    false
   }
 
 }

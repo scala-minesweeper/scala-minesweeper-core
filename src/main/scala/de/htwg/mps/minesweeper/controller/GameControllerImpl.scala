@@ -109,7 +109,7 @@ class GameControllerImpl(publisher: ActorRef) extends GameController with Actor 
     */
   private def updateField(row: Int, col: Int, field: Field): Boolean = {
     game = game.updateGrid(game.grid().set(row, col, field))
-    publisher ! FieldChanged(row, col, field)
+    publisher ! FieldChanged(row, col, field, game.grid())
     if (checkIfGameIsOver()) {
       game.getScore.exists(score => {
         player = player.addGameResult(score)

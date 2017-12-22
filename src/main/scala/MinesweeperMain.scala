@@ -1,11 +1,10 @@
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
-import de.htwg.mps.minesweeper.controller.{GameControllerImpl, GameControllerPublisher}
-import de.htwg.mps.minesweeper.view.tui.TuiActor
+import de.htwg.mps.minesweeper.controller.{GameControllerImpl, GameControllerPublisher, StartGame}
+import de.htwg.mps.minesweeper.view.tui.{ProcessTuiInput, Tui}
 
 import scala.io.StdIn
-import scala.util.Try
 
 object MinesweeperMain {
 
@@ -22,13 +21,15 @@ object MinesweeperMain {
   val controller: ActorRef =
     system.actorOf(Props(new GameControllerImpl(publisher)), controllerActorName)
 
-  val tui: ActorRef = system.actorOf(Props(new TuiActor(controller, publisher)))
+  val tui: ActorRef =
+    system.actorOf(Props(new Tui(controller, publisher)))
 
   //val gui = new SwingGui(controller)
 
   def main(args: Array[String]) {
+    controller.tell(StartGame(5, 5, 10), null)
     while (true) {
-      Try(StdIn.readInt()) map (tui.tell(_, null))
+      tui.tell(ProcessTuiInput(StdIn.readLine()), null)
     }
   }
 }
