@@ -38,10 +38,13 @@ class GameGui(guiController: GuiController) extends Frame {
 
 
   menuBar = new MenuBar {
-    contents += new Menu("File") {
-      mnemonic = Key.F
+    contents += new Menu("New") {
+      mnemonic = Key.G
       contents += new MenuItem(Action("New") {
         new NewGameGui(guiController).visible = true
+      })
+      contents += new MenuItem(Action("History") {
+        new PlayerGui(guiController).visible = true
       })
       contents += new MenuItem(Action("Quit") {
         System.exit(0)

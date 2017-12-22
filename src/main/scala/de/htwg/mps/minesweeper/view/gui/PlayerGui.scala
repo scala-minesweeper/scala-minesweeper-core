@@ -1,6 +1,5 @@
 package de.htwg.mps.minesweeper.view.gui
 
-import javax.swing.UIManager
 import javax.swing.border.EmptyBorder
 
 import de.htwg.mps.minesweeper.controller.PlayerUpdate
@@ -15,10 +14,6 @@ class PlayerGui(guiController: GuiController) extends Frame {
   reactions += {
     case PlayerUpdate(player) => redraw(player)
   }
-
-  visible = true
-
-  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
 
   title = "Player Score"
 
