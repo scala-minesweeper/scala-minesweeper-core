@@ -9,6 +9,7 @@ class SwingGuiActor(controller: ActorRef, publisher: ActorRef) extends Actor {
 
   private val guiController = new GuiController(controller)
   new GameGui(guiController)
+  new PlayerGui(guiController)
 
   override def receive: Receive = {
     case event: GameEvent => guiController.sendEvent(event)
