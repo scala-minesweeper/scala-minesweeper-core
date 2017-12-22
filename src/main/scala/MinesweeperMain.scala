@@ -1,7 +1,7 @@
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
-import de.htwg.mps.minesweeper.controller.{GameControllerImpl, GameControllerPublisher, StartGame}
+import de.htwg.mps.minesweeper.controller.{GameControllerActor, GameControllerPublisherActor, PlayerControllerActor, StartGame}
 import de.htwg.mps.minesweeper.view.gui.SwingGuiActor
 import de.htwg.mps.minesweeper.view.tui.{ProcessTuiInput, TuiActor}
 
@@ -17,19 +17,21 @@ object MinesweeperMain {
   val system = ActorSystem(actorSystemName)
 
   val publisher: ActorRef =
-    system.actorOf(Props[GameControllerPublisher], publisherActorName)
+    system.actorOf(Props[GameControllerPublisherActor], publisherActorName)
 
-  val controller: ActorRef =
-    system.actorOf(Props(new GameControllerImpl(publisher)), controllerActorName)
+  val playerController: ActorRef =
+    system.actorOf(Props(new PlayerControllerActor(publisher)))
+  val gameController: ActorRef =
+    system.actorOf(Props(new GameControllerActor(publisher, playerController)), controllerActorName)
 
   val tui: ActorRef =
-    system.actorOf(Props(new TuiActor(controller, publisher)))
+    system.actorOf(Props(new TuiActor(gameController, publisher)))
 
   val gui: ActorRef =
-    system.actorOf(Props(new SwingGuiActor(controller, publisher)))
+    system.actorOf(Props(new SwingGuiActor(gameController, publisher)))
 
   def main(args: Array[String]) {
-    controller.tell(StartGame(5, 5, 10), null)
+    gameController.tell(StartGame(5, 5, 10), null)
     while (true) {
       tui.tell(ProcessTuiInput(StdIn.readLine()), null)
     }

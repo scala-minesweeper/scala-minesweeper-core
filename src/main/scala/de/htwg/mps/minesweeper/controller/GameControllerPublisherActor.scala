@@ -6,14 +6,14 @@ case class RegisterObserver()
 
 case class DeregisterObserver()
 
-class GameControllerPublisher extends Actor {
+class GameControllerPublisherActor extends Actor {
 
-  def run(observers: Set[ActorRef]): Receive = {
+  override def receive: Receive = run(Set())
+
+  private def run(observers: Set[ActorRef]): Receive = {
     case RegisterObserver => context.become(run(observers + sender()))
     case DeregisterObserver => context.become(run(observers - sender()))
     case event: GameEvent => observers.foreach(_ ! event)
   }
-
-  override def receive: Receive = run(Set())
 
 }
