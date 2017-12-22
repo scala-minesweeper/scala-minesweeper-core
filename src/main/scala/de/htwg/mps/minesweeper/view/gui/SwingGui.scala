@@ -3,11 +3,9 @@ package de.htwg.mps.minesweeper.view.gui
 import javax.swing.UIManager
 
 import de.htwg.mps.minesweeper.controller._
-import de.htwg.mps.minesweeper.model.grid.Grid
 
-import scala.swing.Color
 import scala.swing.event.Key
-import scala.swing.{Action, BorderPanel, Frame, GridPanel, Menu, MenuBar, MenuItem, Swing, TextField}
+import scala.swing.{Action, BorderPanel, Frame, Menu, MenuBar, MenuItem, TextField}
 
 
 class SwingGui(controller: GameController) extends Frame {
