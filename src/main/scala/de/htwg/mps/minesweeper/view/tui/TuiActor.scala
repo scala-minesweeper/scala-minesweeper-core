@@ -12,13 +12,13 @@ class TuiActor(controller: ActorRef, publisher: ActorRef) extends Actor {
 
   override def receive: Receive = {
     case ProcessTuiInput(input) => processInput(input)
-    case FieldChanged(_, _, _, grid) => println(grid)
-    case GridChanged(grid) => println(grid)
-    case GameWon(gameResult) => println(gameResult)
-    case GameLost(gameResult) => println(gameResult)
-    case GameStart(grid) =>
+    case FieldUpdate(_, _, _, grid) => println(grid)
+    case GridUpdate(grid) => println(grid)
+    case GameWon(game) => println(game.getScore)
+    case GameLost(game) => println(game.getScore)
+    case GameStart(game) =>
       println("\n==========================\nMinesweeper\n==========================")
-      printTui(grid)
+      printTui(game.grid())
     case PlayerUpdate(player) => printTui(PlayerTuiPrinter(player).print())
   }
 

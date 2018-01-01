@@ -14,13 +14,13 @@ class GameGui(guiController: GuiController) extends Frame {
   listenTo(guiController)
 
   reactions += {
-    case GameStart(grid) =>
+    case GameStart(game) =>
       status.text = "Game is running"
-      redraw(grid)
-    case GameWon(gameResult) =>
-      status.text = "You win - Score: " + gameResult.getScore
-    case GameLost(gameResult) =>
-      status.text = "You lost - Score: " + gameResult.getScore
+      redraw(game.grid())
+    case GameWon(game) =>
+      status.text = "You win - Score: " + game.getScore
+    case GameLost(game) =>
+      status.text = "You lost - Score: " + game.getScore
   }
 
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)

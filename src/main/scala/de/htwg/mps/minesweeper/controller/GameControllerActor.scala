@@ -3,7 +3,6 @@ package de.htwg.mps.minesweeper.controller
 import akka.actor.{Actor, ActorRef}
 import de.htwg.mps.minesweeper.model.field.{Field, NumberField}
 import de.htwg.mps.minesweeper.model.grid.{Grid, GridUtils, MinesweeperGrid}
-import de.htwg.mps.minesweeper.model.result.EmptyGameResult
 import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
 
 class GameControllerActor(publisher: ActorRef, playerController: ActorRef) extends Actor {
@@ -16,12 +15,12 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
     case StartGame(rows, cols, bombs) => context.become(run(restartGame(rows, cols, bombs)))
     case OpenField(row, col) => context.become(run(openField(row, col, game)))
     case ToggleField(row, col) => context.become(run(toggleMarkField(game, row, col)))
-    case GetCurrentStatus() => sender() ! GameStatus(game)
+    case GetCurrentStatus() => sender() ! GameUpdate(game)
   }
 
   private def restartGame(rows: Int, cols: Int, bombs: Int): Game = {
     val game = MinesweeperGame(MinesweeperGrid(rows, cols, bombs).init()).startGame()
-    publisher ! GameStart(game.grid())
+    publisher ! GameStart(game)
     game
   }
 
@@ -32,7 +31,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
         game
       case f: NumberField if f.numberBombs == 0 =>
         val newGame = game.updateGrid(openFieldsAround(row, col, game.grid()))
-        publisher ! GridChanged(newGame.grid())
+        publisher ! GridUpdate(newGame.grid())
         newGame
       case _ => updateField(game, "Open field", row, col, cell.showField())
     }
@@ -44,7 +43,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
         grid.updateField(coordinate._1, coordinate._2, field => field.showField())
       )
     )
-    publisher ! GridChanged(newGame.grid())
+    publisher ! GridUpdate(newGame.grid())
     newGame
   }
 
@@ -82,7 +81,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
 
   private def updateField(game: Game, row: Int, col: Int, field: Field): Game = {
     val newGame = game.updateGrid(game.grid().set(row, col, field))
-    publisher ! FieldChanged(row, col, field, newGame.grid())
+    publisher ! FieldUpdate(row, col, field, newGame.grid())
     checkAndHandleGameIsOver(newGame)
   }
 
@@ -103,7 +102,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
 
   private def finishGameWin(game: Game): Game = {
     val newGame = game.finishGame()
-    val wonMessage = GameWon(newGame.getScore.getOrElse(EmptyGameResult()))
+    val wonMessage = GameWon(newGame)
     publisher ! wonMessage
     playerController ! wonMessage
     newGame
@@ -111,7 +110,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
 
   private def finishGameLost(game: Game): Game = {
     val newGame = openAllFields(game.finishGame())
-    val lostMessage = GameLost(newGame.getScore.getOrElse(EmptyGameResult()))
+    val lostMessage = GameLost(newGame)
     publisher ! lostMessage
     playerController ! lostMessage
     newGame

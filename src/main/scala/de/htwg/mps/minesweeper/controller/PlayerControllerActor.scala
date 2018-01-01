@@ -11,8 +11,10 @@ class PlayerControllerActor(publisher: ActorRef) extends Actor {
   override def receive: Receive = run(MinesweeperPlayer())
 
   private def run(player: Player): Receive = {
-    case GameWon(gameResult) => context.become(addGameResult(player, gameResult))
-    case GameLost(gameResult) => context.become(addGameResult(player, gameResult))
+    case GameWon(game) =>
+      game.getScore.fold()(score => context.become(addGameResult(player, score)))
+    case GameLost(game) =>
+      game.getScore.fold()(score => context.become(addGameResult(player, score)))
     case GetCurrentStatus() => sender() ! PlayerUpdate(player)
   }
 

@@ -10,6 +10,8 @@ case class RegisterPublisher()
 
 case class DeregisterPublisher()
 
+case class GetCurrentStatus()
+
 class PublisherActor extends Actor {
 
   override def receive: Receive = run(Set(), Set())
