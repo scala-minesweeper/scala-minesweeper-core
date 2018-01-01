@@ -6,11 +6,14 @@ import de.htwg.mps.minesweeper.model.result.GameResult
 
 class PlayerControllerActor(publisher: ActorRef) extends Actor {
 
+  publisher ! RegisterPublisher
+
   override def receive: Receive = run(MinesweeperPlayer())
 
   private def run(player: Player): Receive = {
     case GameWon(gameResult) => context.become(addGameResult(player, gameResult))
     case GameLost(gameResult) => context.become(addGameResult(player, gameResult))
+    case GetCurrentStatus() => sender() ! PlayerUpdate(player)
   }
 
   private def addGameResult(player: Player, gameResult: GameResult) = {

@@ -8,12 +8,15 @@ import de.htwg.mps.minesweeper.model.{Game, MinesweeperGame}
 
 class GameControllerActor(publisher: ActorRef, playerController: ActorRef) extends Actor {
 
+  publisher ! RegisterPublisher
+
   override def receive: Receive = run(MinesweeperGame())
 
   private def run(game: Game): Receive = {
     case StartGame(rows, cols, bombs) => context.become(run(restartGame(rows, cols, bombs)))
     case OpenField(row, col) => context.become(run(openField(row, col, game)))
     case ToggleField(row, col) => context.become(run(toggleMarkField(game, row, col)))
+    case GetCurrentStatus() => sender() ! GameStatus(game)
   }
 
   private def restartGame(rows: Int, cols: Int, bombs: Int): Game = {
