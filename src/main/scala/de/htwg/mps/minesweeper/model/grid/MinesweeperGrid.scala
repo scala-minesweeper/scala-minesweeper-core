@@ -8,12 +8,14 @@ import scala.util.Random
 case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random: Random) extends Grid {
 
   override def set(row: Int, col: Int, cell: Field): MinesweeperGrid = copy(playground = playground.updated(row, col, cell))
+
   override def set(coordinates: (Int, Int), cell: Field): MinesweeperGrid = set(coordinates._1, coordinates._2, cell)
 
   override def updateField(row: Int, col: Int, f: Field => Field): Grid =
     get(row, col).fold(this)(field => set(row, col, f(field)))
 
   override def get(row: Int, col: Int): Option[Field] = playground.get(row, col)
+
   override def get(coordinates: (Int, Int)): Option[Field] = get(coordinates._1, coordinates._2)
 
   override def init(): MinesweeperGrid = {
@@ -47,6 +49,8 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
   override def getFieldCount: Int = playground.rows * playground.cols
 
   override def fields: List[Field] = playground.asList
+
+  override def nestedFields: List[List[Field]] = playground.asNestedList
 
   override def toString: String = {
     val cols = playground.cols
