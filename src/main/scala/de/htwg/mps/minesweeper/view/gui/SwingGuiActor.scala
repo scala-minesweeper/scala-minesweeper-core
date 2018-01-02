@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.view.gui
 
 import akka.actor.{Actor, ActorRef}
-import de.htwg.mps.minesweeper.core.controller.{GameEvent, RegisterObserver}
+import de.htwg.mps.minesweeper.api.events.{GameEvent, RegisterObserver}
 
 class SwingGuiActor(controller: ActorRef, publisher: ActorRef) extends Actor {
 

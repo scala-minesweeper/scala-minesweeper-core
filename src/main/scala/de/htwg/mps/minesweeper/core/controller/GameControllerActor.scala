@@ -1,6 +1,7 @@
 package de.htwg.mps.minesweeper.core.controller
 
 import akka.actor.{Actor, ActorRef}
+import de.htwg.mps.minesweeper.api.events._
 import de.htwg.mps.minesweeper.api.{Field, Game, Grid}
 import de.htwg.mps.minesweeper.core.model.MinesweeperGame
 import de.htwg.mps.minesweeper.core.model.field.NumberField

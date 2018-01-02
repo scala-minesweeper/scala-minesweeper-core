@@ -1,16 +1,7 @@
 package de.htwg.mps.minesweeper.core.controller
 
 import akka.actor.{Actor, ActorRef}
-
-case class RegisterObserver()
-
-case class DeregisterObserver()
-
-case class RegisterPublisher()
-
-case class DeregisterPublisher()
-
-case class GetCurrentStatus()
+import de.htwg.mps.minesweeper.api.events._
 
 class PublisherActor extends Actor {
 
