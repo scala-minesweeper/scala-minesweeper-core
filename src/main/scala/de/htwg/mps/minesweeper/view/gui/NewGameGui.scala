@@ -2,11 +2,9 @@ package de.htwg.mps.minesweeper.view.gui
 
 import javax.swing.border.EmptyBorder
 
-import de.htwg.mps.minesweeper.controller.GameController
-
 import scala.swing.{Action, BorderPanel, BoxPanel, Button, Frame, Label, Orientation}
 
-class NewGameGui(controller: GameController) extends Frame {
+class NewGameGui(controller: GuiController) extends Frame {
 
   title = "Start new game"
 
@@ -26,15 +24,15 @@ class NewGameGui(controller: GameController) extends Frame {
     }
 
     private lazy val textFieldRows = new DigitTextField {
-      text = controller.game.grid().getSize._1.toString
+      text = "5"
       columns = 10
     }
     private lazy val textFieldCols = new DigitTextField {
-      text = controller.game.grid().getSize._2.toString
+      text = "5"
       columns = 10
     }
     private lazy val textFieldBombs = new DigitTextField {
-      text = controller.game.grid().bombs.toString
+      text = "9"
       columns = 10
     }
 
