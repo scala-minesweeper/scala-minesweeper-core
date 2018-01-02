@@ -3,7 +3,6 @@ package de.htwg.mps.minesweeper.view.gui
 import javax.swing.UIManager
 
 import de.htwg.mps.minesweeper.api.Grid
-import de.htwg.mps.minesweeper.core.controller._
 import de.htwg.mps.minesweeper.core.model.result.EmptyGameResult
 
 import scala.swing.event.Key
@@ -15,16 +14,16 @@ class GameGui(guiController: GuiController) extends Frame {
   listenTo(guiController)
 
   reactions += {
-    case GameStart(game) =>
+    case GameStartEvent(game) =>
       status.text = "Bombs to be found: " + game.grid().missingBombs
       redraw(game.grid())
-    case FieldUpdate(_, _, _, grid) =>
+    case FieldUpdateEvent(_, _, _, grid) =>
       status.text = "Bombs to be found: " + grid.missingBombs
-    case GridUpdate(grid) =>
+    case GridUpdateEvent(grid) =>
       status.text = "Bombs to be found: " + grid.missingBombs
-    case GameWon(game) =>
+    case GameWonEvent(game) =>
       status.text = "You win - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
-    case GameLost(game) =>
+    case GameLostEvent(game) =>
       status.text = "You lost - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
   }
 

@@ -3,7 +3,6 @@ package de.htwg.mps.minesweeper.view.gui
 import javax.swing.border.EmptyBorder
 
 import de.htwg.mps.minesweeper.api.Player
-import de.htwg.mps.minesweeper.core.controller.PlayerUpdate
 
 import scala.swing.{BorderPanel, Dimension, Frame, Label}
 
@@ -12,7 +11,7 @@ class PlayerGui(guiController: GuiController) extends Frame {
   listenTo(guiController)
 
   reactions += {
-    case PlayerUpdate(player) => redraw(player)
+    case PlayerUpdateEvent(player) => redraw(player)
   }
 
   title = "Player Score"

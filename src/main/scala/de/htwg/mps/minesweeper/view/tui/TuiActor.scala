@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.view.tui
 
 import akka.actor.{Actor, ActorRef}
 import de.htwg.mps.minesweeper.api.Grid
-import de.htwg.mps.minesweeper.core.controller._
+import de.htwg.mps.minesweeper.api.events._
 
 case class ProcessTuiInput(input: String)
 

@@ -3,7 +3,6 @@ package de.htwg.mps.minesweeper.view.gui
 import java.awt.event.MouseEvent
 
 import de.htwg.mps.minesweeper.api.Grid
-import de.htwg.mps.minesweeper.core.controller.{FieldUpdate, GridUpdate}
 
 import scala.swing.event.MouseClicked
 import scala.swing.{FlowPanel, _}
@@ -18,12 +17,12 @@ class CellPanel(row: Int, col: Int, grid: Grid, guiController: GuiController) ex
       listenTo(mouse.moves)
       listenTo(guiController)
       reactions += {
-        case e: FieldUpdate =>
+        case e: FieldUpdateEvent =>
           if (e.col == col && e.row == row) {
             text = e.field.toString
             repaint
           }
-        case e: GridUpdate =>
+        case e: GridUpdateEvent =>
           text = e.grid.get(row, col).getOrElse().toString
           repaint
         case evt@MouseClicked(_, _, _, _, _) =>
