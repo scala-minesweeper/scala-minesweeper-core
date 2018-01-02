@@ -1,6 +1,6 @@
 package de.htwg.mps.minesweeper.view.gui
 
-import de.htwg.mps.minesweeper.model.grid.Grid
+import de.htwg.mps.minesweeper.api.Grid
 
 import scala.swing.{Color, GridPanel}
 
