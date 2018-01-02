@@ -6,6 +6,8 @@ trait Grid {
 
   val bombs: Int
 
+  def missingBombs: Int
+
   def init(): Grid
 
   def set(row: Int, col: Int, cell: Field): Grid

@@ -7,6 +7,8 @@ import scala.util.Random
 
 case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random: Random) extends Grid {
 
+  override def missingBombs: Int = bombs - playground.asList.count(f => f.isFlagged || (f.isShown && f.isBomb))
+
   override def set(row: Int, col: Int, cell: Field): MinesweeperGrid = copy(playground = playground.updated(row, col, cell))
 
   override def set(coordinates: (Int, Int), cell: Field): MinesweeperGrid = set(coordinates._1, coordinates._2, cell)
@@ -66,7 +68,7 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
       val index = row._2
       val rowList = row._1
       string + (" " * (rowDigits - StringUtils.stringLength(index))) + index + " | " + rowList.mkString(" ") + "\n"
-    })
+    }) + "\nBombs to be found: " + missingBombs
   }
 
 }

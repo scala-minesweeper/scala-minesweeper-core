@@ -16,8 +16,12 @@ class GameGui(guiController: GuiController) extends Frame {
 
   reactions += {
     case GameStart(game) =>
-      status.text = "Game is running"
+      status.text = "Bombs to be found: " + game.grid().missingBombs
       redraw(game.grid())
+    case FieldUpdate(_, _, _, grid) =>
+      status.text = "Bombs to be found: " + grid.missingBombs
+    case GridUpdate(grid) =>
+      status.text = "Bombs to be found: " + grid.missingBombs
     case GameWon(game) =>
       status.text = "You win - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
     case GameLost(game) =>
