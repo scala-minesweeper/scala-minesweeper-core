@@ -2,8 +2,8 @@ package de.htwg.mps.minesweeper.view.gui
 
 import javax.swing.border.EmptyBorder
 
-import de.htwg.mps.minesweeper.controller.PlayerUpdate
-import de.htwg.mps.minesweeper.model.player.Player
+import de.htwg.mps.minesweeper.api.Player
+import de.htwg.mps.minesweeper.core.controller.PlayerUpdate
 
 import scala.swing.{BorderPanel, Dimension, Frame, Label}
 

@@ -1,7 +1,7 @@
 package de.htwg.mps.minesweeper.view.gui
 
 import akka.actor.ActorRef
-import de.htwg.mps.minesweeper.controller.{GameEvent, OpenField, StartGame, ToggleField}
+import de.htwg.mps.minesweeper.core.controller.{GameEvent, OpenField, StartGame, ToggleField}
 
 import scala.swing.Publisher
 

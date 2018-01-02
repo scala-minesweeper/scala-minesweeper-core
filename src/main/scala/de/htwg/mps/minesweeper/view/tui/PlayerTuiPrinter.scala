@@ -1,6 +1,6 @@
 package de.htwg.mps.minesweeper.view.tui
 
-import de.htwg.mps.minesweeper.model.player.Player
+import de.htwg.mps.minesweeper.api.Player
 
 case class PlayerTuiPrinter(player: Player) extends TuiPrinter {
 

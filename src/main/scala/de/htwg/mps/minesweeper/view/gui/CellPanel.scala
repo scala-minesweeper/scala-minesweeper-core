@@ -2,8 +2,8 @@ package de.htwg.mps.minesweeper.view.gui
 
 import java.awt.event.MouseEvent
 
-import de.htwg.mps.minesweeper.controller.{FieldUpdate, GridUpdate}
-import de.htwg.mps.minesweeper.model.grid.Grid
+import de.htwg.mps.minesweeper.api.Grid
+import de.htwg.mps.minesweeper.core.controller.{FieldUpdate, GridUpdate}
 
 import scala.swing.event.MouseClicked
 import scala.swing.{FlowPanel, _}

@@ -1,7 +1,7 @@
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
-import de.htwg.mps.minesweeper.controller.{GameControllerActor, PlayerControllerActor, PublisherActor, StartGame}
+import de.htwg.mps.minesweeper.core.controller.{GameControllerActor, PlayerControllerActor, PublisherActor, StartGame}
 import de.htwg.mps.minesweeper.view.gui.SwingGuiActor
 import de.htwg.mps.minesweeper.view.tui.{ProcessTuiInput, TuiActor}
 
