@@ -4,6 +4,7 @@ import javax.swing.UIManager
 
 import de.htwg.mps.minesweeper.controller._
 import de.htwg.mps.minesweeper.model.grid.Grid
+import de.htwg.mps.minesweeper.model.result.EmptyGameResult
 
 import scala.swing.event.Key
 import scala.swing.{Action, BorderPanel, Frame, Label, Menu, MenuBar, MenuItem}
@@ -18,9 +19,9 @@ class GameGui(guiController: GuiController) extends Frame {
       status.text = "Game is running"
       redraw(game.grid())
     case GameWon(game) =>
-      status.text = "You win - Score: " + game.getScore
+      status.text = "You win - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
     case GameLost(game) =>
-      status.text = "You lost - Score: " + game.getScore
+      status.text = "You lost - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
   }
 
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
