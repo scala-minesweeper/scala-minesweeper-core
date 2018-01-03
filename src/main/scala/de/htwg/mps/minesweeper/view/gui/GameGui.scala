@@ -32,6 +32,8 @@ class GameGui(guiController: GuiController) extends Frame {
 
   var status = new Label("Initializing")
 
+  val playerGui = new PlayerGui(guiController)
+
   visible = true
 
   private def redraw(grid: GridModel): Unit = contents = new BorderPanel {
@@ -47,7 +49,7 @@ class GameGui(guiController: GuiController) extends Frame {
         new NewGameGui(guiController).visible = true
       })
       contents += new MenuItem(Action("History") {
-        new PlayerGui(guiController).visible = true
+        playerGui.visible = true
       })
       contents += new MenuItem(Action("Quit") {
         System.exit(0)
