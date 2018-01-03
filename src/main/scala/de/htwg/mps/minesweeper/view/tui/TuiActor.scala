@@ -1,7 +1,6 @@
 package de.htwg.mps.minesweeper.view.tui
 
 import akka.actor.{Actor, ActorRef}
-import de.htwg.mps.minesweeper.api.Grid
 import de.htwg.mps.minesweeper.api.events._
 
 case class ProcessTuiInput(input: String)
@@ -12,18 +11,18 @@ class TuiActor(controller: ActorRef, publisher: ActorRef) extends Actor {
 
   override def receive: Receive = {
     case ProcessTuiInput(input) => processInput(input)
-    case FieldUpdate(_, _, _, grid) => println(grid)
-    case GridUpdate(grid) => println(grid)
-    case GameWon(game) => println(game.getScore)
-    case GameLost(game) => println(game.getScore)
+    case FieldUpdate(_, _, _, grid) => println(GridTuiPrinter(grid).print())
+    case GridUpdate(grid) => println(GridTuiPrinter(grid).print())
+    case GameWon(game) => println(game.gameResult)
+    case GameLost(game) => println(game.gameResult)
     case GameStart(game) =>
       println("\n==========================\nMinesweeper\n==========================")
-      printTui(game.grid())
+      printTui(game.grid)
     case PlayerUpdate(player) => printTui(PlayerTuiPrinter(player).print())
   }
 
-  private def printTui(grid: Grid): Unit = {
-    println(grid)
+  private def printTui(grid: GridModel): Unit = {
+    println(GridTuiPrinter(grid).print())
     println("You can choose following actions")
     println(" o <row> <col> - open a cell")
     println(" ! <row> <col> - toggle cell mark (#: flagged, ?: question marked)")

@@ -7,19 +7,19 @@ import de.htwg.mps.minesweeper.api.{Field, Game, Grid, Player}
 import scala.swing.Publisher
 import scala.swing.event.Event
 
-case class PlayerUpdateEvent(player: Player) extends Event
+case class PlayerUpdateEvent(player: PlayerModel) extends Event
 
-case class FieldUpdateEvent(row: Int, col: Int, field: Field, grid: Grid) extends Event
+case class FieldUpdateEvent(row: Int, col: Int, field: FieldModel, grid: GridModel) extends Event
 
-case class GridUpdateEvent(grid: Grid) extends Event
+case class GridUpdateEvent(grid: GridModel) extends Event
 
-case class GameUpdateEvent(game: Game) extends Event
+case class GameUpdateEvent(game: GameModel) extends Event
 
-case class GameWonEvent(game: Game) extends Event
+case class GameWonEvent(game: GameModel) extends Event
 
-case class GameLostEvent(game: Game) extends Event
+case class GameLostEvent(game: GameModel) extends Event
 
-case class GameStartEvent(game: Game) extends Event
+case class GameStartEvent(game: GameModel) extends Event
 
 class GuiController(gameController: ActorRef) extends Publisher {
 

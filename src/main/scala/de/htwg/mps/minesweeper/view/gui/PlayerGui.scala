@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.view.gui
 
 import javax.swing.border.EmptyBorder
 
-import de.htwg.mps.minesweeper.api.Player
+import de.htwg.mps.minesweeper.api.events.PlayerModel
 
 import scala.swing.{BorderPanel, Dimension, Frame, Label}
 
@@ -29,11 +29,11 @@ class PlayerGui(guiController: GuiController) extends Frame {
     minimumSize = new Dimension(200, 200)
   }
 
-  private def redraw(player: Player): Unit = contents = new BorderPanel {
+  private def redraw(player: PlayerModel): Unit = contents = new BorderPanel {
     add(heading, BorderPanel.Position.North)
     add(new Label {
       text = player.history.foldLeft("<html>")((string, gameResult) => string +
-        (if (gameResult.win) "win" else "defeat") + ": <b>" + gameResult.getScore + "</b><br/>"
+        (if (gameResult.win) "win" else "defeat") + ": <b>" + gameResult.score + "</b><br/>"
       ) + "</html>"
     }, BorderPanel.Position.Center)
     border = new EmptyBorder(10, 10, 10, 10)

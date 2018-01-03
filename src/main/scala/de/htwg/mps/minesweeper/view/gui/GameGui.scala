@@ -2,8 +2,7 @@ package de.htwg.mps.minesweeper.view.gui
 
 import javax.swing.UIManager
 
-import de.htwg.mps.minesweeper.api.Grid
-import de.htwg.mps.minesweeper.core.model.result.EmptyGameResult
+import de.htwg.mps.minesweeper.api.events.GridModel
 
 import scala.swing.event.Key
 import scala.swing.{Action, BorderPanel, Frame, Label, Menu, MenuBar, MenuItem}
@@ -15,16 +14,16 @@ class GameGui(guiController: GuiController) extends Frame {
 
   reactions += {
     case GameStartEvent(game) =>
-      status.text = "Bombs to be found: " + game.grid().missingBombs
-      redraw(game.grid())
+      status.text = "Bombs to be found: " + game.grid.missingBombs
+      redraw(game.grid)
     case FieldUpdateEvent(_, _, _, grid) =>
       status.text = "Bombs to be found: " + grid.missingBombs
     case GridUpdateEvent(grid) =>
       status.text = "Bombs to be found: " + grid.missingBombs
     case GameWonEvent(game) =>
-      status.text = "You win - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
+      status.text = "You win - Score: " + game.gameResult.fold("?")(_.score.toString)
     case GameLostEvent(game) =>
-      status.text = "You lost - Score: " + game.getScore.getOrElse(EmptyGameResult()).getScore
+      status.text = "You lost - Score: " + game.gameResult.fold("?")(_.score.toString)
   }
 
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
@@ -35,7 +34,7 @@ class GameGui(guiController: GuiController) extends Frame {
 
   visible = true
 
-  private def redraw(grid: Grid): Unit = contents = new BorderPanel {
+  private def redraw(grid: GridModel): Unit = contents = new BorderPanel {
     add(new GamePanel(grid, guiController), BorderPanel.Position.Center)
     add(status, BorderPanel.Position.South)
   }

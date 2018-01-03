@@ -3,24 +3,25 @@ package de.htwg.mps.minesweeper.core.model
 import com.github.nscala_time.time.Imports._
 import de.htwg.mps.minesweeper.api.{Game, GameResult, Grid}
 import de.htwg.mps.minesweeper.core.model.grid.MinesweeperGrid
-import de.htwg.mps.minesweeper.core.model.result.{EmptyGameResult, MinesweeperGameResult}
 
 case class MinesweeperGame(start: DateTime,
                            end: DateTime,
                            running: Boolean,
                            grid: Grid,
-                           gameResult: GameResult) extends Game {
+                           gameResult: Option[GameResult]) extends Game {
   override def startGame(): Game = copy(start = DateTime.now, running = true)
 
   override def finishGame(): Game = {
     val now = DateTime.now
     copy(end = now, running = false,
-      gameResult = MinesweeperGameResult(
-        checkWin,
-        correctlyFlaggedBombs,
-        grid.bombs,
-        start.to(now).toDuration.getStandardSeconds,
-        grid.coordinates.size
+      gameResult = Some(
+        GameResult(
+          checkWin,
+          correctlyFlaggedBombs,
+          grid.bombs,
+          start.to(now).toDuration.getStandardSeconds,
+          grid.coordinates.size
+        )
       )
     )
   }
@@ -30,11 +31,6 @@ case class MinesweeperGame(start: DateTime,
   override def isRunning: Boolean = running
 
   override def isFinished: Boolean = running && !start.equals(end)
-
-  override def getScore: Option[GameResult] = gameResult match {
-    case EmptyGameResult() => None
-    case e => Some(e)
-  }
 
   override def checkWin: Boolean = detectedNonBombFields == nonBombFields && correctlyFlaggedBombs == grid.bombs
 
@@ -56,7 +52,7 @@ object MinesweeperGame {
     DateTime.now,
     running = false,
     MinesweeperGrid(1, 1, 0),
-    EmptyGameResult()
+    None
   )
 
   def apply(grid: Grid): MinesweeperGame = MinesweeperGame(
@@ -64,6 +60,6 @@ object MinesweeperGame {
     DateTime.now,
     running = false,
     grid,
-    EmptyGameResult()
+    None
   )
 }
