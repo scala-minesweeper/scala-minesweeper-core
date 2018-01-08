@@ -66,11 +66,13 @@ class MinesweeperGridTest extends WordSpec with Matchers {
 
     "print a grid" in {
       val result =
-        "   | 0  1  2\n" +
-          "---|---------\n" +
-          "0  | ~  ~  ~ \n" +
-          "1  | ~  ~  ~ \n" +
-          "2  | ~  ~  ~ \n"
+          " \n" +
+          "  | 0 1 2\n" +
+          "--|------\n" +
+          "0 | ~ ~ ~\n" +
+          "1 | ~ ~ ~\n" +
+          "2 | ~ ~ ~\n\n" +
+          "Bombs to be found: 2"
       grid.toString shouldBe result
     }
 

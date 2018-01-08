@@ -12,7 +12,7 @@ class NumberFieldTest extends WordSpec with Matchers {
     }
 
     "print a placeholder" in {
-      numberField.toString shouldBe "~ "
+      numberField.toString shouldBe "~"
     }
 
     "not shown at start" in {
@@ -36,7 +36,7 @@ class NumberFieldTest extends WordSpec with Matchers {
     }
 
     "print a number" in {
-      numberField.toString shouldBe "1 "
+      numberField.toString shouldBe "1"
     }
 
     "is shown" in {
@@ -60,7 +60,7 @@ class NumberFieldTest extends WordSpec with Matchers {
     }
 
     "print a flag" in {
-      numberField.toString shouldBe "# "
+      numberField.toString shouldBe "#"
     }
 
     "is not shown at start" in {

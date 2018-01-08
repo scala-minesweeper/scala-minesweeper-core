@@ -12,7 +12,7 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isBomb shouldBe true
     }
     "print a ~" in {
-      bombField.toString shouldBe "~ "
+      bombField.toString shouldBe "~"
     }
     "is not flagged" in {
       bombField.isFlagged shouldBe false
@@ -35,7 +35,7 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isBomb shouldBe true
     }
     "print a +" in {
-      bombField.toString shouldBe "+ "
+      bombField.toString shouldBe "+"
     }
     "is not flagged" in {
       bombField.isFlagged shouldBe false
@@ -58,7 +58,7 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isBomb shouldBe true
     }
     "print a #" in {
-      bombField.toString shouldBe "# "
+      bombField.toString shouldBe "#"
     }
     "is flagged" in {
       bombField.isFlagged shouldBe true
@@ -81,7 +81,7 @@ class BombFieldTest extends WordSpec with Matchers {
       bombField.isBomb shouldBe true
     }
     "print a ?" in {
-      bombField.toString shouldBe "? "
+      bombField.toString shouldBe "?"
     }
     "is not flagged" in {
       bombField.isFlagged shouldBe false
