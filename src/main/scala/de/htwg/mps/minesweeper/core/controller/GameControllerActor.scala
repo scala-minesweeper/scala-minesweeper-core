@@ -34,7 +34,7 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
       case f: NumberField if f.numberBombs == 0 =>
         val newGame = game.updateGrid(openFieldsAround(row, col, game.grid()))
         publisher ! GridUpdate(newGame.grid())
-        newGame
+        checkAndHandleGameIsOver(newGame)
       case _ => updateField(game, "Open field", row, col, cell.showField())
     }
   })
