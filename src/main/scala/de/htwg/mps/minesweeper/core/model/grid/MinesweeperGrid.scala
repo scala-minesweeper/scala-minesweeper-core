@@ -2,7 +2,7 @@ package de.htwg.mps.minesweeper.core.model.grid
 
 import de.htwg.mps.minesweeper.api.{Field, Grid}
 import de.htwg.mps.minesweeper.core.model.field.{BombField, NumberField, NumberUtils}
-import de.htwg.mps.minesweeper.core.utils.StringUtils
+import de.htwg.mps.minesweeper.core.utils.NumberToStringUtils
 
 import scala.util.Random
 
@@ -62,13 +62,13 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
     val colDigits = NumberUtils.numberOfDigits(cols - 1)
     val string = 0.until(colDigits).foldRight(" ")((line, string) =>
       string + "\n" + (" " * (rowDigits + 1)) + "| " + 0.until(cols)
-        .map(col => StringUtils.getCharStringAtOrElse(col, line, " "))
+        .map(col => NumberToStringUtils.getCharStringAtOrElse(col, line, " "))
         .mkString(" ")
     ) + "\n" + "-" * (rowDigits + 1) + "|" + "-" * (cols * 2) + "\n"
     playground.asNestedList.zipWithIndex.foldLeft(string)((string, row) => {
       val index = row._2
       val rowList = row._1
-      string + (" " * (rowDigits - StringUtils.stringLength(index))) + index + " | " + rowList.mkString(" ") + "\n"
+      string + (" " * (rowDigits - NumberToStringUtils.stringLength(index))) + index + " | " + rowList.mkString(" ") + "\n"
     }) + "\nBombs to be found: " + missingBombs
   }
 

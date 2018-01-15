@@ -1,9 +1,9 @@
 package de.htwg.mps.minesweeper.core.utils
 
-trait StringUtils {
+trait NumberToStringUtils {
 
   def getCharStringAtOrElse(input: Int, position: Int, orElse: String): String = {
-    if (stringLength(input) <= position) {
+    if (stringLength(input) <= position || position < 0) {
       orElse
     } else {
       input.toString.substring(position, position + 1)
@@ -14,5 +14,5 @@ trait StringUtils {
 
 }
 
-object StringUtils extends StringUtils
+object NumberToStringUtils extends NumberToStringUtils
 
