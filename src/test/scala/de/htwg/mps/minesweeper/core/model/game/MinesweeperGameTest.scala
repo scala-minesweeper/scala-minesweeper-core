@@ -48,7 +48,8 @@ class MinesweeperGameTest(_system: ActorSystem) extends TestKit(_system) with Ma
     testProbePlayerController.expectMsg(500 millis, FieldUpdate(0,0,FieldModel(FieldOpenState,"+"),GridModel(1,0,(1,1),List(List(FieldModel(FieldOpenState,"+"))))))
     testProbePlayerController.expectMsg(500 millis, GridUpdate(GridModel(1,0,(1,1),List(List(FieldModel(FieldOpenState,"+"))))))
     //TODO fixen
-    //testProbePlayerController.expectMsg(500 millis, GameLost(new GameModel(false,false,Option[GameResult])) ,GridModel(1,0,(1,1),List(List(FieldModel(FieldOpenState,"+"))))))
+
+    testProbePlayerController.expectMsg(500 millis, GameLost(new GameModel(false,false,Some(GameResult(false, 0,1,0,1)) ,GridModel(1,0,(1,1),List(List(FieldModel(FieldOpenState,"+")))))))
 
 
   }
