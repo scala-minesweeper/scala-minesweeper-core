@@ -4,8 +4,7 @@ import de.htwg.mps.minesweeper.api.events.GridModel
 
 import scala.swing.{Color, GridPanel}
 
-class GamePanel(grid: GridModel, guiController: GuiController)
-  extends GridPanel(grid.size._1, grid.size._2) {
+class GamePanel(grid: GridModel, guiController: GuiController) extends GridPanel(grid.size._1, grid.size._2) {
 
   private val backgroundColor = new Color(255, 255, 255)
 
