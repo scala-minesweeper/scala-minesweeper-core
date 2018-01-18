@@ -66,7 +66,7 @@ class MinesweeperGridTest extends WordSpec with Matchers {
 
     "print a grid" in {
       val result =
-          " \n+" +
+          " \n" +
           "  | 0 1 2\n" +
           "--|------\n" +
           "0 | ~ ~ ~\n" +

@@ -9,11 +9,10 @@ import de.htwg.mps.minesweeper.core.controller.{GameControllerActor, PlayerContr
 import org.scalatest._
 
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
-class MinesweeperGameOpenNumberfieldWinTest(_system: ActorSystem) extends TestKit(_system) with Matchers with FlatSpecLike with BeforeAndAfterAll {
-
-
-  def this() = this(ActorSystem("minesweeper"))
+class MinesweeperGameOpenNumberFieldWinTest extends TestKit(ActorSystem("TestSystem"))
+  with Matchers with FlatSpecLike with BeforeAndAfterAll {
 
   override def afterAll: Unit = {
     shutdown(system)
@@ -21,33 +20,23 @@ class MinesweeperGameOpenNumberfieldWinTest(_system: ActorSystem) extends TestKi
 
   "A 1x1 Grid" should "game win" in {
 
-
-      val config = ConfigFactory.load()
-      val controllerActorName = ConfigFactory.load().getString("akka.minesweeper.controllerActor")
-
-      val publisherActorName = config.getString("akka.minesweeper.publisherActor")
-
       val testProbePlayerController = TestProbe()
 
       val publisher: ActorRef =
-        system.actorOf(Props[PublisherActor], publisherActorName)
+        system.actorOf(Props[PublisherActor])
       val playerController: ActorRef =
         system.actorOf(Props(new PlayerControllerActor(publisher)))
       val gameController: ActorRef =
-        system.actorOf(Props(new GameControllerActor(testProbePlayerController.ref, playerController)), controllerActorName)
-
-
+        system.actorOf(Props(new GameControllerActor(testProbePlayerController.ref, playerController)))
 
       gameController ! StartGame(1,1,0)
       gameController ! OpenField(0,0)
       testProbePlayerController.expectMsg(500 millis, RegisterPublisher)
-      testProbePlayerController.expectMsg(500 millis, GameStart(GameModel(false,true,None,GridModel(0,0,(1,1),List(List(FieldModel(FieldHiddenState,"~")))))))
+      testProbePlayerController.expectMsg(500 millis, GameStart(GameModel(finished = false,running = true,None,GridModel(0,0,(1,1),List(List(FieldModel(FieldHiddenState,"~")))))))
       testProbePlayerController.expectMsg(500 millis, GridUpdate(GridModel(0, 0, (1, 1), List(List(FieldModel(FieldOpenState, "0"))))))
       //testProbePlayerController.expectMsg(500 millis, FieldUpdate(0, 0, FieldModel(FieldOpenState, "0"), GridModel(0, 0, (1, 1), List(List(FieldModel(FieldOpenState, "0"))))))
 
-
-      testProbePlayerController.expectMsg(500 millis, GameWon(new GameModel(false,false,Some(GameResult(true, 0,0,0,1)) ,GridModel(0,0,(1,1),List(List(FieldModel(FieldOpenState,"0")))))))
-
+      testProbePlayerController.expectMsg(500 millis, GameWon(new GameModel(false,false,Some(GameResult(win = true, 0,0,0,1)) ,GridModel(0,0,(1,1),List(List(FieldModel(FieldOpenState,"0")))))))
 
   }
 
