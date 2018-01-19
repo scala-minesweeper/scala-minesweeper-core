@@ -3,9 +3,6 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import de.htwg.mps.minesweeper.api.events.StartGame
 import de.htwg.mps.minesweeper.core.controller.{GameControllerActor, PlayerControllerActor, PublisherActor}
-import de.htwg.mps.minesweeper.view.tui.{ProcessTuiInput, TuiActor}
-
-import scala.io.StdIn
 
 object MinesweeperMain {
 
@@ -24,13 +21,7 @@ object MinesweeperMain {
   val gameController: ActorRef =
     system.actorOf(Props(new GameControllerActor(publisher, playerController)), controllerActorName)
 
-  val tui: ActorRef =
-    system.actorOf(Props(new TuiActor(gameController, publisher)))
-
   def main(args: Array[String]) {
     gameController.tell(StartGame(5, 5, 10), gameController)
-    while (true) {
-      tui.tell(ProcessTuiInput(StdIn.readLine()), tui)
-    }
   }
 }
