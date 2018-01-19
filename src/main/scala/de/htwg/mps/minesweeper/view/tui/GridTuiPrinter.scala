@@ -1,8 +1,7 @@
 package de.htwg.mps.minesweeper.view.tui
 
 import de.htwg.mps.minesweeper.api.events.GridModel
-import de.htwg.mps.minesweeper.core.model.field.NumberUtils
-import de.htwg.mps.minesweeper.core.utils.NumberToStringUtils
+import de.htwg.mps.minesweeper.core.utils.{NumberToStringUtils, NumberUtils}
 
 case class GridTuiPrinter(grid: GridModel) extends TuiPrinter {
 

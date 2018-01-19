@@ -1,4 +1,4 @@
-package de.htwg.mps.minesweeper.core.model.field
+package de.htwg.mps.minesweeper.core.utils
 
 import org.scalatest.{Matchers, WordSpec}
 

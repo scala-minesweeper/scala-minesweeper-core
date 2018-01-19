@@ -1,8 +1,8 @@
 package de.htwg.mps.minesweeper.core.model.grid
 
 import de.htwg.mps.minesweeper.api.{Field, Grid}
-import de.htwg.mps.minesweeper.core.model.field.{BombField, NumberField, NumberUtils}
-import de.htwg.mps.minesweeper.core.utils.NumberToStringUtils
+import de.htwg.mps.minesweeper.core.model.field.{BombField, NumberField}
+import de.htwg.mps.minesweeper.core.utils.{NumberToStringUtils, NumberUtils}
 
 import scala.util.Random
 
