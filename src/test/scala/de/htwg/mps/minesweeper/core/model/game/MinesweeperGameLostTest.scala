@@ -27,9 +27,9 @@ class MinesweeperGameLostTest extends TestKit(ActorSystem("TestSystem"))
     val publisher: ActorRef =
       system.actorOf(Props[PublisherActor])
     val playerController: ActorRef =
-      system.actorOf(Props(new PlayerControllerActor(publisher)))
+      system.actorOf(Props(PlayerControllerActor(publisher)))
     val gameController: ActorRef =
-      system.actorOf(Props(new GameControllerActor(testProbePlayerController.ref, playerController)))
+      system.actorOf(Props(GameControllerActor(testProbePlayerController.ref, playerController)))
 
     gameController ! StartGame(1, 1, 1)
     gameController ! OpenField(0, 0)

@@ -77,4 +77,7 @@ case class MinesweeperGrid(playground: TwoDimensional[Field], bombs: Int, random
 object MinesweeperGrid {
   def apply(rows: Int, cols: Int, bombs: Int): MinesweeperGrid =
     MinesweeperGrid(TwoDimensionalArray[Field](rows, cols, NumberField(0)), bombs, Random)
+
+  def apply(rows: Int, cols: Int, bombs: Int, random: Random): MinesweeperGrid =
+    MinesweeperGrid(TwoDimensionalArray[Field](rows, cols, NumberField(0)), bombs, random)
 }
