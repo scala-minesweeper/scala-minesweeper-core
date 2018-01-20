@@ -2,7 +2,7 @@ language: scala
 scala:
   - 2.12.4
 before_install:
-  - ./travis/build_api_dependency.sh
+  - travis/build_api_dependency.sh
 script:
   - sbt clean && sbt compile &&
     sbt clean coverage test coverageReport
