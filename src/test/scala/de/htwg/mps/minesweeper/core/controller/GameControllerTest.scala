@@ -13,35 +13,43 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.Random
 
-class GameControllerTest extends WordSpec with Matchers {
+class GameControllerTest extends fixture.WordSpec with Matchers {
 
   val timeout: FiniteDuration = 2000.millis
+  type FixtureParam = ActorSystem
+
+  override def withFixture(test: OneArgTest): Outcome = {
+    val testKit = new TestKit(ActorSystem("TestSystem"))
+    implicit val system: ActorSystem = testKit.system
+
+    try test(system)
+    finally {
+      testKit.shutdown()
+    }
+  }
 
   "A game controller " can {
-    "answer the GetCurrentStatus message in initial state and " should {
+    "answer the GetCurrentStatus message in initial state and" should {
       "return an initial game object " in {
-        val testKit = new TestKit(ActorSystem("TestSystem"))
-        implicit val system: ActorSystem = testKit.system
+        system => {
+          val testPublisherController = TestProbe()(system)
+          val testProbePlayerController = TestProbe()(system)
+          val testProbeClient = TestProbe()
 
-        val testPublisherController = TestProbe()
-        val testProbePlayerController = TestProbe()
-        val testProbeClient = TestProbe()
+          val gameController: ActorRef =
+            system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)))
 
-        val gameController: ActorRef =
-          system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)))
+          gameController.tell(GetCurrentStatus(), testProbeClient.ref)
 
-        gameController.tell(GetCurrentStatus(), testProbeClient.ref)
-
-        testProbeClient.expectMsg(timeout, GameUpdate(MinesweeperGame()))
-
-        testKit.shutdown()
+          testProbeClient.expectMsg(timeout, GameUpdate(MinesweeperGame()))
+        }
       }
     }
+  }
 
-    "answer the GetCurrentStatus message after game restart and " should {
-      "return the configured game object " in {
-        val testKit = new TestKit(ActorSystem("TestSystem"))
-        implicit val system: ActorSystem = testKit.system
+  "answer the GetCurrentStatus message after game restart and " should {
+    "return the configured game object " in {
+      system => {
 
         val testPublisherController = TestProbe()
         val testProbePlayerController = TestProbe()
@@ -58,15 +66,13 @@ class GameControllerTest extends WordSpec with Matchers {
           GameModel(finished = false, running = true, None,
             GridModel(1, 1, (1, 1), List(List(FieldModel(FieldHiddenState, "~"))))))
         )
-
-        testKit.shutdown()
       }
     }
+  }
 
-    "open a field in a 2x2 game with 1 bomb and " should {
-      "send update message " in {
-        val testKit = new TestKit(ActorSystem("TestSystem"))
-        implicit val system: ActorSystem = testKit.system
+  "open a field in a 2x2 game with 1 bomb and " should {
+    "send update message " in {
+      system => {
 
         val testPublisherController = TestProbe()
         val testProbePlayerController = TestProbe()
@@ -88,16 +94,14 @@ class GameControllerTest extends WordSpec with Matchers {
             List(FieldModel(FieldHiddenState, "~"), FieldModel(FieldHiddenState, "~"))
           )))
         )
-
-        testKit.shutdown()
       }
-
     }
 
-    "disallow open a field in a 1x1 game which is not running and " should {
-      "not send any message " in {
-        val testKit = new TestKit(ActorSystem("TestSystem"))
-        implicit val system: ActorSystem = testKit.system
+  }
+
+  "disallow open a field in a 1x1 game which is not running and " should {
+    "not send any message " in {
+      system => {
 
         val testPublisherController = TestProbe()
         val testProbePlayerController = TestProbe()
@@ -114,11 +118,8 @@ class GameControllerTest extends WordSpec with Matchers {
         // then test message on nun running game
         gameController ! OpenField(0, 0)
         testPublisherController.expectNoMsg(timeout)
-
-        testKit.shutdown()
       }
     }
-
   }
 
 }
