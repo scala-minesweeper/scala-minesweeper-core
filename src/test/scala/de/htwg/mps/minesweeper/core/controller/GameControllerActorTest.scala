@@ -19,7 +19,7 @@ class GameControllerActorTest extends fixture.WordSpec with Matchers {
   type FixtureParam = ActorSystem
 
   override def withFixture(test: OneArgTest): Outcome = {
-    val testKit = new TestKit(ActorSystem("TestSystem"))
+    val testKit = new TestKit(ActorSystem(Random.nextInt(Int.MaxValue).toString))
     implicit val system: ActorSystem = testKit.system
 
     try test(system)

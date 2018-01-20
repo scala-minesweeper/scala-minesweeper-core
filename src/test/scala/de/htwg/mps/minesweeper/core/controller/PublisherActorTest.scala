@@ -7,6 +7,7 @@ import de.htwg.mps.minesweeper.core.model.player.MinesweeperPlayer
 import org.scalatest.{Matchers, Outcome, fixture}
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 class PublisherActorTest extends fixture.WordSpec with Matchers {
 
@@ -14,7 +15,7 @@ class PublisherActorTest extends fixture.WordSpec with Matchers {
   type FixtureParam = ActorSystem
 
   override def withFixture(test: OneArgTest): Outcome = {
-    val testKit = new TestKit(ActorSystem("TestSystem"))
+    val testKit = new TestKit(ActorSystem(Random.nextInt(Int.MaxValue).toString))
     implicit val system: ActorSystem = testKit.system
 
     try test(system)
