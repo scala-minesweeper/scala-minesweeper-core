@@ -8,7 +8,7 @@ import org.scalatest.{Matchers, Outcome, fixture}
 
 import scala.concurrent.duration._
 
-class PublisherControllerTest extends fixture.WordSpec with Matchers {
+class PublisherActorTest extends fixture.WordSpec with Matchers {
 
   val timeout: FiniteDuration = 2000.millis
   type FixtureParam = ActorSystem
@@ -51,7 +51,7 @@ class PublisherControllerTest extends fixture.WordSpec with Matchers {
     }
 
     "deregister an observer and " should {
-      "publish events to this observer " in {
+      "do not publish events to this observer " in {
         system => {
           val testObserver = TestProbe()(system)
           val testPublisher = TestProbe()(system)

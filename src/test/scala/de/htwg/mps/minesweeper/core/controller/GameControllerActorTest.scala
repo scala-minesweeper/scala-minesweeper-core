@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.Random
 
-class GameControllerTest extends fixture.WordSpec with Matchers {
+class GameControllerActorTest extends fixture.WordSpec with Matchers {
 
   val timeout: FiniteDuration = 2000.millis
   type FixtureParam = ActorSystem
@@ -98,7 +98,56 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
     }
   }
 
-  "open a field in a greater game and " should {
+  "open a field in a running game and " should {
+    "in a 1x1 with 1 bomb lose the game " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(1, 1, 1, new Random(5)).init(), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectMsg(timeout, FieldUpdate(
+          0, 0, FieldModel(FieldOpenState, "+"),
+          GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
+        testPublisherController.expectMsg(timeout, GridUpdate(
+          GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
+
+        testPublisherController.expectMsgType[GameLost](timeout)
+        testProbePlayerController.expectMsgType[GameLost](timeout)
+      }
+    }
+
+    "in a 1x1 with 0 bombs and win the game " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(1, 1, 0, new Random(5)).init(), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectMsg(timeout, GridUpdate(
+          GridModel(0, 0, (1, 1), List(List(FieldModel(FieldOpenState, "0"))))))
+
+        testPublisherController.expectMsgType[GameWon](timeout)
+        testProbePlayerController.expectMsgType[GameWon](timeout)
+      }
+    }
+
     "in a 2x2 with 0 bombs open all fields and send a win message " in {
       system => {
         val testPublisherController = TestProbe()(system)
@@ -173,8 +222,31 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
     }
   }
 
-  "flag a field message in a 1x1 with 0 bombs game and " should {
-    "not send any message if it is requested to open " in {
+  "flag a field in a running game and " should {
+    "in a 1x1 with 1 bomb win the game " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(1, 1, 1, new Random(5)).init(), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        gameController ! ToggleField(0, 0)
+
+        testPublisherController.expectMsg(timeout, FieldUpdate(0, 0, FieldModel(FieldFlaggedState, "#"), GridModel(1, 0, (1, 1), List(List(FieldModel(FieldFlaggedState, "#"))))))
+
+        testPublisherController.expectMsgType[GameWon](timeout)
+        testProbePlayerController.expectMsgType[GameWon](timeout)
+      }
+    }
+
+    "in a 1x1 with 0 bombs not send any message if it is requested to open " in {
       system => {
         val testPublisherController = TestProbe()(system)
         val testProbePlayerController = TestProbe()(system)
