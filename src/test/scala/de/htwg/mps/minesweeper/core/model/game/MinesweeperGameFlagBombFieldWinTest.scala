@@ -2,16 +2,13 @@ package de.htwg.mps.minesweeper.core.model.game
 
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
-import com.typesafe.config.ConfigFactory
+import akka.testkit.{TestKit, TestProbe}
 import de.htwg.mps.minesweeper.api._
-
-import scala.concurrent.duration._
 import de.htwg.mps.minesweeper.api.events._
 import de.htwg.mps.minesweeper.core.controller.{GameControllerActor, PlayerControllerActor, PublisherActor}
-import de.htwg.mps.minesweeper.view.gui.GameLostEvent
 import org.scalatest._
 
+import scala.concurrent.duration._
 import scala.language.postfixOps
 
 class MinesweeperGameFlagBombFieldWinTest extends TestKit(ActorSystem("TestSystem"))
