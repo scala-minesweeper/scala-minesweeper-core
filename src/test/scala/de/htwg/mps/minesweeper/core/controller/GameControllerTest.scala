@@ -34,7 +34,7 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
         system => {
           val testPublisherController = TestProbe()(system)
           val testProbePlayerController = TestProbe()(system)
-          val testProbeClient = TestProbe()
+          val testProbeClient = TestProbe()(system)
 
           val gameController: ActorRef =
             system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)))
@@ -51,12 +51,12 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
     "return the configured game object " in {
       system => {
 
-        val testPublisherController = TestProbe()
-        val testProbePlayerController = TestProbe()
-        val testProbeClient = TestProbe()
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+        val testProbeClient = TestProbe()(system)
 
         val gameController: ActorRef =
-          system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)), "T2")
+          system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)))
 
         gameController ! StartGame(1, 1, 1)
         gameController.tell(GetCurrentStatus(), testProbeClient.ref)
@@ -74,14 +74,14 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
     "send update message " in {
       system => {
 
-        val testPublisherController = TestProbe()
-        val testProbePlayerController = TestProbe()
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
 
         val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
           MinesweeperGrid(2, 2, 1, new Random(5)).init(), None)
 
         val gameController: ActorRef =
-          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)), "T3")
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
 
         // catch initializing messages first
         testPublisherController.expectMsg(timeout, RegisterPublisher)
@@ -96,21 +96,46 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
         )
       }
     }
+  }
 
+  "open a field in a 2x2 game with 0 bombs and " should {
+    "open all fields and send a win message " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(2, 2, 0, new Random(5)).init(), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectMsg(timeout, GridUpdate(
+          GridModel(0, 0, (2, 2), List(
+            List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0")),
+            List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0"))
+          )))
+        )
+      }
+    }
   }
 
   "disallow open a field in a 1x1 game which is not running and " should {
     "not send any message " in {
       system => {
 
-        val testPublisherController = TestProbe()
-        val testProbePlayerController = TestProbe()
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
 
         val notRunningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = false,
           MinesweeperGrid(1, 1, 0, new Random(5)), None)
 
         val gameController: ActorRef =
-          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, notRunningGame)), "T4")
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, notRunningGame)))
 
         // catch initializing messages first
         testPublisherController.expectMsg(timeout, RegisterPublisher)
