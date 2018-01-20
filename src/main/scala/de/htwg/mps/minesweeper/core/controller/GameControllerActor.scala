@@ -7,11 +7,11 @@ import de.htwg.mps.minesweeper.core.model.MinesweeperGame
 import de.htwg.mps.minesweeper.core.model.field.NumberField
 import de.htwg.mps.minesweeper.core.model.grid.{GridUtils, MinesweeperGrid}
 
-class GameControllerActor(publisher: ActorRef, playerController: ActorRef) extends Actor {
+class GameControllerActor(publisher: ActorRef, playerController: ActorRef, startGame: Game) extends Actor {
 
   publisher ! RegisterPublisher
 
-  override def receive: Receive = run(MinesweeperGame())
+  override def receive: Receive = run(startGame)
 
   private def run(game: Game): Receive = {
     case StartGame(rows, cols, bombs) => context.become(run(restartGame(rows, cols, bombs)))
@@ -120,4 +120,9 @@ class GameControllerActor(publisher: ActorRef, playerController: ActorRef) exten
 
   private def coordinateToString(row: Int, col: Int): String = "(" + row + "|" + col + ")"
 
+}
+
+object GameControllerActor {
+  def apply(publisher: ActorRef, playerController: ActorRef): GameControllerActor =
+    new GameControllerActor(publisher, playerController, MinesweeperGame())
 }

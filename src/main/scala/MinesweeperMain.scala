@@ -17,9 +17,9 @@ object MinesweeperMain {
     system.actorOf(Props[PublisherActor], publisherActorName)
 
   val playerController: ActorRef =
-    system.actorOf(Props(new PlayerControllerActor(publisher)))
+    system.actorOf(Props(PlayerControllerActor(publisher)))
   val gameController: ActorRef =
-    system.actorOf(Props(new GameControllerActor(publisher, playerController)), controllerActorName)
+    system.actorOf(Props(GameControllerActor(publisher, playerController)), controllerActorName)
 
   def main(args: Array[String]) {
     gameController.tell(StartGame(5, 5, 10), gameController)

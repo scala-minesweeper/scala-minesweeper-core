@@ -5,11 +5,11 @@ import de.htwg.mps.minesweeper.api.events._
 import de.htwg.mps.minesweeper.api.{GameResult, Player}
 import de.htwg.mps.minesweeper.core.model.player.MinesweeperPlayer
 
-class PlayerControllerActor(publisher: ActorRef) extends Actor {
+class PlayerControllerActor(publisher: ActorRef, startPlayer: Player) extends Actor {
 
   publisher ! RegisterPublisher
 
-  override def receive: Receive = run(MinesweeperPlayer())
+  override def receive: Receive = run(startPlayer)
 
   private def run(player: Player): Receive = {
     case GameWon(game) =>
@@ -25,4 +25,9 @@ class PlayerControllerActor(publisher: ActorRef) extends Actor {
     run(newPlayer)
   }
 
+}
+
+object PlayerControllerActor {
+  def apply(publisher: ActorRef): PlayerControllerActor =
+    new PlayerControllerActor(publisher, MinesweeperPlayer())
 }
