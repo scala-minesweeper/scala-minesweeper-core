@@ -9,7 +9,7 @@ import de.htwg.mps.minesweeper.core.model.grid.{GridUtils, MinesweeperGrid}
 
 class GameControllerActor(publisher: ActorRef, playerController: ActorRef, startGame: Game) extends Actor {
 
-  publisher ! RegisterPublisher
+  override def preStart(): Unit = publisher ! RegisterPublisher
 
   override def receive: Receive = run(startGame)
 

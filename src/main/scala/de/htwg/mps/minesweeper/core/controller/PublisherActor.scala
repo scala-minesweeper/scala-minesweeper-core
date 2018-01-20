@@ -10,8 +10,11 @@ class PublisherActor extends Actor {
   private def run(observers: Set[ActorRef], publishers: Set[ActorRef]): Receive = {
     case RegisterObserver =>
       publishers.foreach(_.tell(GetCurrentStatus(), sender()))
+      println("Register observer " + sender().path.toString)
       context.become(run(observers + sender(), publishers))
-    case DeregisterObserver => context.become(run(observers - sender(), publishers))
+    case DeregisterObserver =>
+      println("Deregister observer " + sender().path.toString)
+      context.become(run(observers - sender(), publishers))
     case RegisterPublisher => context.become(run(observers, publishers + sender()))
     case DeregisterPublisher => context.become(run(observers, publishers - sender()))
     case event: GameEvent => observers.foreach(_ ! event)
