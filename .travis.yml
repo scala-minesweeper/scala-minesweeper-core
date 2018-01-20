@@ -2,6 +2,7 @@ language: scala
 scala:
   - 2.12.4
 before_install:
+  - chmod +x travis/build_api_dependency.sh
   - travis/build_api_dependency.sh
 script:
   - sbt clean && sbt compile &&
