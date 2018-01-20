@@ -50,7 +50,6 @@ class GameControllerActorTest extends fixture.WordSpec with Matchers {
   "answer the GetCurrentStatus message after game restart and " should {
     "return the configured game object " in {
       system => {
-
         val testPublisherController = TestProbe()(system)
         val testProbePlayerController = TestProbe()(system)
         val testProbeClient = TestProbe()(system)
@@ -58,10 +57,15 @@ class GameControllerActorTest extends fixture.WordSpec with Matchers {
         val gameController: ActorRef =
           system.actorOf(Props(GameControllerActor(testPublisherController.ref, testProbePlayerController.ref)))
 
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
         gameController ! StartGame(1, 1, 1)
+
+        testPublisherController.expectMsg(timeout, GameStart(GameModel(finished = false, running = true, None,
+          GridModel(1, 1, (1, 1), List(List(FieldModel(FieldHiddenState, "~")))))))
+
         gameController.tell(GetCurrentStatus(), testProbeClient.ref)
 
-        testPublisherController.expectMsg(timeout, RegisterPublisher)
         testProbeClient.expectMsg(timeout, GameUpdate(
           GameModel(finished = false, running = true, None,
             GridModel(1, 1, (1, 1), List(List(FieldModel(FieldHiddenState, "~"))))))

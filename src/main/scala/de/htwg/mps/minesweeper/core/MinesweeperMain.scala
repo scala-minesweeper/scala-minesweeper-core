@@ -1,3 +1,5 @@
+package de.htwg.mps.minesweeper.core
+
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
@@ -22,6 +24,7 @@ object MinesweeperMain {
     system.actorOf(Props(GameControllerActor(publisher, playerController)), controllerActorName)
 
   def main(args: Array[String]) {
-    gameController.tell(StartGame(5, 5, 10), gameController)
+    gameController.tell(StartGame(10, 10, 10), gameController)
   }
+
 }
