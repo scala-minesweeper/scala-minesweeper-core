@@ -98,8 +98,8 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
     }
   }
 
-  "open a field in a 2x2 game with 0 bombs and " should {
-    "open all fields and send a win message " in {
+  "open a field in a greater game and " should {
+    "in a 2x2 with 0 bombs open all fields and send a win message " in {
       system => {
         val testPublisherController = TestProbe()(system)
         val testProbePlayerController = TestProbe()(system)
@@ -118,6 +118,32 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
           GridModel(0, 0, (2, 2), List(
             List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0")),
             List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0"))
+          )))
+        )
+        testPublisherController.expectMsgType[GameWon](timeout)
+      }
+    }
+
+    "in a 3x3 with 1 bombs open all 0 and 1 fields but not the bomb " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val runningGame: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(3, 3, 1, new Random(7)).init(), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, runningGame)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectMsg(timeout, GridUpdate(
+          GridModel(1, 1, (3, 3), List(
+            List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "0")),
+            List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "1"), FieldModel(FieldOpenState, "1")),
+            List(FieldModel(FieldOpenState, "0"), FieldModel(FieldOpenState, "1"), FieldModel(FieldHiddenState, "~"))
           )))
         )
       }
@@ -141,6 +167,68 @@ class GameControllerTest extends fixture.WordSpec with Matchers {
         testPublisherController.expectMsg(timeout, RegisterPublisher)
 
         // then test message on nun running game
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectNoMsg(timeout)
+      }
+    }
+  }
+
+  "flag a field message in a 1x1 with 0 bombs game and " should {
+    "not send any message if it is requested to open " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val game: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(1, 1, 0, new Random(5)), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, game)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        // then test message on nun running game
+        gameController ! ToggleField(0, 0)
+        testPublisherController.expectMsg(timeout, FieldUpdate(0, 0, FieldModel(FieldFlaggedState, "#"),
+          GridModel(0, -1, (1, 1), List(
+            List(FieldModel(FieldFlaggedState, "#")
+            )))))
+
+        gameController ! OpenField(0, 0)
+        testPublisherController.expectNoMsg(timeout)
+      }
+    }
+  }
+
+  "question mark a field message in a 1x1 with 0 bombs game and " should {
+    "not send any message if it is requested to open " in {
+      system => {
+        val testPublisherController = TestProbe()(system)
+        val testProbePlayerController = TestProbe()(system)
+
+        val game: Game = new MinesweeperGame(DateTime.now, DateTime.now, running = true,
+          MinesweeperGrid(1, 1, 0, new Random(5)), None)
+
+        val gameController: ActorRef =
+          system.actorOf(Props(new GameControllerActor(testPublisherController.ref, testProbePlayerController.ref, game)))
+
+        // catch initializing messages first
+        testPublisherController.expectMsg(timeout, RegisterPublisher)
+
+        // then test message on nun running game
+        gameController ! ToggleField(0, 0)
+        testPublisherController.expectMsg(timeout, FieldUpdate(0, 0, FieldModel(FieldFlaggedState, "#"),
+          GridModel(0, -1, (1, 1), List(
+            List(FieldModel(FieldFlaggedState, "#")
+            )))))
+
+        gameController ! ToggleField(0, 0)
+        testPublisherController.expectMsg(timeout, FieldUpdate(0, 0, FieldModel(FieldQuestionMarkedState, "?"),
+          GridModel(0, 0, (1, 1), List(
+            List(FieldModel(FieldQuestionMarkedState, "?")
+            )))))
+
         gameController ! OpenField(0, 0)
         testPublisherController.expectNoMsg(timeout)
       }
