@@ -14,6 +14,8 @@ import scala.language.postfixOps
 class MinesweeperGameLostTest extends TestKit(ActorSystem("TestSystem"))
   with Matchers with FlatSpecLike with BeforeAndAfterAll {
 
+  val timeout: FiniteDuration = 2000.millis
+  
   override def afterAll: Unit = {
     shutdown(system)
   }
@@ -31,12 +33,12 @@ class MinesweeperGameLostTest extends TestKit(ActorSystem("TestSystem"))
 
     gameController ! StartGame(1, 1, 1)
     gameController ! OpenField(0, 0)
-    testProbePlayerController.expectMsg(500 millis, RegisterPublisher)
-    testProbePlayerController.expectMsg(500 millis, GameStart(GameModel(finished = false, running = true, None, GridModel(1, 1, (1, 1), List(List(FieldModel(FieldHiddenState, "~")))))))
-    testProbePlayerController.expectMsg(500 millis, FieldUpdate(0, 0, FieldModel(FieldOpenState, "+"), GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
-    testProbePlayerController.expectMsg(500 millis, GridUpdate(GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
+    testProbePlayerController.expectMsg(timeout, RegisterPublisher)
+    testProbePlayerController.expectMsg(timeout, GameStart(GameModel(finished = false, running = true, None, GridModel(1, 1, (1, 1), List(List(FieldModel(FieldHiddenState, "~")))))))
+    testProbePlayerController.expectMsg(timeout, FieldUpdate(0, 0, FieldModel(FieldOpenState, "+"), GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
+    testProbePlayerController.expectMsg(timeout, GridUpdate(GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+"))))))
 
-    testProbePlayerController.expectMsg(500 millis, GameLost(new GameModel(false, false, Some(GameResult(win = false, 0, 1, 0, 1)), GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+")))))))
+    testProbePlayerController.expectMsg(timeout, GameLost(new GameModel(false, false, Some(GameResult(win = false, 0, 1, 0, 1)), GridModel(1, 0, (1, 1), List(List(FieldModel(FieldOpenState, "+")))))))
 
   }
 
