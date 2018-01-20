@@ -76,4 +76,52 @@ class NumberFieldTest extends WordSpec with Matchers {
     }
   }
 
+  "An question marked NumberField" should {
+    val numberField: NumberField = NumberField(1).questionField()
+
+    "not be a bomb" in {
+      numberField.isBomb shouldBe false
+    }
+
+    "print a question mark" in {
+      numberField.toString shouldBe "?"
+    }
+
+    "is not shown at start" in {
+      numberField.isShown shouldBe false
+    }
+
+    "is not flagged" in {
+      numberField.isFlagged shouldBe false
+    }
+
+    "is marked with ?" in {
+      numberField.isQuestionMarked shouldBe true
+    }
+  }
+
+  "Toggling a hidden numberfield" should {
+    val numberField: NumberField = NumberField(1).toggleNextFieldState()
+
+    "not be a bomb" in {
+      numberField.isBomb shouldBe false
+    }
+
+    "print a question mark" in {
+      numberField.toString shouldBe "#"
+    }
+
+    "is not shown at start" in {
+      numberField.isShown shouldBe false
+    }
+
+    "is not flagged" in {
+      numberField.isFlagged shouldBe true
+    }
+
+    "is marked with ?" in {
+      numberField.isQuestionMarked shouldBe false
+    }
+  }
+
 }
